@@ -6,6 +6,6 @@ namespace TimeManagementService.Controllers
     [ApiController]
     public class TimeManagementController : ControllerBase
     {
-        
+        //TODD Add endpoints.
     }
 }
