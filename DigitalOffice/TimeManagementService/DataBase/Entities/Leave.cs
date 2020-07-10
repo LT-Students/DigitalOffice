@@ -1,6 +1,4 @@
-﻿
-
-using System;
+﻿using System;
 using System.ComponentModel.DataAnnotations;
 
 namespace TimeManagementService.DataBase.Entities
