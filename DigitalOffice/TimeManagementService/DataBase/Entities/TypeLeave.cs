@@ -1,4 +1,4 @@
-﻿namespace TimeManagementService.DataBase.Entities
+﻿namespace TimeManagementService.Database.Entities
 {
     public enum TypeLeave
     {

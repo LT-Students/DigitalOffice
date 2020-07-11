@@ -1,8 +1,10 @@
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
+using TimeManagementService.Database;
 
 namespace TimeManagementService
 {
@@ -17,6 +19,11 @@ namespace TimeManagementService
 
         public void ConfigureServices(IServiceCollection services)
         {
+            services.AddDbContext<TimeManagementDbContext>(options =>
+            {
+                options.UseSqlServer(Configuration.GetConnectionString("SQLConnectionString"));
+            });
+
             services.AddControllers();
         }
 
