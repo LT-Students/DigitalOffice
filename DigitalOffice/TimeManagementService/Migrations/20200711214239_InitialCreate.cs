@@ -32,7 +32,7 @@ namespace TimeManagementService.Migrations
                     Date = table.Column<DateTime>(nullable: false),
                     Time = table.Column<TimeSpan>(nullable: false),
                     Title = table.Column<string>(nullable: true),
-                    Project = table.Column<Guid>(nullable: false),
+                    ProjectId = table.Column<Guid>(nullable: false),
                     Comment = table.Column<string>(nullable: true)
                 },
                 constraints: table =>
