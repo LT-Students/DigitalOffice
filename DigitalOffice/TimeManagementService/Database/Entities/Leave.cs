@@ -7,7 +7,7 @@ namespace TimeManagementService.Database.Entities
     {
         [Key]
         public Guid Id { get; set; }
-        public Guid WorkerId { get; set; }
+        public Guid WorkerUserId { get; set; }
         public DateTime StartLeave { get; set; }
         public DateTime EndLeave { get; set; }
         public TypeLeave TypeLeave { get; set; }        
