@@ -14,10 +14,13 @@ namespace UserService.Database
         {
         }
 
+        // Main table.
         public DbSet<User> Users { get; set; }
         public DbSet<Achievement> Achievements { get; set; }
         public DbSet<Position> Positions { get; set; }
         public DbSet<Company> Companies { get; set; }
+
+        // Auxiliary table.
 
         // Fluent API is written here.
         protected override void OnModelCreating(ModelBuilder modelBuilder)

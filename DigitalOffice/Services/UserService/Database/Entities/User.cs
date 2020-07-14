@@ -15,13 +15,13 @@ namespace UserService.Database.Entities
         public string MiddleName { get; set; }
         public string Status { get; set; }
         public string PasswordHash { get; set; }
-        public Guid AvatarId { get; set; }
+        public Guid AvatarFileId { get; set; }
         [NotMapped]
-        public ICollection<Guid> CertificatesIds { get; set; }
+        public ICollection<Guid> CertificatesFilesIds { get; set; }
         [NotMapped]
         public ICollection<Guid> PositionsIds { get; set; }
         [NotMapped]
         public ICollection<Guid> AchievementsIds { get; set; }
-        public bool Obsolete { get; set; }
+        public bool IsActive { get; set; }
     }
 }
