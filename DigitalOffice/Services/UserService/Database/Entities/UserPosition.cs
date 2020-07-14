@@ -1,4 +1,5 @@
 ﻿using System;
+using System.ComponentModel.DataAnnotations;
 
 namespace UserService.Database.Entities
 {
@@ -9,7 +10,8 @@ namespace UserService.Database.Entities
         public Guid PositionId { get; set; }
         public virtual Position Position { get; set; }
 
+        [Required]
         public DateTime StartTime { get; set; }
-        public DateTime EndTime { get; set; }
+        public DateTime? EndTime { get; set; }
     }
 }

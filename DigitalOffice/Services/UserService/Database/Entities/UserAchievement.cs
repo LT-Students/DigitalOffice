@@ -1,4 +1,5 @@
 ﻿using System;
+using System.ComponentModel.DataAnnotations;
 
 namespace UserService.Database.Entities
 {
@@ -9,6 +10,7 @@ namespace UserService.Database.Entities
         public Guid AchievementId { get; set; }
         public virtual Achievement Achievement { get; set; }
 
+        [Required]
         public DateTime Time { get; set; }
     }
 }

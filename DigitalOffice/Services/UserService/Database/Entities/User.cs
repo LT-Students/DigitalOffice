@@ -9,19 +9,23 @@ namespace UserService.Database.Entities
     {
         [Key]
         public Guid Id { get; set; }
+        [Required]
         public string Email { get; set; }
+        [Required]
         public string FirstName { get; set; }
+        [Required]
         public string LastName { get; set; }
         public string MiddleName { get; set; }
         public string Status { get; set; }
+        [Required]
         public string PasswordHash { get; set; }
-        public Guid AvatarFileId { get; set; }
+        public Guid? AvatarFileId { get; set; }
         [NotMapped]
-        public ICollection<Guid> CertificatesFilesIds { get; set; }
+        public ICollection<UserCertificateFile> CertificatesFilesIds { get; set; }
         [NotMapped]
-        public ICollection<Guid> PositionsIds { get; set; }
+        public ICollection<UserPosition> PositionsIds { get; set; }
         [NotMapped]
-        public ICollection<Guid> AchievementsIds { get; set; }
+        public ICollection<UserAchievement> AchievementsIds { get; set; }
         public bool IsActive { get; set; }
     }
 }

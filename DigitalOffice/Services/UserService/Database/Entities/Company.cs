@@ -7,8 +7,10 @@ namespace UserService.Database.Entities
     {
         [Key]
         public Guid Id { get; set; }
+        [Required]
         public string Name { get; set; }
-        public Guid CEOUserId { get; set; }
+        public Guid? CEOUserId { get; set; }
+        [Required]
         public bool IsActive { get; set; }
     }
 }
