@@ -43,5 +43,16 @@ namespace TimeManagementService
                 endpoints.MapControllers();
             });
         }
+
+        private static void UpdateDatabase(IApplicationBuilder app)
+        {
+            using (var serviceScope = app.ApplicationServices.GetRequiredService<IServiceScopeFactory>().CreateScope())
+            {
+                using (var context = serviceScope.ServiceProvider.GetService<TimeManagementDbContext>())
+                {
+                    context.Database.Migrate();
+                }
+            }
+        }
     }
 }
