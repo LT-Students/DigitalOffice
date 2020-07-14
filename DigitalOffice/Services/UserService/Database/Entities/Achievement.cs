@@ -9,6 +9,5 @@ namespace UserService.Database.Entities
         public Guid Id { get; set; }
         public string Message { get; set; }
         public Guid PictureFileId { get; set; }
-        public DateTime Time { get; set; }
     }
 }

@@ -10,7 +10,5 @@ namespace UserService.Database.Entities
         public string Name { get; set; }
         public string Description { get; set; }
         public Guid CompanyId { get; set; }
-        public DateTime StartTime { get; set; }
-        public DateTime EndTime { get; set; }
     }
 }
