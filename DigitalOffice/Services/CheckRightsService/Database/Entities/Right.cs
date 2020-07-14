@@ -9,9 +9,11 @@ namespace CheckRightsService.Database.Entities
     {
         [Key]
         public Guid Id { get; set; }
+        [Required]
         public Guid UserId { get; set; }
+        [Required]
         public int Type { get; set; }
         [NotMapped]
-        public ICollection<Guid> PermissionsIds { get; set; }
+        public ICollection<RightProjectLink> PermissionsIds { get; set; }
     }
 }
