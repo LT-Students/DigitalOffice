@@ -32,6 +32,8 @@ namespace CheckRightsService
 
         public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
         {
+            UpdateDatabase(app);
+
             app.UseHttpsRedirection();
 
             app.UseRouting();
@@ -40,6 +42,19 @@ namespace CheckRightsService
             {
                 endpoints.MapControllers();
             });
+        }
+
+        private void UpdateDatabase(IApplicationBuilder app)
+        {
+            using (var scope = app.ApplicationServices
+                .GetRequiredService<IServiceScopeFactory>()
+                .CreateScope())
+            {
+                using (var context = scope.ServiceProvider.GetService<CheckRightsServiceDbContext>())
+                {
+                    context.Database.Migrate();
+                }
+            }
         }
     }
 }
