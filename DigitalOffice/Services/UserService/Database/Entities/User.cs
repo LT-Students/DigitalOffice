@@ -20,12 +20,11 @@ namespace UserService.Database.Entities
         [Required]
         public string PasswordHash { get; set; }
         public Guid? AvatarFileId { get; set; }
-        [NotMapped]
-        public ICollection<UserCertificateFile> CertificatesFilesIds { get; set; }
-        [NotMapped]
-        public ICollection<UserPosition> PositionsIds { get; set; }
-        [NotMapped]
-        public ICollection<UserAchievement> AchievementsIds { get; set; }
+        [Required]
         public bool IsActive { get; set; }
+
+        public ICollection<UserCertificateFile> CertificatesFilesIds { get; set; }
+        public ICollection<UserPosition> PositionsIds { get; set; }
+        public ICollection<UserAchievement> AchievementsIds { get; set; }
     }
 }
