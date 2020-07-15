@@ -7,7 +7,7 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Services", "Services", "{2F
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ProjectService", "Services\ProjectService\ProjectService.csproj", "{1F659D47-7DCA-4805-B42A-7FB9DC714DA7}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "TimeManagementService", "TimeManagementService\TimeManagementService.csproj", "{BFEC18E6-CA3F-42AC-AB32-AEBA70AB9603}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "TimeManagementService", "Services\TimeManagementService\TimeManagementService.csproj", "{BFEC18E6-CA3F-42AC-AB32-AEBA70AB9603}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
