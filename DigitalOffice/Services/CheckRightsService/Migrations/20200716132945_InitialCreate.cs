@@ -34,18 +34,6 @@ namespace CheckRightsService.Migrations
                 });
 
             migrationBuilder.CreateTable(
-                name: "RightTypes",
-                columns: table => new
-                {
-                    Id = table.Column<Guid>(nullable: false),
-                    Type = table.Column<string>(nullable: false)
-                },
-                constraints: table =>
-                {
-                    table.PrimaryKey("PK_RightTypes", x => x.Id);
-                });
-
-            migrationBuilder.CreateTable(
                 name: "RightProjectLink",
                 columns: table => new
                 {
@@ -59,6 +47,42 @@ namespace CheckRightsService.Migrations
                         name: "FK_RightProjectLink_Rights_RightId",
                         column: x => x.RightId,
                         principalTable: "Rights",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "RightTypeLink",
+                columns: table => new
+                {
+                    RightId = table.Column<Guid>(nullable: false),
+                    RightType = table.Column<int>(nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_RightTypeLink", x => new { x.RightId, x.RightType });
+                    table.ForeignKey(
+                        name: "FK_RightTypeLink_Rights_RightId",
+                        column: x => x.RightId,
+                        principalTable: "Rights",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "RightChangeRecordTypeLink",
+                columns: table => new
+                {
+                    RightChangeRecordId = table.Column<Guid>(nullable: false),
+                    RightType = table.Column<int>(nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_RightChangeRecordTypeLink", x => new { x.RightChangeRecordId, x.RightType });
+                    table.ForeignKey(
+                        name: "FK_RightChangeRecordTypeLink_RightsHistory_RightChangeRecordId",
+                        column: x => x.RightChangeRecordId,
+                        principalTable: "RightsHistory",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Cascade);
                 });
@@ -80,64 +104,6 @@ namespace CheckRightsService.Migrations
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Cascade);
                 });
-
-            migrationBuilder.CreateTable(
-                name: "RightChangeRecordTypeLink",
-                columns: table => new
-                {
-                    RightChangeRecordId = table.Column<Guid>(nullable: false),
-                    RightTypeId = table.Column<Guid>(nullable: false)
-                },
-                constraints: table =>
-                {
-                    table.PrimaryKey("PK_RightChangeRecordTypeLink", x => new { x.RightChangeRecordId, x.RightTypeId });
-                    table.ForeignKey(
-                        name: "FK_RightChangeRecordTypeLink_RightsHistory_RightChangeRecordId",
-                        column: x => x.RightChangeRecordId,
-                        principalTable: "RightsHistory",
-                        principalColumn: "Id",
-                        onDelete: ReferentialAction.Cascade);
-                    table.ForeignKey(
-                        name: "FK_RightChangeRecordTypeLink_RightTypes_RightTypeId",
-                        column: x => x.RightTypeId,
-                        principalTable: "RightTypes",
-                        principalColumn: "Id",
-                        onDelete: ReferentialAction.Cascade);
-                });
-
-            migrationBuilder.CreateTable(
-                name: "RightTypeLink",
-                columns: table => new
-                {
-                    RightId = table.Column<Guid>(nullable: false),
-                    RightTypeId = table.Column<Guid>(nullable: false)
-                },
-                constraints: table =>
-                {
-                    table.PrimaryKey("PK_RightTypeLink", x => new { x.RightId, x.RightTypeId });
-                    table.ForeignKey(
-                        name: "FK_RightTypeLink_Rights_RightId",
-                        column: x => x.RightId,
-                        principalTable: "Rights",
-                        principalColumn: "Id",
-                        onDelete: ReferentialAction.Cascade);
-                    table.ForeignKey(
-                        name: "FK_RightTypeLink_RightTypes_RightTypeId",
-                        column: x => x.RightTypeId,
-                        principalTable: "RightTypes",
-                        principalColumn: "Id",
-                        onDelete: ReferentialAction.Cascade);
-                });
-
-            migrationBuilder.CreateIndex(
-                name: "IX_RightChangeRecordTypeLink_RightTypeId",
-                table: "RightChangeRecordTypeLink",
-                column: "RightTypeId");
-
-            migrationBuilder.CreateIndex(
-                name: "IX_RightTypeLink_RightTypeId",
-                table: "RightTypeLink",
-                column: "RightTypeId");
         }
 
         protected override void Down(MigrationBuilder migrationBuilder)
@@ -159,9 +125,6 @@ namespace CheckRightsService.Migrations
 
             migrationBuilder.DropTable(
                 name: "Rights");
-
-            migrationBuilder.DropTable(
-                name: "RightTypes");
         }
     }
 }

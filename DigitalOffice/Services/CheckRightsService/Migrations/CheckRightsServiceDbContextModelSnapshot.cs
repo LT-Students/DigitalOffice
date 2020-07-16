@@ -19,21 +19,6 @@ namespace CheckRightsService.Migrations
                 .HasAnnotation("Relational:MaxIdentifierLength", 128)
                 .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
 
-            modelBuilder.Entity("CheckRightsService.Database.Entities.DbRightType", b =>
-                {
-                    b.Property<Guid>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("uniqueidentifier");
-
-                    b.Property<string>("Type")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.HasKey("Id");
-
-                    b.ToTable("RightTypes");
-                });
-
             modelBuilder.Entity("CheckRightsService.Database.Entities.Right", b =>
                 {
                     b.Property<Guid>("Id")
@@ -73,12 +58,10 @@ namespace CheckRightsService.Migrations
                     b.Property<Guid>("RightChangeRecordId")
                         .HasColumnType("uniqueidentifier");
 
-                    b.Property<Guid>("RightTypeId")
-                        .HasColumnType("uniqueidentifier");
+                    b.Property<int>("RightType")
+                        .HasColumnType("int");
 
-                    b.HasKey("RightChangeRecordId", "RightTypeId");
-
-                    b.HasIndex("RightTypeId");
+                    b.HasKey("RightChangeRecordId", "RightType");
 
                     b.ToTable("RightChangeRecordTypeLink");
                 });
@@ -114,12 +97,10 @@ namespace CheckRightsService.Migrations
                     b.Property<Guid>("RightId")
                         .HasColumnType("uniqueidentifier");
 
-                    b.Property<Guid>("RightTypeId")
-                        .HasColumnType("uniqueidentifier");
+                    b.Property<int>("RightType")
+                        .HasColumnType("int");
 
-                    b.HasKey("RightId", "RightTypeId");
-
-                    b.HasIndex("RightTypeId");
+                    b.HasKey("RightId", "RightType");
 
                     b.ToTable("RightTypeLink");
                 });
@@ -129,12 +110,6 @@ namespace CheckRightsService.Migrations
                     b.HasOne("CheckRightsService.Database.Entities.RightChangeRecord", "RightChangeRecord")
                         .WithMany("Types")
                         .HasForeignKey("RightChangeRecordId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.HasOne("CheckRightsService.Database.Entities.DbRightType", "RightType")
-                        .WithMany("RightChangeRecords")
-                        .HasForeignKey("RightTypeId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
                 });
@@ -162,12 +137,6 @@ namespace CheckRightsService.Migrations
                     b.HasOne("CheckRightsService.Database.Entities.Right", "Right")
                         .WithMany("Types")
                         .HasForeignKey("RightId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.HasOne("CheckRightsService.Database.Entities.DbRightType", "RightType")
-                        .WithMany("Rights")
-                        .HasForeignKey("RightTypeId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
                 });

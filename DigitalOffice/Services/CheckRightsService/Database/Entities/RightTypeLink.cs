@@ -1,4 +1,5 @@
-﻿using Microsoft.EntityFrameworkCore;
+﻿using CheckRightsService.Enums;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
 using System;
 
@@ -8,15 +9,14 @@ namespace CheckRightsService.Database.Entities
     {
         public Guid RightId { get; set; }
         public Right Right { get; set; }
-        public Guid RightTypeId { get; set; }
-        public DbRightType RightType { get; set; }
+        public RightType RightType { get; set; }
     }
 
     public class RightTypeLinkConfiguration : IEntityTypeConfiguration<RightTypeLink>
     {
         public void Configure(EntityTypeBuilder<RightTypeLink> builder)
         {
-            builder.HasKey(link => new { link.RightId, link.RightTypeId });
+            builder.HasKey(link => new { link.RightId, link.RightType });
 
             builder
                 .HasOne(link => link.Right)
@@ -24,9 +24,8 @@ namespace CheckRightsService.Database.Entities
                 .HasForeignKey(link => link.RightId);
 
             builder
-                .HasOne(link => link.RightType)
-                .WithMany(t => t.Rights)
-                .HasForeignKey(link => link.RightTypeId);
+            .Property(e => e.RightType)
+            .HasConversion<int>();
         }
     }
 }

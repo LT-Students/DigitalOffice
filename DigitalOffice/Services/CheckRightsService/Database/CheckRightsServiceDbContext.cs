@@ -8,8 +8,6 @@ namespace CheckRightsService.Database
     /// </summary>
     public class CheckRightsServiceDbContext : DbContext
     {
-        public DbSet<DbRightType> RightTypes { get; set; }
-
         public DbSet<Right> Rights { get; set; }
 
         public DbSet<RightChangeRecord> RightsHistory { get; set; }
@@ -18,8 +16,6 @@ namespace CheckRightsService.Database
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
-            modelBuilder.ApplyConfiguration(new RightTypeConfiguration());
-
             modelBuilder.ApplyConfiguration(new RightProjectLinkConfiguration());
 
             modelBuilder.ApplyConfiguration(new RightRecordProjectLinkConfiguration());
