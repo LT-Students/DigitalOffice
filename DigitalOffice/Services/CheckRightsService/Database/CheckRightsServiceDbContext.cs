@@ -1,5 +1,6 @@
 ﻿using CheckRightsService.Database.Entities;
 using Microsoft.EntityFrameworkCore;
+using System.Reflection;
 
 namespace CheckRightsService.Database
 {
@@ -16,13 +17,7 @@ namespace CheckRightsService.Database
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
-            modelBuilder.ApplyConfiguration(new RightProjectLinkConfiguration());
-
-            modelBuilder.ApplyConfiguration(new RightRecordProjectLinkConfiguration());
-
-            modelBuilder.ApplyConfiguration(new RightTypeLinkConfiguration());
-
-            modelBuilder.ApplyConfiguration(new RightChangeRecordTypeLinkConfiguration());
+            modelBuilder.ApplyConfigurationsFromAssembly(Assembly.GetExecutingAssembly());
         }
     }
 }
