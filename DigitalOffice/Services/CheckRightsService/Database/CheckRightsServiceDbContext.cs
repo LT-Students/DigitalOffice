@@ -1,5 +1,4 @@
-﻿using CheckRightsService.Database.Configurations;
-using CheckRightsService.Database.Entities;
+﻿using CheckRightsService.Database.Entities;
 using Microsoft.EntityFrameworkCore;
 
 namespace CheckRightsService.Database
