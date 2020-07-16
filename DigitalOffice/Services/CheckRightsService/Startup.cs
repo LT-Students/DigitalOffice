@@ -44,15 +44,13 @@ namespace CheckRightsService
 
         private void UpdateDatabase(IApplicationBuilder app)
         {
-            using (var scope = app.ApplicationServices
+            using var scope = app.ApplicationServices
                 .GetRequiredService<IServiceScopeFactory>()
-                .CreateScope())
-            {
-                using (var context = scope.ServiceProvider.GetService<CheckRightsServiceDbContext>())
-                {
-                    context.Database.Migrate();
-                }
-            }
+                .CreateScope();
+
+            using var context = scope.ServiceProvider.GetService<CheckRightsServiceDbContext>();
+
+            context.Database.Migrate();
         }
     }
 }

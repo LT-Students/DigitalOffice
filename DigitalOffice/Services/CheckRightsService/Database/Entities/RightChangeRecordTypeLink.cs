@@ -1,15 +1,12 @@
 ﻿using System;
-using System.ComponentModel.DataAnnotations;
 
 namespace CheckRightsService.Database.Entities
 {
-    public class RightChangeRecordProjectLink
+    public class RightChangeRecordTypeLink
     {
-        [Required]
         public Guid RightChangeRecordId { get; set; }
-        [Required]
         public RightChangeRecord RightChangeRecord { get; set; }
-        [Required]
-        public Guid ProjectId { get; set; }
+        public Guid RightTypeId { get; set; }
+        public DbRightType RightType { get; set; }
     }
 }

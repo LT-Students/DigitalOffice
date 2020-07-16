@@ -1,4 +1,5 @@
-﻿using CheckRightsService.Database.Entities;
+﻿using CheckRightsService.Database.Configurations;
+using CheckRightsService.Database.Entities;
 using Microsoft.EntityFrameworkCore;
 
 namespace CheckRightsService.Database
@@ -8,33 +9,25 @@ namespace CheckRightsService.Database
     /// </summary>
     public class CheckRightsServiceDbContext : DbContext
     {
+        public DbSet<DbRightType> RightTypes { get; set; }
+
         public DbSet<Right> Rights { get; set; }
 
         public DbSet<RightChangeRecord> RightsHistory { get; set; }
-
-        public DbSet<RightProjectLink> RightProjectLinks { get; set; }
 
         public CheckRightsServiceDbContext(DbContextOptions<CheckRightsServiceDbContext> options) : base(options) { }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
-            modelBuilder.Entity<RightProjectLink>(entity =>
-            {
-                entity.HasKey(link => new { link.RightId, link.ProjectId });
+            modelBuilder.ApplyConfiguration(new RightTypeConfiguration());
 
-                entity.HasOne(link => link.Right)
-                    .WithMany(r => r.PermissionsIds)
-                    .HasForeignKey(link => link.RightId);
-            });
+            modelBuilder.ApplyConfiguration(new RightProjectLinkConfiguration());
 
-            modelBuilder.Entity<RightChangeRecordProjectLink>(entity =>
-            {
-                entity.HasKey(link => new { link.RightChangeRecordId, link.ProjectId });
+            modelBuilder.ApplyConfiguration(new RightRecordProjectLinkConfiguration());
 
-                entity.HasOne(link => link.RightChangeRecord)
-                    .WithMany(record => record.ChangedPermissionsIds)
-                    .HasForeignKey(link => link.RightChangeRecordId);
-            });
+            modelBuilder.ApplyConfiguration(new RightTypeLinkConfiguration());
+
+            modelBuilder.ApplyConfiguration(new RightChangeRecordTypeLinkConfiguration());
         }
     }
 }
