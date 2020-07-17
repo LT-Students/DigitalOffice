@@ -24,8 +24,8 @@ namespace CheckRightsService.Database.Entities
                 .HasForeignKey(link => link.RightId);
 
             builder
-            .Property(e => e.RightType)
-            .HasConversion<int>();
+                .Property(e => e.RightType)
+                .HasConversion<int>();
         }
     }
 }
