@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 
 namespace UserService.Database.Entities
@@ -12,5 +13,7 @@ namespace UserService.Database.Entities
         public Guid? CEOUserId { get; set; }
         [Required]
         public bool IsActive { get; set; }
+
+        public ICollection<Position> Positions { get; set; }
     }
 }

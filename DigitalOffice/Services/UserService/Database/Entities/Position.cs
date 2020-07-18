@@ -1,4 +1,6 @@
-﻿using System;
+﻿using Microsoft.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore.Metadata.Builders;
+using System;
 using System.ComponentModel.DataAnnotations;
 
 namespace UserService.Database.Entities
@@ -10,7 +12,5 @@ namespace UserService.Database.Entities
         [Required]
         public string Name { get; set; }
         public string Description { get; set; }
-        [Required]
-        public Guid CompanyId { get; set; }
     }
 }
