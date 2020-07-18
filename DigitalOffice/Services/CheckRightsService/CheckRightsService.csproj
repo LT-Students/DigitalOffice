@@ -6,6 +6,10 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <PackageReference Include="MassTransit" Version="7.0.2-develop.2877" />
+    <PackageReference Include="MassTransit.AspNetCore" Version="7.0.2-develop.2877" />
+    <PackageReference Include="MassTransit.Extensions.DependencyInjection" Version="7.0.2-develop.2877" />
+    <PackageReference Include="MassTransit.RabbitMQ" Version="7.0.2-develop.2877" />
     <PackageReference Include="Microsoft.EntityFrameworkCore" Version="3.1.6" />
     <PackageReference Include="Microsoft.EntityFrameworkCore.SqlServer" Version="3.1.6" />
     <PackageReference Include="Microsoft.EntityFrameworkCore.Tools" Version="3.1.6">
