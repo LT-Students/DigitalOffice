@@ -1,4 +1,6 @@
-﻿using System;
+﻿using Microsoft.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore.Metadata.Builders;
+using System;
 using System.ComponentModel.DataAnnotations;
 
 namespace UserService.Database.Entities
@@ -12,5 +14,16 @@ namespace UserService.Database.Entities
 
         [Required]
         public DateTime Time { get; set; }
+    }
+
+    public class UserAchievementConfiguration : IEntityTypeConfiguration<UserAchievement>
+    {
+        public void Configure(EntityTypeBuilder<UserAchievement> builder)
+        {
+            builder.HasKey(pm => new { pm.UserId, pm.AchievementId });
+            builder.HasOne<User>(pm => pm.User)
+                .WithMany(p => p.AchievementsIds)
+                .HasForeignKey(pm => pm.UserId);
+        }
     }
 }
