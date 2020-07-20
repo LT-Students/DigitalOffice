@@ -1,4 +1,5 @@
-﻿using Microsoft.EntityFrameworkCore;
+﻿using System.Reflection;
+using Microsoft.EntityFrameworkCore;
 using ProjectService.Database.Entities;
 
 namespace ProjectService.Database
@@ -19,25 +20,7 @@ namespace ProjectService.Database
         // Fluent API is written here.
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
-            modelBuilder.Entity<ProjectManagerUser>(entity =>
-            {
-                entity.HasKey(pm => new { pm.ProjectId, pm.ManagerUserId });
-
-                entity.HasOne<Project>(pm => pm.Project)
-                    .WithMany(p => p.ManagersUsersIds)
-                    .HasForeignKey(pm => pm.ProjectId);                
-            });
-
-            modelBuilder.Entity<ProjectWorkerUser>(entity =>
-            {
-                entity.HasKey(pw => new { pw.ProjectId, pw.WorkerUserId });
-
-                entity.HasOne<Project>(pw => pw.Project)
-                    .WithMany(p => p.WorkersUsersIds)
-                    .HasForeignKey(pw => pw.ProjectId);
-            });
-
-            modelBuilder.Entity<ProjectFile>().HasKey(userFile => new { userFile.ProjectId, userFile.FileId });
+            modelBuilder.ApplyConfigurationsFromAssembly(Assembly.GetExecutingAssembly());
         }
     }
 }
