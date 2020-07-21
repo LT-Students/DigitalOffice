@@ -2,12 +2,14 @@ name: .NET Core
 
 on:
   push:
-    paths:
-      - 'DigitalOffice/Services/**'
+    paths-ignore:
+      - '**.yml'
     branches: 
       - develop
       - feature/*
   pull_request:
+    paths-ignore:
+      - '**.yml'
     branches: [ develop ]
 
 jobs:
