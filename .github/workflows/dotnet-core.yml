@@ -6,7 +6,7 @@ on:
       - develop
       - feature/*
   pull_request:
-    branches: [ develop ]
+    branches: [ develop, master ]
 
 jobs:
   build:
@@ -23,7 +23,7 @@ jobs:
       with:
         dotnet-version: 3.1.301
     - name: Install dependencies
-      run: dotnet restore 
+      run: dotnet restore ./digitaloffice/
     - name: Build
       run: dotnet build --configuration Release --no-restore
     - name: Test
