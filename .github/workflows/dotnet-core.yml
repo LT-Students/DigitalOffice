@@ -2,6 +2,8 @@ name: .NET Core
 
 on:
   push:
+    paths-ignore:
+      - '**.yml'
     branches: 
       - develop
       - feature/*
