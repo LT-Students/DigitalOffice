@@ -17,17 +17,17 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "TimeManagementService", "Se
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Tests", "Tests", "{726AAF26-0B24-4525-99A3-955F0E354C71}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CheckRightsServiceTests", "Tests\CheckRightsServiceTests\CheckRightsServiceTests.csproj", "{B1995E22-8ED7-4C89-97CE-B062533E5BE8}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "CheckRightsServiceUnitTests", "Tests\CheckRightsServiceTests\CheckRightsServiceUnitTests.csproj", "{B1995E22-8ED7-4C89-97CE-B062533E5BE8}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "UserServiceTests", "Tests\UserServiceTests\UserServiceTests.csproj", "{3F5D097A-C4C9-4D65-9602-9FC2A423D800}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "UserServiceUnitTests", "Tests\UserServiceTests\UserServiceUnitTests.csproj", "{3F5D097A-C4C9-4D65-9602-9FC2A423D800}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "FileServiceTests", "Tests\FileServiceTests\FileServiceTests.csproj", "{7AC1DFDB-F57C-43CB-B86C-1BCBB6AA448B}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "FileServiceUnitTests", "Tests\FileServiceTests\FileServiceUnitTests.csproj", "{7AC1DFDB-F57C-43CB-B86C-1BCBB6AA448B}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ProjectServiceTests", "Tests\ProjectServiceTests\ProjectServiceTests.csproj", "{757BF6BC-D97D-45EA-A36E-B5854BB5801F}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ProjectServiceUnitTests", "Tests\ProjectServiceTests\ProjectServiceUnitTests.csproj", "{757BF6BC-D97D-45EA-A36E-B5854BB5801F}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TimeManagementServiceTests", "Tests\TimeManagementServiceTests\TimeManagementServiceTests.csproj", "{6E0BD608-AEBA-4881-BFBE-331EDC17202B}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "TimeManagementServiceUnitTests", "Tests\TimeManagementServiceTests\TimeManagementServiceUnitTests.csproj", "{6E0BD608-AEBA-4881-BFBE-331EDC17202B}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CompanyServiceTests", "Tests\CompanyServiceTests\CompanyServiceTests.csproj", "{1FC00E13-79AD-429A-862B-7F14A6975B4D}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "CompanyServiceUnitTests", "Tests\CompanyServiceTests\CompanyServiceUnitTests.csproj", "{1FC00E13-79AD-429A-862B-7F14A6975B4D}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
