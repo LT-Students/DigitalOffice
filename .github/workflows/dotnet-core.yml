@@ -2,20 +2,16 @@ name: .NET Core
 
 on:
   push:
-    paths-ignore:
-      - '**.yml'
     branches: 
       - develop
       - feature/*
   pull_request:
-    paths-ignore:
-      - '**.yml'
     branches: [ develop ]
 
 jobs:
   build:
 
-    runs-on: ubuntu-latest
+    runs-on: windows-latest
 
     steps:
     - uses: actions/checkout@v2
@@ -24,7 +20,7 @@ jobs:
       with:
         dotnet-version: 3.1.301
     - name: Install dependencies
-      run: dotnet restore
+      run: dotnet restore 
     - name: Build
       run: dotnet build --configuration Release --no-restore
     - name: Test
