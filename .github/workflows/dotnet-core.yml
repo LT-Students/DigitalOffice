@@ -2,6 +2,8 @@ name: .NET Core
 
 on:
   push:
+    paths:
+      - 'DigitalOffice/Services/**'
     branches: 
       - develop
       - feature/*
