@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
-using System.ComponentModel.DataAnnotations.Schema;
 
 namespace UserService.Database.Entities
 {
@@ -24,7 +23,6 @@ namespace UserService.Database.Entities
         public bool IsActive { get; set; }
 
         public ICollection<UserCertificateFile> CertificatesFilesIds { get; set; }
-        public ICollection<UserPosition> PositionsIds { get; set; }
         public ICollection<UserAchievement> AchievementsIds { get; set; }
     }
 }
