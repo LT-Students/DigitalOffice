@@ -25,6 +25,6 @@ jobs:
     - name: Install dependencies
       run: dotnet restore ./digitaloffice/
     - name: Build
-      run: dotnet build ./digitaloffice/ --configuration Release --no-restore
+      run: dotnet build ./digitaloffice/ --no-restore
     - name: Test
       run: dotnet test ./digitaloffice/ --no-restore --verbosity normal
