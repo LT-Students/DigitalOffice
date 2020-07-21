@@ -33,11 +33,6 @@ namespace ProjectService
         {
             UpdateDatabase(app);
 
-            if (env.IsDevelopment())
-            {
-                app.UseDeveloperExceptionPage();
-            }
-
             app.UseHttpsRedirection();
 
             app.UseRouting();
