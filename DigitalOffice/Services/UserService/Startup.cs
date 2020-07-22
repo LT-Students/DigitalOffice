@@ -16,7 +16,7 @@ namespace UserService
         {
             Configuration = configuration;
         }
-  
+
         public void ConfigureServices(IServiceCollection services)
         {
             services.AddDbContext<UserServiceDbContext>(options =>
@@ -30,6 +30,7 @@ namespace UserService
         public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
         {
             UpdateDatabase(app);
+
             if (env.IsDevelopment())
             {
                 app.UseDeveloperExceptionPage();
@@ -44,18 +45,13 @@ namespace UserService
             });
         }
 
-        private static void UpdateDatabase(IApplicationBuilder app)
+        private void UpdateDatabase(IApplicationBuilder app)
         {
-            using (var serviceScope = app.ApplicationServices
+            using var serviceScope = app.ApplicationServices
                 .GetRequiredService<IServiceScopeFactory>()
-                .CreateScope())
-            {
-                using (var context = serviceScope.ServiceProvider.GetService<UserServiceDbContext>())
-                {
-                    context.Database.Migrate();
-                }
-            }
+                .CreateScope();
+            using var context = serviceScope.ServiceProvider.GetService<UserServiceDbContext>();
+            context.Database.Migrate();
         }
-
     }
 }

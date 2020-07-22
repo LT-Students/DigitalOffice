@@ -3,15 +3,17 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using UserService.Database;
 
 namespace UserService.Migrations
 {
     [DbContext(typeof(UserServiceDbContext))]
-    partial class UserServiceDbContextModelSnapshot : ModelSnapshot
+    [Migration("20200718150017_AddRelationWithCompanies")]
+    partial class AddRelationWithCompanies
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -35,6 +37,50 @@ namespace UserService.Migrations
                     b.HasKey("Id");
 
                     b.ToTable("Achievements");
+                });
+
+            modelBuilder.Entity("UserService.Database.Entities.Company", b =>
+                {
+                    b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<Guid?>("CEOUserId")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<bool>("IsActive")
+                        .HasColumnType("bit");
+
+                    b.Property<string>("Name")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("Companies");
+                });
+
+            modelBuilder.Entity("UserService.Database.Entities.Position", b =>
+                {
+                    b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<Guid?>("CompanyId")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<string>("Description")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("Name")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("CompanyId");
+
+                    b.ToTable("Positions");
                 });
 
             modelBuilder.Entity("UserService.Database.Entities.User", b =>
@@ -107,6 +153,34 @@ namespace UserService.Migrations
                     b.ToTable("UserCertificateFile");
                 });
 
+            modelBuilder.Entity("UserService.Database.Entities.UserPosition", b =>
+                {
+                    b.Property<Guid>("UserId")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<Guid>("PositionId")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<DateTime?>("EndTime")
+                        .HasColumnType("datetime2");
+
+                    b.Property<DateTime>("StartTime")
+                        .HasColumnType("datetime2");
+
+                    b.HasKey("UserId", "PositionId");
+
+                    b.HasIndex("PositionId");
+
+                    b.ToTable("UserPosition");
+                });
+
+            modelBuilder.Entity("UserService.Database.Entities.Position", b =>
+                {
+                    b.HasOne("UserService.Database.Entities.Company", null)
+                        .WithMany("Positions")
+                        .HasForeignKey("CompanyId");
+                });
+
             modelBuilder.Entity("UserService.Database.Entities.UserAchievement", b =>
                 {
                     b.HasOne("UserService.Database.Entities.Achievement", "Achievement")
@@ -126,6 +200,21 @@ namespace UserService.Migrations
                 {
                     b.HasOne("UserService.Database.Entities.User", "User")
                         .WithMany("CertificatesFilesIds")
+                        .HasForeignKey("UserId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+                });
+
+            modelBuilder.Entity("UserService.Database.Entities.UserPosition", b =>
+                {
+                    b.HasOne("UserService.Database.Entities.Position", "Position")
+                        .WithMany()
+                        .HasForeignKey("PositionId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("UserService.Database.Entities.User", "User")
+                        .WithMany("PositionsIds")
                         .HasForeignKey("UserId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
