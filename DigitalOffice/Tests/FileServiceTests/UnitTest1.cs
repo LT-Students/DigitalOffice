@@ -1,6 +1,6 @@
 using NUnit.Framework;
 
-namespace FileServiceTests
+namespace FileServiceUnitTests
 {
     public class Tests
     {

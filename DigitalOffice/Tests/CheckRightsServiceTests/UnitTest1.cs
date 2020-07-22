@@ -1,6 +1,6 @@
 using NUnit.Framework;
 
-namespace CheckRightsServiceTests
+namespace CheckRightsServiceUnitTests
 {
     public class Tests
     {

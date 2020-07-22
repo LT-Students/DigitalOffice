@@ -1,6 +1,6 @@
 using NUnit.Framework;
 
-namespace CompanyServiceTests
+namespace CompanyServiceUnitTests
 {
     public class Tests
     {
