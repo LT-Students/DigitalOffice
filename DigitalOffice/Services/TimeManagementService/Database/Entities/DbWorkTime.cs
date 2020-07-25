@@ -3,7 +3,7 @@ using System.ComponentModel.DataAnnotations;
 
 namespace TimeManagementService.Database.Entities
 {
-    public class WorkTime
+    public class DbWorkTime
     {
         [Key]
         public Guid Id { get; set; }

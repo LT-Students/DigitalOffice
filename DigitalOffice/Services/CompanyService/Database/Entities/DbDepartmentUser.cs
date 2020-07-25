@@ -5,11 +5,11 @@ using Microsoft.EntityFrameworkCore.Metadata.Builders;
 
 namespace CompanyService.Database.Entities
 {
-    public class DepartmentUser
+    public class DbDepartmentUser
     {
         public Guid UserId { get; set; }
         public Guid DepartmentId { get; set; }
-        public Department Department { get; set; }
+        public DbDepartment Department { get; set; }
 
         [Required]
         public bool IsActive { get; set; }
@@ -18,9 +18,9 @@ namespace CompanyService.Database.Entities
         public DateTime? EndTime { get; set; }
     }
 
-    public class DepartmentUserConfiguration : IEntityTypeConfiguration<DepartmentUser>
+    public class DepartmentUserConfiguration : IEntityTypeConfiguration<DbDepartmentUser>
     {
-        public void Configure(EntityTypeBuilder<DepartmentUser> builder)
+        public void Configure(EntityTypeBuilder<DbDepartmentUser> builder)
         {
             builder.HasKey(user => new {user.UserId, user.DepartmentId});
 

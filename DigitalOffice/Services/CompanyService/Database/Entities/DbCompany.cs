@@ -4,14 +4,15 @@ using System.ComponentModel.DataAnnotations;
 
 namespace CompanyService.Database.Entities
 {
-    public class Position
+    public class DbCompany
     {
         [Key]
         public Guid Id { get; set; }
         [Required]
         public string Name { get; set; }
-        public string Description { get; set; }
-
-        public ICollection<CompanyUser> UserIds { get; set; }
+        [Required]
+        public bool IsActive { get; set; }
+        
+        public ICollection<DbCompanyUser> UserIds { get; set; }
     }
 }

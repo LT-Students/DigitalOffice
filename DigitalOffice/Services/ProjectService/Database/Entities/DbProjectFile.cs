@@ -4,16 +4,16 @@ using Microsoft.EntityFrameworkCore.Metadata.Builders;
 
 namespace ProjectService.Database.Entities
 {
-    public class ProjectFile
+    public class DbProjectFile
     {
         public Guid ProjectId { get; set; }
-        public Project Project { get; set; }
+        public DbProject Project { get; set; }
         public Guid FileId { get; set; }
     }
 
-    public class ProjectFileConfiguration : IEntityTypeConfiguration<ProjectFile>
+    public class ProjectFileConfiguration : IEntityTypeConfiguration<DbProjectFile>
     {
-        public void Configure(EntityTypeBuilder<ProjectFile> builder)
+        public void Configure(EntityTypeBuilder<DbProjectFile> builder)
         {
             builder.HasKey(projectFile => new {projectFile.ProjectId, projectFile.FileId});
         }

@@ -4,16 +4,16 @@ using System;
 
 namespace CheckRightsService.Database.Entities
 {
-    public class RightRecordProjectLink
+    public class DbRightRecordProjectLink
     {
         public Guid RightChangeRecordId { get; set; }
-        public RightChangeRecord RightChangeRecord { get; set; }
+        public DbRightChangeRecord RightChangeRecord { get; set; }
         public Guid ProjectId { get; set; }
     }
 
-    public class RightRecordProjectLinkConfiguration : IEntityTypeConfiguration<RightRecordProjectLink>
+    public class RightRecordProjectLinkConfiguration : IEntityTypeConfiguration<DbRightRecordProjectLink>
     {
-        public void Configure(EntityTypeBuilder<RightRecordProjectLink> builder)
+        public void Configure(EntityTypeBuilder<DbRightRecordProjectLink> builder)
         {
             builder.HasKey(link => new { link.RightChangeRecordId, link.ProjectId });
 

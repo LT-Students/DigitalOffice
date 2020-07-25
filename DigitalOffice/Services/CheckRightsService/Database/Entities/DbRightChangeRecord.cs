@@ -4,7 +4,7 @@ using System.ComponentModel.DataAnnotations;
 
 namespace CheckRightsService.Database.Entities
 {
-    public class RightChangeRecord
+    public class DbRightChangeRecord
     {
         [Key]
         public Guid Id { get; set; }
@@ -14,7 +14,7 @@ namespace CheckRightsService.Database.Entities
         public Guid ChangedByUserId { get; set; }
         [Required]
         public DateTime Time { get; set; }
-        public ICollection<RightChangeRecordTypeLink> Types { get; set; }
-        public ICollection<RightRecordProjectLink> ChangedPermissionsIds { get; set; }
+        public ICollection<DbRightChangeRecordTypeLink> Types { get; set; }
+        public ICollection<DbRightRecordProjectLink> ChangedPermissionsIds { get; set; }
     }
 }

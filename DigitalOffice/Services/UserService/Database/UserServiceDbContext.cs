@@ -15,8 +15,8 @@ namespace UserService.Database
         {
         }
 
-        public DbSet<User> Users { get; set; }
-        public DbSet<Achievement> Achievements { get; set; }
+        public DbSet<DbUser> Users { get; set; }
+        public DbSet<DbAchievement> Achievements { get; set; }
 
         // Fluent API is written here.
         protected override void OnModelCreating(ModelBuilder modelBuilder)

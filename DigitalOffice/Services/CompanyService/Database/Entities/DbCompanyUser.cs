@@ -5,13 +5,13 @@ using Microsoft.EntityFrameworkCore.Metadata.Builders;
 
 namespace CompanyService.Database.Entities
 {
-    public class CompanyUser
+    public class DbCompanyUser
     {
         public Guid UserId { get; set; }
         public Guid CompanyId { get; set; }
-        public Company Company { get; set; }
+        public DbCompany Company { get; set; }
         public Guid PositionId { get; set; }
-        public Position Position { get; set; }
+        public DbPosition Position { get; set; }
 
         [Required]
         public bool IsActive { get; set; }
@@ -20,9 +20,9 @@ namespace CompanyService.Database.Entities
         public DateTime? EndTime { get; set; }
     }
 
-    public class CompanyUserConfiguration : IEntityTypeConfiguration<CompanyUser>
+    public class CompanyUserConfiguration : IEntityTypeConfiguration<DbCompanyUser>
     {
-        public void Configure(EntityTypeBuilder<CompanyUser> builder)
+        public void Configure(EntityTypeBuilder<DbCompanyUser> builder)
         {
             builder.HasKey(user => new { user.UserId, user.CompanyId, user.PositionId });
 

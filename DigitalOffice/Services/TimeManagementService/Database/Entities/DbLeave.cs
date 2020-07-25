@@ -3,7 +3,7 @@ using System.ComponentModel.DataAnnotations;
 
 namespace TimeManagementService.Database.Entities
 {
-    public class Leave
+    public class DbLeave
     {
         [Key]
         public Guid Id { get; set; }

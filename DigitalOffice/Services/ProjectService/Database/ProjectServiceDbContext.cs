@@ -15,7 +15,7 @@ namespace ProjectService.Database
         {
         }
 
-        public DbSet<Project> Projects { get; set; }
+        public DbSet<DbProject> Projects { get; set; }
 
         // Fluent API is written here.
         protected override void OnModelCreating(ModelBuilder modelBuilder)
