@@ -9,9 +9,9 @@ namespace CheckRightsService.Database
     /// </summary>
     public class CheckRightsServiceDbContext : DbContext
     {
-        public DbSet<Right> Rights { get; set; }
+        public DbSet<DbRight> Rights { get; set; }
 
-        public DbSet<RightChangeRecord> RightsHistory { get; set; }
+        public DbSet<DbRightChangeRecord> RightsHistory { get; set; }
 
         public CheckRightsServiceDbContext(DbContextOptions<CheckRightsServiceDbContext> options) : base(options) { }
 

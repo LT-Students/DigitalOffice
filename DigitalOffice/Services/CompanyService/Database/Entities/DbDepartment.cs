@@ -4,7 +4,7 @@ using System.ComponentModel.DataAnnotations;
 
 namespace CompanyService.Database.Entities
 {
-    public class Department
+    public class DbDepartment
     {
         [Key]
         public Guid Id { get; set; }
@@ -17,6 +17,6 @@ namespace CompanyService.Database.Entities
         [Required]
         public Guid CompanyId { get; set; }
         
-        public ICollection<DepartmentUser> UserIds { get; set; }
+        public ICollection<DbDepartmentUser> UserIds { get; set; }
     }
 }

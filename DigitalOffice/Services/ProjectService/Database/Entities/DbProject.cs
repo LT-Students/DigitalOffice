@@ -4,7 +4,7 @@ using System.ComponentModel.DataAnnotations;
 
 namespace ProjectService.Database.Entities
 {
-    public class Project
+    public class DbProject
     {
         [Key]
         public Guid Id { get; set; }
@@ -13,8 +13,8 @@ namespace ProjectService.Database.Entities
         public Guid DepartmentId { get; set; }
         public bool Deferred { get; set; }
         public bool IsActive { get; set; }
-        public ICollection<ProjectManagerUser> ManagersUsersIds { get; set; }
-        public ICollection<ProjectWorkerUser> WorkersUsersIds { get; set; }
-        public ICollection<ProjectFile> FilesIds { get; set; }
+        public ICollection<DbProjectManagerUser> ManagersUsersIds { get; set; }
+        public ICollection<DbProjectWorkerUser> WorkersUsersIds { get; set; }
+        public ICollection<DbProjectFile> FilesIds { get; set; }
     }
 }

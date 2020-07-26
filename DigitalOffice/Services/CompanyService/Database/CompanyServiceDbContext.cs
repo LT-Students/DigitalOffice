@@ -15,9 +15,9 @@ namespace CompanyService.Database
         {
         }
 
-        public DbSet<Position> Positions { get; set; }
-        public DbSet<Company> Companies { get; set; }
-        public DbSet<Department> Departments { get; set; }
+        public DbSet<DbPosition> Positions { get; set; }
+        public DbSet<DbCompany> Companies { get; set; }
+        public DbSet<DbDepartment> Departments { get; set; }
 
         // Fluent API is written here.
         protected override void OnModelCreating(ModelBuilder modelBuilder)

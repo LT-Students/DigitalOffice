@@ -5,23 +5,23 @@ using System.ComponentModel.DataAnnotations;
 
 namespace UserService.Database.Entities
 {
-    public class UserAchievement
+    public class DbUserAchievement
     {
         public Guid UserId { get; set; }
-        public virtual User User { get; set; }
+        public virtual DbUser User { get; set; }
         public Guid AchievementId { get; set; }
-        public virtual Achievement Achievement { get; set; }
+        public virtual DbAchievement Achievement { get; set; }
 
         [Required]
         public DateTime Time { get; set; }
     }
 
-    public class UserAchievementConfiguration : IEntityTypeConfiguration<UserAchievement>
+    public class UserAchievementConfiguration : IEntityTypeConfiguration<DbUserAchievement>
     {
-        public void Configure(EntityTypeBuilder<UserAchievement> builder)
+        public void Configure(EntityTypeBuilder<DbUserAchievement> builder)
         {
             builder.HasKey(pm => new { pm.UserId, pm.AchievementId });
-            builder.HasOne<User>(pm => pm.User)
+            builder.HasOne<DbUser>(pm => pm.User)
                 .WithMany(p => p.AchievementsIds)
                 .HasForeignKey(pm => pm.UserId);
         }

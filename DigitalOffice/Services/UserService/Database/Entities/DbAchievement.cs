@@ -3,7 +3,7 @@ using System.ComponentModel.DataAnnotations;
 
 namespace UserService.Database.Entities
 {
-    public class Achievement
+    public class DbAchievement
     {
         [Key]
         public Guid Id { get; set; }

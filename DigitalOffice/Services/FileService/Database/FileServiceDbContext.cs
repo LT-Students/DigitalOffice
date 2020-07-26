@@ -13,7 +13,7 @@ namespace FileService.Database
         {
         }
         
-        public DbSet<File> Files { get; set; }
+        public DbSet<DbFile> Files { get; set; }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         { 

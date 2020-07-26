@@ -4,19 +4,19 @@ using System;
 
 namespace UserService.Database.Entities
 {
-    public class UserCertificateFile
+    public class DbUserCertificateFile
     {
         public Guid UserId { get; set; }
-        public virtual User User { get; set; }
+        public virtual DbUser User { get; set; }
         public Guid CertificateId { get; set; }
     }
 
-    public class UserCertificateFileConfiguration : IEntityTypeConfiguration<UserCertificateFile>
+    public class UserCertificateFileConfiguration : IEntityTypeConfiguration<DbUserCertificateFile>
     {
-        public void Configure(EntityTypeBuilder<UserCertificateFile> builder)
+        public void Configure(EntityTypeBuilder<DbUserCertificateFile> builder)
         {
             builder.HasKey(pm => new { pm.UserId, pm.CertificateId });
-            builder.HasOne<User>(pm => pm.User)
+            builder.HasOne<DbUser>(pm => pm.User)
                 .WithMany(p => p.CertificatesFilesIds)
                 .HasForeignKey(pm => pm.UserId);
         }

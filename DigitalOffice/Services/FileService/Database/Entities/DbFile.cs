@@ -3,7 +3,7 @@ using System.ComponentModel.DataAnnotations;
 
 namespace FileService.Database.Entities
 {
-    public class File
+    public class DbFile
     {
         [Key]
         public Guid Id { get; set; }

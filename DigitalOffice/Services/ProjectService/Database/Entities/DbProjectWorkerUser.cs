@@ -4,16 +4,16 @@ using Microsoft.EntityFrameworkCore.Metadata.Builders;
 
 namespace ProjectService.Database.Entities
 {
-    public class ProjectWorkerUser
+    public class DbProjectWorkerUser
     {
         public Guid ProjectId { get; set; }
-        public Project Project { get; set; }
+        public DbProject Project { get; set; }
         public Guid WorkerUserId { get; set; }
     }
     
-    public class ProjectWorkerUserConfiguration : IEntityTypeConfiguration<ProjectWorkerUser>
+    public class ProjectWorkerUserConfiguration : IEntityTypeConfiguration<DbProjectWorkerUser>
     {
-        public void Configure(EntityTypeBuilder<ProjectWorkerUser> builder)
+        public void Configure(EntityTypeBuilder<DbProjectWorkerUser> builder)
         {
             builder.HasKey(pw => new { pw.ProjectId, pw.WorkerUserId });
             

@@ -4,7 +4,7 @@ using System.ComponentModel.DataAnnotations;
 
 namespace UserService.Database.Entities
 {
-    public class User
+    public class DbUser
     {
         [Key]
         public Guid Id { get; set; }
@@ -22,7 +22,7 @@ namespace UserService.Database.Entities
         [Required]
         public bool IsActive { get; set; }
 
-        public ICollection<UserCertificateFile> CertificatesFilesIds { get; set; }
-        public ICollection<UserAchievement> AchievementsIds { get; set; }
+        public ICollection<DbUserCertificateFile> CertificatesFilesIds { get; set; }
+        public ICollection<DbUserAchievement> AchievementsIds { get; set; }
     }
 }

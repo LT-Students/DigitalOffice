@@ -8,8 +8,8 @@ namespace TimeManagementService.Database
     /// </summary>
     public class TimeManagementDbContext : DbContext
     {
-        public DbSet<Leave> Leaves { get; set; }
-        public DbSet<WorkTime> WorkTimes { get; set; }
+        public DbSet<DbLeave> Leaves { get; set; }
+        public DbSet<DbWorkTime> WorkTimes { get; set; }
 
         public TimeManagementDbContext(DbContextOptions<TimeManagementDbContext> options) : base(options)
         {
