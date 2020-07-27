@@ -9,7 +9,7 @@ namespace ProjectService.Database.Entities
         [Key]
         public Guid Id { get; set; }
         public string Name { get; set; }
-        public string Description { get; set; }     
+        public string Description { get; set; }
         public Guid DepartmentId { get; set; }
         public bool Deferred { get; set; }
         public bool IsActive { get; set; }
