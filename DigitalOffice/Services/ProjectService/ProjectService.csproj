@@ -5,8 +5,8 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <Compile Remove="Migrations\20200710073402_InitialCreate.cs" />
-    <Compile Remove="Migrations\20200710073402_InitialCreate.Designer.cs" />
+    <Compile Remove="Database\Migrations\20200710073402_InitialCreate.cs" />
+    <Compile Remove="Database\Migrations\20200710073402_InitialCreate.Designer.cs" />
   </ItemGroup>
 
   <ItemGroup>
