@@ -11,8 +11,6 @@ namespace CheckRightsService.Database
     {
         public DbSet<DbRight> Rights { get; set; }
 
-        public DbSet<DbRightChangeRecord> RightsHistory { get; set; }
-
         public CheckRightsServiceDbContext(DbContextOptions<CheckRightsServiceDbContext> options) : base(options) { }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
