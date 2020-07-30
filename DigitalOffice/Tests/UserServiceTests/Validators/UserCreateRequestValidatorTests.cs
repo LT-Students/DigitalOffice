@@ -1,16 +1,16 @@
 ﻿using FluentValidation;
 using FluentValidation.TestHelper;
 using NUnit.Framework;
-using UserService.RestRequests;
-using UserService.Validators;
+using LT.DigitalOffice.UserService.RestRequests;
+using LT.DigitalOffice.UserService.Validators;
 
-namespace UserServiceUnitTests.Validators
+namespace LT.DigitalOffice.UserServiceUnitTests.Validators
 {
     public class UserCreateRequestValidatorTests
     {
         private IValidator<UserCreateRequest> validator;
 
-        [SetUp] 
+        [SetUp]
         public void Initialize()
         {
             validator = new UserCreateRequestValidator();

@@ -5,9 +5,9 @@ using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
 using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
-using UserService.Database;
+using LT.DigitalOffice.UserService.Database;
 
-namespace UserService.Migrations
+namespace LT.DigitalOffice.UserService.Migrations
 {
     [DbContext(typeof(UserServiceDbContext))]
     [Migration("20200718150017_AddRelationWithCompanies")]

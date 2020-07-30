@@ -1,10 +1,10 @@
-﻿using CheckRightsService.Commands.Interfaces;
+﻿using LT.DigitalOffice.CheckRightsService.Commands.Interfaces;
 using System.Collections.Generic;
-using CheckRightsService.Repositories.Interfaces;
+using LT.DigitalOffice.CheckRightsService.Repositories.Interfaces;
 using Microsoft.AspNetCore.Mvc;
-using CheckRightsService.Models;
+using LT.DigitalOffice.CheckRightsService.Models;
 
-namespace CheckRightsService.Commands
+namespace LT.DigitalOffice.CheckRightsService.Commands
 {
     public class GetRightsListCommand : IGetRightsListCommand
     {

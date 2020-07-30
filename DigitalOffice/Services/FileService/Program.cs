@@ -1,7 +1,7 @@
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.Hosting;
 
-namespace FileService
+namespace LT.DigitalOffice.FileService
 {
     public class Program
     {

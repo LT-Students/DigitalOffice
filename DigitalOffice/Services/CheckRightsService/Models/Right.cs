@@ -1,4 +1,4 @@
-﻿namespace CheckRightsService.Models
+﻿namespace LT.DigitalOffice.CheckRightsService.Models
 {
     public class Right
     {

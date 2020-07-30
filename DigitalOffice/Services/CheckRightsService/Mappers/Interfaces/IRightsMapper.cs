@@ -1,4 +1,4 @@
-﻿namespace CheckRightsService.Mappers.Interfaces
+﻿namespace LT.DigitalOffice.CheckRightsService.Mappers.Interfaces
 {
     public interface IMapper<Tin, Tout>
     {

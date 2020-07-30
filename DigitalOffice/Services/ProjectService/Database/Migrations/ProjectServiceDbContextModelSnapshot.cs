@@ -4,9 +4,9 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
-using ProjectService.Database;
+using LT.DigitalOffice.ProjectService.Database;
 
-namespace ProjectService.Migrations
+namespace LT.DigitalOffice.ProjectService.Migrations
 {
     [DbContext(typeof(ProjectServiceDbContext))]
     partial class ProjectServiceDbContextModelSnapshot : ModelSnapshot

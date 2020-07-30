@@ -1,8 +1,8 @@
-﻿using CheckRightsService.Database.Entities;
-using CheckRightsService.Mappers.Interfaces;
-using CheckRightsService.Models;
+﻿using LT.DigitalOffice.CheckRightsService.Database.Entities;
+using LT.DigitalOffice.CheckRightsService.Mappers.Interfaces;
+using LT.DigitalOffice.CheckRightsService.Models;
 
-namespace CheckRightsService.Mappers
+namespace LT.DigitalOffice.CheckRightsService.Mappers
 {
     public class RightsMapper : IMapper<DbRight, Right>
     {

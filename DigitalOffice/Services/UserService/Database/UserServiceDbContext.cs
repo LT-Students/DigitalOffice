@@ -1,12 +1,12 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using System.Reflection;
-using UserService.Database.Entities;
+using LT.DigitalOffice.UserService.Database.Entities;
 
-namespace UserService.Database
+namespace LT.DigitalOffice.UserService.Database
 {
     /// <summary>
     /// A class that defines the tables and its properties in the database.
-    /// For this particular case, it defines the database for the UserService.
+    /// For this particular case, it defines the database for the LT.DigitalOffice.UserService.
     /// </summary>
     public class UserServiceDbContext : DbContext
     {

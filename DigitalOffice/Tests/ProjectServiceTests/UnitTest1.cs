@@ -1,6 +1,6 @@
 using NUnit.Framework;
 
-namespace ProjectServiceUnitTests
+namespace LT.DigitalOffice.ProjectServiceUnitTests
 {
     public class Tests
     {

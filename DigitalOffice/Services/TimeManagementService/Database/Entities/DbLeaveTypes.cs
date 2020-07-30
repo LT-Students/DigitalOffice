@@ -1,5 +1,5 @@
 ﻿using System;
-namespace TimeManagementService.Database.Entities
+namespace LT.DigitalOffice.TimeManagementService.Database.Entities
 {
    public enum LeaveType
    {

@@ -1,19 +1,19 @@
-using CheckRightsService.Commands;
-using CheckRightsService.Commands.Interfaces;
-using CheckRightsService.Database;
-using CheckRightsService.Database.Entities;
-using CheckRightsService.Mappers;
-using CheckRightsService.Mappers.Interfaces;
-using CheckRightsService.Models;
-using CheckRightsService.Repositories;
-using CheckRightsService.Repositories.Interfaces;
+using LT.DigitalOffice.CheckRightsService.Commands;
+using LT.DigitalOffice.CheckRightsService.Commands.Interfaces;
+using LT.DigitalOffice.CheckRightsService.Database;
+using LT.DigitalOffice.CheckRightsService.Database.Entities;
+using LT.DigitalOffice.CheckRightsService.Mappers;
+using LT.DigitalOffice.CheckRightsService.Mappers.Interfaces;
+using LT.DigitalOffice.CheckRightsService.Models;
+using LT.DigitalOffice.CheckRightsService.Repositories;
+using LT.DigitalOffice.CheckRightsService.Repositories.Interfaces;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 
-namespace CheckRightsService
+namespace LT.DigitalOffice.CheckRightsService
 {
     public class Startup
     {

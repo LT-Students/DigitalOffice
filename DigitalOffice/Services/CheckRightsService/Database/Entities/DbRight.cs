@@ -1,7 +1,6 @@
-﻿using System;
-using System.ComponentModel.DataAnnotations;
+﻿using System.ComponentModel.DataAnnotations;
 
-namespace CheckRightsService.Database.Entities
+namespace LT.DigitalOffice.CheckRightsService.Database.Entities
 {
     public class DbRight
     {

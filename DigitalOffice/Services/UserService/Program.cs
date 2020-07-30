@@ -1,7 +1,7 @@
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.Hosting;
 
-namespace UserService
+namespace LT.DigitalOffice.UserService
 {
     public class Program
     {

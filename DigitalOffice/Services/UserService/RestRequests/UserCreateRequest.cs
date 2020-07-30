@@ -1,4 +1,4 @@
-﻿namespace UserService.RestRequests
+﻿namespace LT.DigitalOffice.UserService.RestRequests
 {
     public class UserCreateRequest
     {

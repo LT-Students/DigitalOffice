@@ -2,6 +2,8 @@
 
     <PropertyGroup>
         <TargetFramework>netcoreapp3.1</TargetFramework>
+        <AssemblyName>LT.DigitalOffice.CompanyService</AssemblyName>
+        <RootNamespace>LT.DigitalOffice.CompanyService</RootNamespace>
     </PropertyGroup>
 
     <ItemGroup>

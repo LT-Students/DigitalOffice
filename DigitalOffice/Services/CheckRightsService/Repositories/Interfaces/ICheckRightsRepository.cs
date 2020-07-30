@@ -1,7 +1,7 @@
-﻿using CheckRightsService.Models;
+﻿using LT.DigitalOffice.CheckRightsService.Models;
 using System.Collections.Generic;
 
-namespace CheckRightsService.Repositories.Interfaces
+namespace LT.DigitalOffice.CheckRightsService.Repositories.Interfaces
 {
     public interface ICheckRightsRepository
     {

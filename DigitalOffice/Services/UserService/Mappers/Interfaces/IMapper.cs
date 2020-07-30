@@ -1,4 +1,4 @@
-﻿namespace UserService.Mappers.Interfaces
+﻿namespace LT.DigitalOffice.UserService.Mappers.Interfaces
 {
     public interface IMapper<TIn, TOut>
     {

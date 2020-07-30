@@ -1,6 +1,6 @@
-﻿using UserService.Database.Entities;
+﻿using LT.DigitalOffice.UserService.Database.Entities;
 
-namespace UserService.Repositories.Interfaces
+namespace LT.DigitalOffice.UserService.Repositories.Interfaces
 {
     public interface IUserRepository
     {

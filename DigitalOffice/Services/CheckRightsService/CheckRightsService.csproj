@@ -3,6 +3,8 @@
   <PropertyGroup>
     <TargetFramework>netcoreapp3.1</TargetFramework>
     <OutputType>Exe</OutputType>
+    <AssemblyName>LT.DigitalOffice.CheckRightsService</AssemblyName>
+    <RootNamespace>LT.DigitalOffice.CheckRightsService</RootNamespace>
   </PropertyGroup>
 
   <ItemGroup>

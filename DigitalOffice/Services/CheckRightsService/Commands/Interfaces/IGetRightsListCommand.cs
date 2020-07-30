@@ -1,7 +1,7 @@
-﻿using CheckRightsService.Models;
+﻿using LT.DigitalOffice.CheckRightsService.Models;
 using System.Collections.Generic;
 
-namespace CheckRightsService.Commands.Interfaces
+namespace LT.DigitalOffice.CheckRightsService.Commands.Interfaces
 {
     public interface IGetRightsListCommand
     {

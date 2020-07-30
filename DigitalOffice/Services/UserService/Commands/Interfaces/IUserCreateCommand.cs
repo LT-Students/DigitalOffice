@@ -1,6 +1,6 @@
-﻿using UserService.RestRequests;
+﻿using LT.DigitalOffice.UserService.RestRequests;
 
-namespace UserService.Commands.Interfaces
+namespace LT.DigitalOffice.UserService.Commands.Interfaces
 {
     public interface IUserCreateCommand
     {

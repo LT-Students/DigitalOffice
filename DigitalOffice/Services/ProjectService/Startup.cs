@@ -4,12 +4,12 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
-using ProjectService.Database;
+using LT.DigitalOffice.ProjectService.Database;
 
-namespace ProjectService
+namespace LT.DigitalOffice.ProjectService
 {
     public class Startup
-    {   
+    {
         public IConfiguration Configuration { get; }
 
         public Startup(IConfiguration configuration)
@@ -28,7 +28,7 @@ namespace ProjectService
 
             services.AddControllers();
         }
-        
+
         public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
         {
             UpdateDatabase(app);

@@ -2,6 +2,8 @@
 
   <PropertyGroup>
     <TargetFramework>netcoreapp3.1</TargetFramework>
+    <AssemblyName>LT.DigitalOffice.TimeManagementService</AssemblyName>
+    <RootNamespace>LT.DigitalOffice.TimeManagementService</RootNamespace>
   </PropertyGroup>
 
   <ItemGroup>

@@ -2,11 +2,11 @@
 using System;
 using System.Security.Cryptography;
 using System.Text;
-using UserService.Database.Entities;
-using UserService.Mappers;
-using UserService.RestRequests;
+using LT.DigitalOffice.UserService.Database.Entities;
+using LT.DigitalOffice.UserService.Mappers;
+using LT.DigitalOffice.UserService.RestRequests;
 
-namespace UserServiceUnitTests.Mappers
+namespace LT.DigitalOffice.UserServiceUnitTests.Mappers
 {
     class UserCreateRequestToDbUserMapperTests
     {

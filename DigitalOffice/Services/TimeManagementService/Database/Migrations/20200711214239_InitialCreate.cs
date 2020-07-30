@@ -1,7 +1,7 @@
 ﻿using System;
 using Microsoft.EntityFrameworkCore.Migrations;
 
-namespace TimeManagementService.Migrations
+namespace LT.DigitalOffice.TimeManagementService.Migrations
 {
     public partial class InitialCreate : Migration
     {

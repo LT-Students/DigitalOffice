@@ -1,4 +1,4 @@
-﻿namespace CheckRightsService.Enums
+﻿namespace LT.DigitalOffice.CheckRightsService.Enums
 {
     public enum RightType
     {

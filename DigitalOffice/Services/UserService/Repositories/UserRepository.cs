@@ -1,11 +1,11 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using System;
 using System.Linq;
-using UserService.Database;
-using UserService.Database.Entities;
-using UserService.Repositories.Interfaces;
+using LT.DigitalOffice.UserService.Database;
+using LT.DigitalOffice.UserService.Database.Entities;
+using LT.DigitalOffice.UserService.Repositories.Interfaces;
 
-namespace UserService.Repositories
+namespace LT.DigitalOffice.UserService.Repositories
 {
     public class UserRepository : IUserRepository
     {

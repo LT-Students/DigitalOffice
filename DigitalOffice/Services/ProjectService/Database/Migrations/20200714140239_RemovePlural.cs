@@ -1,7 +1,7 @@
 ﻿using System;
 using Microsoft.EntityFrameworkCore.Migrations;
 
-namespace ProjectService.Migrations
+namespace LT.DigitalOffice.ProjectService.Migrations
 {
     public partial class RemovePlural : Migration
     {

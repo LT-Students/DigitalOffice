@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 
-namespace UserService.Database.Entities
+namespace LT.DigitalOffice.UserService.Database.Entities
 {
     public class DbUser
     {

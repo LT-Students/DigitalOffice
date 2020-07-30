@@ -1,14 +1,14 @@
-﻿using CheckRightsService.Database;
-using CheckRightsService.Database.Entities;
-using CheckRightsService.Mappers.Interfaces;
-using CheckRightsService.Models;
-using CheckRightsService.Repositories;
-using CheckRightsService.Repositories.Interfaces;
+﻿using LT.DigitalOffice.CheckRightsService.Database;
+using LT.DigitalOffice.CheckRightsService.Database.Entities;
+using LT.DigitalOffice.CheckRightsService.Mappers.Interfaces;
+using LT.DigitalOffice.CheckRightsService.Models;
+using LT.DigitalOffice.CheckRightsService.Repositories;
+using LT.DigitalOffice.CheckRightsService.Repositories.Interfaces;
 using Microsoft.EntityFrameworkCore;
 using Moq;
 using NUnit.Framework;
 
-namespace CheckRightsServiceUnitTests.RepositoriesTests
+namespace LT.DigitalOffice.CheckRightsServiceUnitTests.RepositoriesTests
 {
     class CheckRightsRepositoryTests
     {

@@ -1,12 +1,12 @@
-﻿using CheckRightsService.Database;
-using CheckRightsService.Database.Entities;
-using CheckRightsService.Mappers.Interfaces;
-using CheckRightsService.Models;
-using CheckRightsService.Repositories.Interfaces;
+﻿using LT.DigitalOffice.CheckRightsService.Database;
+using LT.DigitalOffice.CheckRightsService.Database.Entities;
+using LT.DigitalOffice.CheckRightsService.Mappers.Interfaces;
+using LT.DigitalOffice.CheckRightsService.Models;
+using LT.DigitalOffice.CheckRightsService.Repositories.Interfaces;
 using System.Collections.Generic;
 using System.Linq;
 
-namespace CheckRightsService.Repositories
+namespace LT.DigitalOffice.CheckRightsService.Repositories
 {
     public class CheckRightsRepository : ICheckRightsRepository
     {

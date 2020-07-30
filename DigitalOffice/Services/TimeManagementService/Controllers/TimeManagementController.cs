@@ -1,6 +1,6 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 
-namespace TimeManagementService.Controllers
+namespace LT.DigitalOffice.TimeManagementService.Controllers
 {
     [Route("[controller]")]
     [ApiController]

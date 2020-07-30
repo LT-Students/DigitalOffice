@@ -1,11 +1,11 @@
 ﻿using System;
 using System.Security.Cryptography;
 using System.Text;
-using UserService.Database.Entities;
-using UserService.Mappers.Interfaces;
-using UserService.RestRequests;
+using LT.DigitalOffice.UserService.Database.Entities;
+using LT.DigitalOffice.UserService.Mappers.Interfaces;
+using LT.DigitalOffice.UserService.RestRequests;
 
-namespace UserService.Mappers
+namespace LT.DigitalOffice.UserService.Mappers
 {
     public class UserCreateRequestToDbUserMapper : IMapper<UserCreateRequest, DbUser>
     {

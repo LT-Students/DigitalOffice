@@ -1,7 +1,7 @@
 ﻿using System;
 using System.ComponentModel.DataAnnotations;
 
-namespace FileService.Database.Entities
+namespace LT.DigitalOffice.FileService.Database.Entities
 {
     public class DbFile
     {

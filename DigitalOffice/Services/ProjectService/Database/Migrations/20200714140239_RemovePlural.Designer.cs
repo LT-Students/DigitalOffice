@@ -5,9 +5,9 @@ using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
 using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
-using ProjectService.Database;
+using LT.DigitalOffice.ProjectService.Database;
 
-namespace ProjectService.Migrations
+namespace LT.DigitalOffice.ProjectService.Migrations
 {
     [DbContext(typeof(ProjectServiceDbContext))]
     [Migration("20200714140239_RemovePlural")]

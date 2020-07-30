@@ -1,8 +1,8 @@
 ﻿using Microsoft.AspNetCore.Mvc;
-using UserService.Commands.Interfaces;
-using UserService.RestRequests;
+using LT.DigitalOffice.UserService.Commands.Interfaces;
+using LT.DigitalOffice.UserService.RestRequests;
 
-namespace UserService.Controllers
+namespace LT.DigitalOffice.UserService.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]

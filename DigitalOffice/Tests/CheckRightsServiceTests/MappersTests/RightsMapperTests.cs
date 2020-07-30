@@ -1,11 +1,11 @@
-﻿using CheckRightsService.Database.Entities;
-using CheckRightsService.Mappers;
-using CheckRightsService.Mappers.Interfaces;
-using CheckRightsService.Models;
+﻿using LT.DigitalOffice.CheckRightsService.Database.Entities;
+using LT.DigitalOffice.CheckRightsService.Mappers;
+using LT.DigitalOffice.CheckRightsService.Mappers.Interfaces;
+using LT.DigitalOffice.CheckRightsService.Models;
 using NUnit.Framework;
 using System;
 
-namespace CheckRightsServiceUnitTests.MappersTests
+namespace LT.DigitalOffice.CheckRightsServiceUnitTests.MappersTests
 {
     class RightsMapperTests
     {

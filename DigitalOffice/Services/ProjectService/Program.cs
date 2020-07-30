@@ -1,7 +1,7 @@
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.Hosting;
 
-namespace ProjectService
+namespace LT.DigitalOffice.ProjectService
 {
     public class Program
     {

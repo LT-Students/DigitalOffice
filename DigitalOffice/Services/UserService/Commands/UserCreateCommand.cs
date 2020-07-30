@@ -1,12 +1,12 @@
 ﻿using FluentValidation;
 using Microsoft.AspNetCore.Mvc;
-using UserService.Commands.Interfaces;
-using UserService.Database.Entities;
-using UserService.Mappers.Interfaces;
-using UserService.Repositories.Interfaces;
-using UserService.RestRequests;
+using LT.DigitalOffice.UserService.Commands.Interfaces;
+using LT.DigitalOffice.UserService.Database.Entities;
+using LT.DigitalOffice.UserService.Mappers.Interfaces;
+using LT.DigitalOffice.UserService.Repositories.Interfaces;
+using LT.DigitalOffice.UserService.RestRequests;
 
-namespace UserService.Commands
+namespace LT.DigitalOffice.UserService.Commands
 {
     public class UserCreateCommand : IUserCreateCommand
     {

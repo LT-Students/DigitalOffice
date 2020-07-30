@@ -2,7 +2,7 @@
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
 
-namespace ProjectService.Database.Entities
+namespace LT.DigitalOffice.ProjectService.Database.Entities
 {
     public class DbProjectFile
     {

@@ -5,18 +5,18 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
-using UserService.Commands;
-using UserService.Commands.Interfaces;
-using UserService.Database;
-using UserService.Database.Entities;
-using UserService.Mappers;
-using UserService.Mappers.Interfaces;
-using UserService.Repositories;
-using UserService.Repositories.Interfaces;
-using UserService.RestRequests;
-using UserService.Validators;
+using LT.DigitalOffice.UserService.Commands;
+using LT.DigitalOffice.UserService.Commands.Interfaces;
+using LT.DigitalOffice.UserService.Database;
+using LT.DigitalOffice.UserService.Database.Entities;
+using LT.DigitalOffice.UserService.Mappers;
+using LT.DigitalOffice.UserService.Mappers.Interfaces;
+using LT.DigitalOffice.UserService.Repositories;
+using LT.DigitalOffice.UserService.Repositories.Interfaces;
+using LT.DigitalOffice.UserService.RestRequests;
+using LT.DigitalOffice.UserService.Validators;
 
-namespace UserService
+namespace LT.DigitalOffice.UserService
 {
     public class Startup
     {

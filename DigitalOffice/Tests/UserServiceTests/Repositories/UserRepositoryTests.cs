@@ -4,22 +4,22 @@ using System;
 using System.Collections.ObjectModel;
 using System.Security.Cryptography;
 using System.Text;
-using UserService.Database;
-using UserService.Database.Entities;
-using UserService.Repositories;
-using UserService.Repositories.Interfaces;
+using LT.DigitalOffice.UserService.Database;
+using LT.DigitalOffice.UserService.Database.Entities;
+using LT.DigitalOffice.UserService.Repositories;
+using LT.DigitalOffice.UserService.Repositories.Interfaces;
 
-namespace UserServiceUnitTests.Repositories
+namespace LT.DigitalOffice.UserServiceUnitTests.Repositories
 {
     class UserRepositoryTests
-    { 
+    {
         private IUserRepository repository;
         private DbContextOptions<UserServiceDbContext> dbOptionsCreateUser;
         private UserServiceDbContext dbContext;
 
         [SetUp]
         public void Initialize()
-        {     
+        {
             dbOptionsCreateUser = new DbContextOptionsBuilder<UserServiceDbContext>()
                 .UseInMemoryDatabase(databaseName: "CreateUserTest")
                 .Options;
