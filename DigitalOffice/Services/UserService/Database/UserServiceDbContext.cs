@@ -18,7 +18,6 @@ namespace LT.DigitalOffice.UserService.Database
         public DbSet<DbUser> Users { get; set; }
         public DbSet<DbAchievement> Achievements { get; set; }
 
-        // Fluent API is written here.
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
             modelBuilder.ApplyConfigurationsFromAssembly(Assembly.GetExecutingAssembly());

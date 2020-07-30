@@ -11,6 +11,7 @@ using LT.DigitalOffice.UserService.Database;
 using LT.DigitalOffice.UserService.Database.Entities;
 using LT.DigitalOffice.UserService.Mappers;
 using LT.DigitalOffice.UserService.Mappers.Interfaces;
+using LT.DigitalOffice.UserService.Models;
 using LT.DigitalOffice.UserService.Repositories;
 using LT.DigitalOffice.UserService.Repositories.Interfaces;
 using LT.DigitalOffice.UserService.RestRequests;
@@ -44,7 +45,8 @@ namespace LT.DigitalOffice.UserService
 
         private void ConfigureCommands(IServiceCollection services)
         {
-            services.AddTransient<IUserCreateCommand, UserCreateCommand>();      
+            services.AddTransient<IUserCreateCommand, UserCreateCommand>();     
+            services.AddTransient<IGetUserByIdCommand, GetUserByIdCommand>(); 
         }
 
         private void ConfigureRepositories(IServiceCollection services)
@@ -60,6 +62,7 @@ namespace LT.DigitalOffice.UserService
         private void ConfigureMappers(IServiceCollection services)
         {
             services.AddTransient<IMapper<UserCreateRequest, DbUser>, UserCreateRequestToDbUserMapper>();
+            services.AddTransient<IMapper<DbUser, User>, UserMapper>();
         }
 
         public void Configure(IApplicationBuilder app, IWebHostEnvironment env)

@@ -1,7 +1,7 @@
 ﻿using System;
 using Microsoft.EntityFrameworkCore.Migrations;
 
-namespace LT.DigitalOffice.UserService.Migrations
+namespace LT.DigitalOffice.UserService.Database.Migrations
 {
     public partial class Requirements : Migration
     {

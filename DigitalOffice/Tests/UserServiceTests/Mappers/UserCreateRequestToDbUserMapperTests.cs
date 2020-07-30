@@ -11,6 +11,7 @@ namespace LT.DigitalOffice.UserServiceUnitTests.Mappers
     class UserCreateRequestToDbUserMapperTests
     {
         private UserCreateRequestToDbUserMapper mapper;
+        
         [SetUp]
         public void Initialization()
         {

@@ -1,6 +1,4 @@
-﻿using Microsoft.EntityFrameworkCore;
-using NUnit.Framework;
-using System;
+﻿using System;
 using System.Collections.ObjectModel;
 using System.Security.Cryptography;
 using System.Text;
@@ -8,23 +6,36 @@ using LT.DigitalOffice.UserService.Database;
 using LT.DigitalOffice.UserService.Database.Entities;
 using LT.DigitalOffice.UserService.Repositories;
 using LT.DigitalOffice.UserService.Repositories.Interfaces;
+using LT.DigitalOffice.UserServiceUnitTests.UnitTestLibrary;
+using Microsoft.EntityFrameworkCore;
+using NUnit.Framework;
 
 namespace LT.DigitalOffice.UserServiceUnitTests.Repositories
 {
-    class UserRepositoryTests
+    public class UserRepositoryTests
     {
-        private IUserRepository repository;
-        private DbContextOptions<UserServiceDbContext> dbOptionsCreateUser;
         private UserServiceDbContext dbContext;
+        private IUserRepository repository;
+        private DbUser dbUser;
 
-        [SetUp]
-        public void Initialize()
+        private const string ExceptionMessage = "User with this id not found.";
+
+        private UserServiceDbContext GetMemoryContext()
         {
-            dbOptionsCreateUser = new DbContextOptionsBuilder<UserServiceDbContext>()
-                .UseInMemoryDatabase(databaseName: "CreateUserTest")
+            var options = new DbContextOptionsBuilder<UserServiceDbContext>()
+                .UseInMemoryDatabase(databaseName: "InMemoryDatabase")
                 .Options;
 
-            var user = new DbUser
+            return new UserServiceDbContext(options);
+        }
+
+        [SetUp]
+        public void SetUp()
+        {
+            dbContext = GetMemoryContext();
+            repository = new UserRepository(dbContext);
+
+            dbUser = new DbUser
             {
                 Id = Guid.NewGuid(),
                 Email = "Example@gmail.com",
@@ -38,12 +49,34 @@ namespace LT.DigitalOffice.UserServiceUnitTests.Repositories
                 CertificatesFilesIds = new Collection<DbUserCertificateFile>(),
                 AchievementsIds = new Collection<DbUserAchievement>()
             };
-
-            dbContext = new UserServiceDbContext(dbOptionsCreateUser);
-            repository = new UserRepository(dbContext);
-
-            dbContext.Users.Add(user);
+            
+            dbContext.Users.Add(dbUser);
             dbContext.SaveChanges();
+        }
+
+        [TearDown]
+        public void TearDown()
+        {
+            if (dbContext.Database.IsInMemory())
+            {
+                dbContext.Database.EnsureDeleted();
+            }
+        }
+
+        [Test]
+        public void ShouldThrowExceptionIfUserWithRequiredIdDoesNotExist()
+        {
+            Assert.Throws<Exception>(() => repository.GetUserInfoById(Guid.Empty), ExceptionMessage);
+        }
+
+        [Test]
+        public void ShouldReturnUserIfUserWithRequiredIdExists()
+        {
+            var resultUser = repository.GetUserInfoById(dbUser.Id);
+
+            Assert.IsNotNull(resultUser);
+            Assert.IsInstanceOf<DbUser>(resultUser);
+            SerializerAssert.AreEqual(dbUser, resultUser);
         }
 
         [Test]
@@ -63,6 +96,7 @@ namespace LT.DigitalOffice.UserServiceUnitTests.Repositories
                 CertificatesFilesIds = new Collection<DbUserCertificateFile>(),
                 AchievementsIds = new Collection<DbUserAchievement>()
             };
+            
             Assert.True(repository.UserCreate(user));
         }
 
@@ -83,16 +117,8 @@ namespace LT.DigitalOffice.UserServiceUnitTests.Repositories
                 CertificatesFilesIds = new Collection<DbUserCertificateFile>(),
                 AchievementsIds = new Collection<DbUserAchievement>()
             };
+            
             Assert.Throws<Exception>(() => repository.UserCreate(user), "Email is already taken.");
-        }
-
-        [TearDown]
-        public void Clean()
-        {
-            if (dbContext.Database.IsInMemory())
-            {
-                dbContext.Database.EnsureDeleted();
-            }
         }
     }
 }
