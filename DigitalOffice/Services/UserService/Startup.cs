@@ -1,10 +1,20 @@
+using FluentValidation;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
+using UserService.Commands;
+using UserService.Commands.Interfaces;
 using UserService.Database;
+using UserService.Database.Entities;
+using UserService.Mappers;
+using UserService.Mappers.Interfaces;
+using UserService.Repositories;
+using UserService.Repositories.Interfaces;
+using UserService.RestRequests;
+using UserService.Validators;
 
 namespace UserService
 {
@@ -25,6 +35,31 @@ namespace UserService
             });
 
             services.AddControllers();
+
+            ConfigureCommands(services);
+            ConfigureRepositories(services);
+            ConfigureValidators(services);
+            ConfigureMappers(services);
+        }
+
+        private void ConfigureCommands(IServiceCollection services)
+        {
+            services.AddTransient<IUserCreateCommand, UserCreateCommand>();      
+        }
+
+        private void ConfigureRepositories(IServiceCollection services)
+        {
+            services.AddTransient<IUserRepository, UserRepository>();
+        }
+
+        private void ConfigureValidators(IServiceCollection services)
+        {
+            services.AddTransient<IValidator<UserCreateRequest>, UserCreateRequestValidator>();
+        }
+
+        private void ConfigureMappers(IServiceCollection services)
+        {
+            services.AddTransient<IMapper<UserCreateRequest, DbUser>, UserCreateRequestToDbUserMapper>();
         }
 
         public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
