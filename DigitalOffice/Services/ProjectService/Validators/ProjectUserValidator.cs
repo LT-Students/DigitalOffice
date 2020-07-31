@@ -7,15 +7,17 @@ using System.Threading.Tasks;
 
 namespace ProjectService.Validators
 {
-    public class ProjectUserValidator : AbstractValidator<AddUserToProjectRequest>
+    public class AddUserToProjectRequestValidator : AbstractValidator<AddUserToProjectRequest>
     {
-        public ProjectUserValidator()
+        public AddUserToProjectRequestValidator()
         {
-            RuleFor(u => u.UserId)
+            RuleFor(r => r.UserId)
                 .NotEmpty()
                 .NotNull();
-            RuleFor(u => u.ProjectId)
+            RuleFor(r => r.ProjectId)
                 .NotEmpty()
+                .NotNull();
+            RuleFor(r => r.IsManager)
                 .NotNull();
         }
     }

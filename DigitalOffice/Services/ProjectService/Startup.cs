@@ -56,7 +56,7 @@ namespace ProjectService
 
         private void ConfigureValidators(IServiceCollection services)
         {
-            services.AddTransient<IValidator<AddUserToProjectRequest>, ProjectUserValidator>();
+            services.AddTransient<IValidator<AddUserToProjectRequest>, AddUserToProjectRequestValidator>();
         }
 
         private void ConfigureMappers(IServiceCollection services)
