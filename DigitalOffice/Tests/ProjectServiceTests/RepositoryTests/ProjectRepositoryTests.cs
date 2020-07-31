@@ -7,6 +7,7 @@ using ProjectService.Models;
 using ProjectService.Repositories;
 using System;
 using System.Collections.Generic;
+using System.Linq;
 
 namespace ProjectServiceUnitTests.RepositoryTests
 {
@@ -89,6 +90,7 @@ namespace ProjectServiceUnitTests.RepositoryTests
             var id = new Guid("ff15f706-8409-4464-8ea9-980247bd8b91");
 
             repository.AddUserToProject(user, id);
+            Assert.AreEqual(1, dbContext.Projects.FirstOrDefault().WorkersUsersIds.Count);
         }
 
         [Test]
@@ -98,6 +100,7 @@ namespace ProjectServiceUnitTests.RepositoryTests
             var id = new Guid("ff15f706-8409-4464-8ea9-980247bd8b91");
 
             repository.AddUserToProject(user, id);
+            Assert.AreEqual(1, dbContext.Projects.FirstOrDefault().ManagersUsersIds.Count);
         }
 
         [TearDown]
