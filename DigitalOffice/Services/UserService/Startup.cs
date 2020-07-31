@@ -1,9 +1,11 @@
+using MassTransit;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
+using UserService.Broker.Consumers;
 using UserService.Database;
 using UserService.Repositories;
 using UserService.Repositories.Interfaces;
@@ -27,6 +29,19 @@ namespace UserService
             });
 
             services.AddControllers();
+
+            /*services.AddMassTransit(x =>
+            {
+                x.AddConsumer<UserExistanceConsumer>();
+
+                x.UsingRabbitMq((context, cfg) =>
+                {
+                    cfg.Host("localhost", h =>
+                    {
+
+                    })
+                }
+            })*/
 
             ConfigureRepositories(services);
         }
