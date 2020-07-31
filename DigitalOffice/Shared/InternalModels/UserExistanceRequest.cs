@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace IntrnalModels
+namespace InternalModels
 {
     public class UserExistanceRequest
     {

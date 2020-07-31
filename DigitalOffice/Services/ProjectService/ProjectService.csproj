@@ -24,4 +24,8 @@
     </PackageReference>
   </ItemGroup>
 
+  <ItemGroup>
+    <ProjectReference Include="..\..\Shared\InternalModels\InternalModels.csproj" />
+  </ItemGroup>
+
 </Project>
