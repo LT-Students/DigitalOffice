@@ -5,6 +5,8 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using UserService.Database;
+using UserService.Repositories;
+using UserService.Repositories.Interfaces;
 
 namespace UserService
 {
@@ -25,6 +27,8 @@ namespace UserService
             });
 
             services.AddControllers();
+
+            ConfigureRepositories(services);
         }
 
         public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
@@ -43,6 +47,11 @@ namespace UserService
             {
                 endpoints.MapControllers();
             });
+        }
+
+        private void ConfigureRepositories(IServiceCollection services)
+        {
+            services.AddTransient<IUserRepository, UserRepository>();
         }
 
         private void UpdateDatabase(IApplicationBuilder app)
