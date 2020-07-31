@@ -3,7 +3,6 @@ using FluentValidation.TestHelper;
 using NUnit.Framework;
 using ProjectService.Models;
 using ProjectService.Validators;
-using ProjectService.Database.Entities;
 using System;
 
 namespace ProjectServiceUnitTests.ValidatorsTests

@@ -18,7 +18,7 @@ namespace ProjectServiceUnitTests.RepositoryTests
         private ProjectServiceDbContext GetMemoryContext()
         {
             var options = new DbContextOptionsBuilder<ProjectServiceDbContext>()
-            .UseInMemoryDatabase(databaseName: "UserRepositoryLoginTest")
+            .UseInMemoryDatabase(databaseName: "AddUserToProjectTest")
             .Options;
 
             return new ProjectServiceDbContext(options);
@@ -100,5 +100,13 @@ namespace ProjectServiceUnitTests.RepositoryTests
             repository.AddUserToProject(user, id);
         }
 
+        [TearDown]
+        public void TearDown()
+        {
+            if (dbContext.Database.IsInMemory())
+            {
+                dbContext.Database.EnsureDeleted();
+            }
+        }
     }
 }
