@@ -1,4 +1,5 @@
 ﻿using Microsoft.AspNetCore.Mvc;
+using System;
 using System.Linq;
 using UserService.Database;
 using UserService.Database.Entities;
@@ -22,6 +23,11 @@ namespace UserService.Repositories
         public User GetUserByEmail(string email)
         {
             return mapper.Map(dbContext.Users.FirstOrDefault(u => u.Email == email));
+        }
+
+        public bool ContainsUserWithId(Guid id)
+        {
+            return dbContext.Users.FirstOrDefault(u => u.Id == id) != null;
         }
     }
 }
