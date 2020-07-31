@@ -1,11 +1,9 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
+﻿using ProjectService.Models;
 
 namespace ProjectService.Commands.Interfaces
 {
     public interface IAddUserToProjectCommand
     {
+        bool Execute(AddUserToProjectRequest projectUser);
     }
 }

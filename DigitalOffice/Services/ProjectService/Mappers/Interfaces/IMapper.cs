@@ -3,9 +3,10 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 
-namespace ProjectService.Models
+namespace ProjectService.Mappers.Interfaces
 {
-    public class ProjectUser
+    public interface IMapper<Tin, Tout>
     {
+        Tout Map(Tin value);
     }
 }

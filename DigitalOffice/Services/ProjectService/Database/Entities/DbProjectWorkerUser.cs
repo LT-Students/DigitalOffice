@@ -4,7 +4,7 @@ using Microsoft.EntityFrameworkCore.Metadata.Builders;
 
 namespace ProjectService.Database.Entities
 {
-    public class DbProjectWorkerUser
+    public class DbProjectWorkerUser 
     {
         public Guid ProjectId { get; set; }
         public DbProject Project { get; set; }
