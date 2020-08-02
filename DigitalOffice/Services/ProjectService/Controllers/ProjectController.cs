@@ -1,14 +1,21 @@
-﻿using System;
-using Microsoft.AspNetCore.Mvc;
-using LT.DigitalOffice.ProjectService.Models;
+﻿using Microsoft.AspNetCore.Mvc;
 using LT.DigitalOffice.ProjectService.Commands.Interfaces;
+using LT.DigitalOffice.ProjectService.Models;
+using System;
 
 namespace LT.DigitalOffice.ProjectService.Controllers
 {
-    [ApiController]
     [Route("api/[controller]")]
+    [ApiController]
     public class ProjectController : ControllerBase
     {
+        [Route("getProjectInfoById")]
+        [HttpGet]
+        public Project GetProjectInfoById([FromServices] IGetProjectInfoByIdCommand command, [FromQuery] Guid projectId)
+        {
+            return command.Execute(projectId);
+        }
+
         [Route("createNewProject")]
         [HttpPost]
         public Guid CreateNewProject(

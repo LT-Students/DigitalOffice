@@ -16,6 +16,18 @@ namespace LT.DigitalOffice.ProjectService.Repositories
             this.dbContext = dbContext;
         }
 
+        public DbProject GetProjectInfoById(Guid projectId)
+        {
+            var project = dbContext.Projects.FirstOrDefault(project => project.Id == projectId);
+
+            if (project == null)
+            {
+                throw new Exception("Project with this id was not found.");
+            }
+
+            return project;
+        }
+
         public Guid CreateNewProject(DbProject newProject)
         {
             if (dbContext.Projects.Any(projects => projects.Name == newProject.Name))

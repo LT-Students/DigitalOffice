@@ -5,6 +5,7 @@ namespace LT.DigitalOffice.ProjectService.Repositories.Interfaces
 {
     public interface IProjectRepository
     {
+        DbProject GetProjectInfoById(Guid projectId);
         Guid CreateNewProject(DbProject item);
     }
 }

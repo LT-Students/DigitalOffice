@@ -13,11 +13,11 @@ namespace LT.DigitalOffice.ProjectService.Database.Migrations
         {
 #pragma warning disable 612, 618
             modelBuilder
-                .HasAnnotation("ProductVersion", "3.1.5")
+                .HasAnnotation("ProductVersion", "3.1.6")
                 .HasAnnotation("Relational:MaxIdentifierLength", 128)
                 .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
 
-            modelBuilder.Entity("ProjectService.Database.Entities.Project", b =>
+            modelBuilder.Entity("ProjectService.Database.Entities.DbProject", b =>
                 {
                     b.Property<Guid>("Id")
                         .ValueGeneratedOnAdd()
@@ -32,18 +32,18 @@ namespace LT.DigitalOffice.ProjectService.Database.Migrations
                     b.Property<string>("Description")
                         .HasColumnType("nvarchar(max)");
 
+                    b.Property<bool>("IsActive")
+                        .HasColumnType("bit");
+
                     b.Property<string>("Name")
                         .HasColumnType("nvarchar(max)");
-
-                    b.Property<bool>("Obsolete")
-                        .HasColumnType("bit");
 
                     b.HasKey("Id");
 
                     b.ToTable("Projects");
                 });
 
-            modelBuilder.Entity("ProjectService.Database.Entities.ProjectFile", b =>
+            modelBuilder.Entity("ProjectService.Database.Entities.DbProjectFile", b =>
                 {
                     b.Property<Guid>("ProjectId")
                         .HasColumnType("uniqueidentifier");
@@ -53,10 +53,10 @@ namespace LT.DigitalOffice.ProjectService.Database.Migrations
 
                     b.HasKey("ProjectId", "FileId");
 
-                    b.ToTable("ProjectFile");
+                    b.ToTable("DbProjectFile");
                 });
 
-            modelBuilder.Entity("ProjectService.Database.Entities.ProjectManagerUser", b =>
+            modelBuilder.Entity("ProjectService.Database.Entities.DbProjectManagerUser", b =>
                 {
                     b.Property<Guid>("ProjectId")
                         .HasColumnType("uniqueidentifier");
@@ -66,10 +66,10 @@ namespace LT.DigitalOffice.ProjectService.Database.Migrations
 
                     b.HasKey("ProjectId", "ManagerUserId");
 
-                    b.ToTable("ProjectManagerUser");
+                    b.ToTable("DbProjectManagerUser");
                 });
 
-            modelBuilder.Entity("ProjectService.Database.Entities.ProjectWorkerUser", b =>
+            modelBuilder.Entity("ProjectService.Database.Entities.DbProjectWorkerUser", b =>
                 {
                     b.Property<Guid>("ProjectId")
                         .HasColumnType("uniqueidentifier");
@@ -79,30 +79,30 @@ namespace LT.DigitalOffice.ProjectService.Database.Migrations
 
                     b.HasKey("ProjectId", "WorkerUserId");
 
-                    b.ToTable("ProjectWorkerUser");
+                    b.ToTable("DbProjectWorkerUser");
                 });
 
-            modelBuilder.Entity("ProjectService.Database.Entities.ProjectFile", b =>
+            modelBuilder.Entity("ProjectService.Database.Entities.DbProjectFile", b =>
                 {
-                    b.HasOne("ProjectService.Database.Entities.Project", "Project")
+                    b.HasOne("ProjectService.Database.Entities.DbProject", "Project")
                         .WithMany("FilesIds")
                         .HasForeignKey("ProjectId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
                 });
 
-            modelBuilder.Entity("ProjectService.Database.Entities.ProjectManagerUser", b =>
+            modelBuilder.Entity("ProjectService.Database.Entities.DbProjectManagerUser", b =>
                 {
-                    b.HasOne("ProjectService.Database.Entities.Project", "Project")
+                    b.HasOne("ProjectService.Database.Entities.DbProject", "Project")
                         .WithMany("ManagersUsersIds")
                         .HasForeignKey("ProjectId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
                 });
 
-            modelBuilder.Entity("ProjectService.Database.Entities.ProjectWorkerUser", b =>
+            modelBuilder.Entity("ProjectService.Database.Entities.DbProjectWorkerUser", b =>
                 {
-                    b.HasOne("ProjectService.Database.Entities.Project", "Project")
+                    b.HasOne("ProjectService.Database.Entities.DbProject", "Project")
                         .WithMany("WorkersUsersIds")
                         .HasForeignKey("ProjectId")
                         .OnDelete(DeleteBehavior.Cascade)

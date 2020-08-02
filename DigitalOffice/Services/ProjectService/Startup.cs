@@ -4,14 +4,14 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
+using LT.DigitalOffice.ProjectService.Commands;
+using LT.DigitalOffice.ProjectService.Commands.Interfaces;
 using LT.DigitalOffice.ProjectService.Database;
 using LT.DigitalOffice.ProjectService.Database.Entities;
 using LT.DigitalOffice.ProjectService.Repositories;
 using LT.DigitalOffice.ProjectService.Repositories.Interfaces;
-using LT.DigitalOffice.ProjectService.Commands.Interfaces;
 using LT.DigitalOffice.ProjectService.Mappers.Interfaces;
 using LT.DigitalOffice.ProjectService.Mappers;
-using LT.DigitalOffice.ProjectService.Commands;
 using LT.DigitalOffice.ProjectService.Models;
 using LT.DigitalOffice.ProjectService.Validators;
 using FluentValidation;
@@ -44,6 +44,7 @@ namespace LT.DigitalOffice.ProjectService
 
         private void ConfigCommands(IServiceCollection services)
         {
+            services.AddTransient<IGetProjectInfoByIdCommand, GetProjectInfoByIdCommand>();
             services.AddTransient<ICreateNewProjectCommand, CreateNewProjectCommand>();
         }
 
@@ -54,6 +55,7 @@ namespace LT.DigitalOffice.ProjectService
 
         private void ConfigMappers(IServiceCollection services)
         {
+            services.AddTransient<IMapper<DbProject, Project>, ProjectMapper>();
             services.AddTransient<IMapper<NewProjectRequest, DbProject>, DbProjectMapper>();
         }
 
@@ -66,11 +68,6 @@ namespace LT.DigitalOffice.ProjectService
         public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
         {
             UpdateDatabase(app);
-
-            if (env.IsDevelopment())
-            {
-                app.UseDeveloperExceptionPage();
-            }
 
             app.UseHttpsRedirection();
 
