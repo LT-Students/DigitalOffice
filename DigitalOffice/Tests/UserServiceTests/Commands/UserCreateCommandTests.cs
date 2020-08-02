@@ -40,7 +40,8 @@ namespace LT.DigitalOffice.UserServiceUnitTests.Commands
                 MiddleName = "Example",
                 Email = "Example@gmail.com",
                 Status = "Example",
-                Password = "Example"
+                Password = "Example",
+                IsAdmin = false
             };
 
             Assert.Throws<ValidationException>(() => command.Execute(request));
@@ -60,7 +61,8 @@ namespace LT.DigitalOffice.UserServiceUnitTests.Commands
                 MiddleName = "Example",
                 Email = "Example@gmail.com",
                 Status = "Example",
-                Password = "Example"
+                Password = "Example",
+                IsAdmin = false
             };
 
             Assert.Throws<Exception>(() => command.Execute(request), "Email is already taken.");
@@ -81,7 +83,8 @@ namespace LT.DigitalOffice.UserServiceUnitTests.Commands
                 MiddleName = "Example",
                 Email = "Example@gmail.com",
                 Status = "Example",
-                Password = "Example"
+                Password = "Example",
+                IsAdmin = false
             };
 
             Assert.IsTrue(command.Execute(request));

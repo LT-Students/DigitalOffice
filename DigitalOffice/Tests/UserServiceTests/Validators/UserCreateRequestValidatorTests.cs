@@ -102,7 +102,8 @@ namespace LT.DigitalOffice.UserServiceUnitTests.Validators
                 MiddleName = "Example",
                 Email = "Example@gmail.com",
                 Status = "Example",
-                Password = "Example"
+                Password = "Example",
+                IsAdmin = false
             };
             Assert.DoesNotThrow(() => validator.ValidateAndThrow(request));
         }

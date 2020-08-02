@@ -14,7 +14,7 @@ namespace LT.DigitalOffice.UserService.Repositories.Interfaces
         /// <param name="userId">Specified id.</param>
         /// <returns>User mode from UserServiceDb.</returns>
         DbUser GetUserInfoById(Guid userId);
-        
+
         bool UserCreate(DbUser user);
     }
 }

@@ -40,7 +40,8 @@ namespace LT.DigitalOffice.UserService.Mappers
                 FirstName = dbUser.FirstName,
                 LastName = dbUser.LastName,
                 MiddleName = dbUser.MiddleName,
-                Status = dbUser.Status
+                Status = dbUser.Status,
+                IsAdmin = dbUser.IsAdmin
             };
         }
     }

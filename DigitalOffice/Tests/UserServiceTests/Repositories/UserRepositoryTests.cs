@@ -46,10 +46,11 @@ namespace LT.DigitalOffice.UserServiceUnitTests.Repositories
                 PasswordHash = (new SHA512Managed().ComputeHash(Encoding.Default.GetBytes("Example"))).ToString(),
                 AvatarFileId = null,
                 IsActive = true,
+                IsAdmin = false,
                 CertificatesFilesIds = new Collection<DbUserCertificateFile>(),
                 AchievementsIds = new Collection<DbUserAchievement>()
             };
-            
+
             dbContext.Users.Add(dbUser);
             dbContext.SaveChanges();
         }
@@ -93,10 +94,11 @@ namespace LT.DigitalOffice.UserServiceUnitTests.Repositories
                 PasswordHash = (new SHA512Managed().ComputeHash(Encoding.Default.GetBytes("Example"))).ToString(),
                 AvatarFileId = null,
                 IsActive = true,
+                IsAdmin = false,
                 CertificatesFilesIds = new Collection<DbUserCertificateFile>(),
                 AchievementsIds = new Collection<DbUserAchievement>()
             };
-            
+
             Assert.True(repository.UserCreate(user));
         }
 
@@ -114,10 +116,11 @@ namespace LT.DigitalOffice.UserServiceUnitTests.Repositories
                 PasswordHash = (new SHA512Managed().ComputeHash(Encoding.Default.GetBytes("Example"))).ToString(),
                 AvatarFileId = null,
                 IsActive = true,
+                IsAdmin = false,
                 CertificatesFilesIds = new Collection<DbUserCertificateFile>(),
                 AchievementsIds = new Collection<DbUserAchievement>()
             };
-            
+
             Assert.Throws<Exception>(() => repository.UserCreate(user), "Email is already taken.");
         }
     }

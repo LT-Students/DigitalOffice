@@ -11,7 +11,7 @@ namespace LT.DigitalOffice.UserServiceUnitTests.Mappers
     class UserCreateRequestToDbUserMapperTests
     {
         private UserCreateRequestToDbUserMapper mapper;
-        
+
         [SetUp]
         public void Initialization()
         {
@@ -28,7 +28,8 @@ namespace LT.DigitalOffice.UserServiceUnitTests.Mappers
                 MiddleName = "Example",
                 Email = "Example@gmail.com",
                 Status = "Example",
-                Password = "Example"
+                Password = "Example",
+                IsAdmin = false
             };
 
             var result = mapper.Map(request);
@@ -42,9 +43,10 @@ namespace LT.DigitalOffice.UserServiceUnitTests.Mappers
                 Status = "Example",
                 PasswordHash = (new SHA512Managed().ComputeHash(Encoding.Default.GetBytes("Example"))).ToString(),
                 AvatarFileId = null,
-                IsActive = true
+                IsActive = true,
+                IsAdmin = false
             };
-            
+
             Assert.AreEqual(user.Email, result.Email);
             Assert.AreEqual(user.FirstName, result.FirstName);
             Assert.AreEqual(user.LastName, result.LastName);
@@ -53,6 +55,7 @@ namespace LT.DigitalOffice.UserServiceUnitTests.Mappers
             Assert.AreEqual(user.PasswordHash, result.PasswordHash);
             Assert.AreEqual(user.AvatarFileId, result.AvatarFileId);
             Assert.AreEqual(user.IsActive, result.IsActive);
+            Assert.AreEqual(user.IsAdmin, result.IsAdmin);
         }
 
         [Test]

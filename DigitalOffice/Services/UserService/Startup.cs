@@ -45,8 +45,8 @@ namespace LT.DigitalOffice.UserService
 
         private void ConfigureCommands(IServiceCollection services)
         {
-            services.AddTransient<IUserCreateCommand, UserCreateCommand>();     
-            services.AddTransient<IGetUserByIdCommand, GetUserByIdCommand>(); 
+            services.AddTransient<IUserCreateCommand, UserCreateCommand>();
+            services.AddTransient<IGetUserByIdCommand, GetUserByIdCommand>();
         }
 
         private void ConfigureRepositories(IServiceCollection services)

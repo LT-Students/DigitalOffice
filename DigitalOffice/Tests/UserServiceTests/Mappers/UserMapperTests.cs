@@ -20,6 +20,7 @@ namespace LT.DigitalOffice.UserServiceUnitTests.Mappers
         private const string PasswordHash = "42";
         private const bool IsActive = true;
         private const string Status = "Hello, world!";
+        private const bool IsAdmin = false;
 
         private Guid userId;
         private Guid achievementId;
@@ -53,8 +54,8 @@ namespace LT.DigitalOffice.UserServiceUnitTests.Mappers
             {
                 AchievementsIds = new List<DbUserAchievement> {dbUserAchievement}, AvatarFileId = avatarFileId,
                 CertificatesFilesIds = new List<DbUserCertificateFile> {dbUserCertificateFile}, Email = Email,
-                FirstName = FirstName, Id = userId, IsActive = IsActive, LastName = LastName, MiddleName = null,
-                PasswordHash = PasswordHash, Status = Status
+                FirstName = FirstName, Id = userId, IsActive = IsActive, IsAdmin = IsAdmin, LastName = LastName,
+                MiddleName = null, PasswordHash = PasswordHash, Status = Status
             };
         }
 
@@ -84,6 +85,7 @@ namespace LT.DigitalOffice.UserServiceUnitTests.Mappers
             Assert.AreEqual(Email, resultUserModel.Email);
             Assert.AreEqual(Status, resultUserModel.Status);
             Assert.AreEqual(avatarFileId, resultUserModel.AvatarId);
+            Assert.AreEqual(IsAdmin, resultUserModel.IsAdmin);
         }
     }
 }
