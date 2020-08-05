@@ -23,6 +23,8 @@ namespace UserService
 
         public void ConfigureServices(IServiceCollection services)
         {
+            services.AddHealthChecks();
+
             services.AddDbContext<UserServiceDbContext>(options =>
             {
                 options.UseSqlServer(Configuration.GetConnectionString("SQLConnectionString"));
@@ -30,18 +32,29 @@ namespace UserService
 
             services.AddControllers();
 
-            /*services.AddMassTransit(x =>
+            services.AddMassTransit(x =>
             {
                 x.AddConsumer<UserExistanceConsumer>();
 
                 x.UsingRabbitMq((context, cfg) =>
                 {
-                    cfg.Host("localhost", h =>
-                    {
+                    const string serviceSection = "ServiceInfo";
+                    string serviceId = Configuration.GetSection(serviceSection)["ID"];
+                    string serviceName = Configuration.GetSection(serviceSection)["Name"];
 
-                    })
+                    cfg.Host("localhost", "/", h =>
+                    {
+                        h.Username($"{serviceName}_{serviceId}");
+                        h.Password($"{serviceId}");
+                    });
+
+                    cfg.ReceiveEndpoint($"{serviceName}", ep =>
+                    {
+                        ep.ConfigureConsumer<UserExistanceConsumer>(context);
+                    });
                 }
-            })*/
+            })
+                // wip
 
             ConfigureRepositories(services);
         }
