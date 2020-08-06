@@ -1,4 +1,5 @@
-﻿using LT.DigitalOffice.CheckRightsService.Database;
+﻿using System;
+using LT.DigitalOffice.CheckRightsService.Database;
 using LT.DigitalOffice.CheckRightsService.Database.Entities;
 using LT.DigitalOffice.CheckRightsService.Mappers.Interfaces;
 using LT.DigitalOffice.CheckRightsService.Models;
@@ -22,6 +23,11 @@ namespace LT.DigitalOffice.CheckRightsService.Repositories
         public List<Right> GetRightsList()
         {
             return dbContext.Rights.Select(r => mapper.Map(r)).ToList();
+        }
+
+        public bool AddRightsToUser(Guid userId)
+        {
+            if(dbContext.Rights)
         }
     }
 }

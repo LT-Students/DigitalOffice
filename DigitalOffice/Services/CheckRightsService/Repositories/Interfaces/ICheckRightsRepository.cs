@@ -1,4 +1,5 @@
-﻿using LT.DigitalOffice.CheckRightsService.Models;
+﻿using System;
+using LT.DigitalOffice.CheckRightsService.Models;
 using System.Collections.Generic;
 
 namespace LT.DigitalOffice.CheckRightsService.Repositories.Interfaces
@@ -6,5 +7,6 @@ namespace LT.DigitalOffice.CheckRightsService.Repositories.Interfaces
     public interface ICheckRightsRepository
     {
         List<Right> GetRightsList();
+        bool AddRightsToUser(Guid userId);
     }
 }
