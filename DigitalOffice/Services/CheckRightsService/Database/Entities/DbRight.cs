@@ -1,4 +1,5 @@
-﻿using System.ComponentModel.DataAnnotations;
+﻿using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations;
 
 namespace LT.DigitalOffice.CheckRightsService.Database.Entities
 {
@@ -9,5 +10,6 @@ namespace LT.DigitalOffice.CheckRightsService.Database.Entities
         [Required]
         public string Name { get; set; }
         public string Description { get; set; }
+        public ICollection<DbRightUser> UserIds { get; set; }
     }
 }
