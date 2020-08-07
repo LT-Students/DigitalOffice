@@ -20,6 +20,10 @@
       <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
     </PackageReference>
   </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\..\Shared\Kernel\Kernel.csproj" />
+  </ItemGroup>
     <PropertyGroup>
     <LangVersion>preview</LangVersion>
     <AssemblyName>LT.DigitalOffice.ProjectService</AssemblyName>
