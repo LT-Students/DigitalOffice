@@ -1,4 +1,6 @@
-﻿using System.ComponentModel.DataAnnotations;
+﻿using System.Collections;
+using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
 
@@ -11,6 +13,7 @@ namespace LT.DigitalOffice.CheckRightsService.Database.Entities
         [Required]
         public string Name { get; set; }
         public string Description { get; set; }
+        public ICollection<DbRightUser> UserIds { get; set; }
     }
 
     public class DbRightConfiguration : IEntityTypeConfiguration<DbRight>
