@@ -14,7 +14,9 @@ namespace UserService.Repositories
         private readonly UserServiceDbContext dbContext;
         private readonly IMapper<DbUser, User> mapper;
 
-        public UserRepository([FromServices] UserServiceDbContext dbContext, [FromServices] IMapper<DbUser, User> mapper)
+        public UserRepository(
+            [FromServices] UserServiceDbContext dbContext, 
+            [FromServices] IMapper<DbUser, User> mapper)
         {
             this.dbContext = dbContext;
             this.mapper = mapper;
