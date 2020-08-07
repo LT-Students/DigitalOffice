@@ -34,21 +34,20 @@ namespace LT.DigitalOffice.CheckRightsServiceUnitTests.RepositoriesTests
 
             dbRight = new DbRight
             {
-                Id = 1,
+                Id = 3,
                 Name = "Right",
                 Description = "Allows you everything",
                 UserIds = new List<DbRightUser>()
             };
             dbRightUpdate = new DbRight
             {
-                Id = 2,
+                Id = 4,
                 Name = "Right update",
                 Description = "Allows you update everything",
                 UserIds = new List<DbRightUser>()
             };
 
-            dbContext.Rights.Add(dbRight);
-            dbContext.Rights.Add(dbRightUpdate);
+            dbContext.Rights.AddRange(dbRight, dbRightUpdate);
             dbContext.SaveChanges();
 
             mapperMock.Setup(mapper => mapper.Map(dbRight)).Returns(new Right
