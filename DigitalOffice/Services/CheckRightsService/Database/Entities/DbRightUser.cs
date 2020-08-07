@@ -10,7 +10,6 @@ namespace LT.DigitalOffice.CheckRightsService.Database.Entities
         public DbRight Right { get; set; }
         public Guid UserId { get; set; }
     }
-    
     public class RightUserConfiguration : IEntityTypeConfiguration<DbRightUser>
     {
         public void Configure(EntityTypeBuilder<DbRightUser> builder)
