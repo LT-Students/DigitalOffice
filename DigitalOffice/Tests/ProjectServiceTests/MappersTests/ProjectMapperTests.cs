@@ -18,11 +18,9 @@ namespace LT.DigitalOffice.ProjectServiceUnitTests.MappersTests
 
         public Guid projectId;
         private Guid workerId;
-        private Guid managerId;
         public Guid DepartmentId;
 
         private DbProjectWorkerUser dbWorkersIds;
-        private DbProjectManagerUser dbManagersIds;
 
         private DbProject dbProject;
 
@@ -32,13 +30,7 @@ namespace LT.DigitalOffice.ProjectServiceUnitTests.MappersTests
             mapper = new ProjectMapper();
             projectId = Guid.NewGuid();
             workerId = Guid.NewGuid();
-            managerId = Guid.NewGuid();
-            dbManagersIds = new DbProjectManagerUser
-            {
-                ProjectId = projectId,
-                Project = dbProject,
-                ManagerUserId = managerId
-            };
+
             dbWorkersIds = new DbProjectWorkerUser
             {
                 ProjectId = projectId,
@@ -49,8 +41,7 @@ namespace LT.DigitalOffice.ProjectServiceUnitTests.MappersTests
             {
                 Id = projectId,
                 Name = Name,
-                WorkersUsersIds = new List<DbProjectWorkerUser> { dbWorkersIds },
-                ManagersUsersIds = new List<DbProjectManagerUser> { dbManagersIds }
+                WorkersUsersIds = new List<DbProjectWorkerUser> { dbWorkersIds }
             };
         }
 
@@ -68,7 +59,6 @@ namespace LT.DigitalOffice.ProjectServiceUnitTests.MappersTests
             var expected = new Project
             {
                 Name = dbProject.Name,
-                ManagersIds = dbProject.ManagersUsersIds?.Select(x => x.ManagerUserId),
                 WorkersIds = dbProject.WorkersUsersIds?.Select(x => x.WorkerUserId)
             };
 

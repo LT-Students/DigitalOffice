@@ -3,7 +3,6 @@ using NUnit.Framework;
 using LT.DigitalOffice.ProjectService.Commands;
 using LT.DigitalOffice.ProjectService.Commands.Interfaces;
 using LT.DigitalOffice.ProjectService.Database.Entities;
-using LT.DigitalOffice.ProjectService.Mappers;
 using LT.DigitalOffice.ProjectService.Mappers.Interfaces;
 using LT.DigitalOffice.ProjectService.Models;
 using LT.DigitalOffice.ProjectService.Repositories.Interfaces;
@@ -20,13 +19,11 @@ namespace LT.DigitalOffice.ProjectServiceUnitTests.CommandsTests
         private Mock<IProjectRepository> repositoryMock;
         private Mock<IMapper<DbProject, Project>> mapperMock;
 
-        private DbProjectManagerUser dbManagersIds;
         private DbProjectWorkerUser dbWorkersIds;
         private DbProject project;
 
         private Guid projectId;
         private Guid workerId;
-        private Guid managerId;
 
         private string Name = "Project";
 
@@ -38,14 +35,7 @@ namespace LT.DigitalOffice.ProjectServiceUnitTests.CommandsTests
             command = new GetProjectInfoByIdCommand(repositoryMock.Object, mapperMock.Object);
 
             workerId = Guid.NewGuid();
-            managerId = Guid.NewGuid();
             projectId = Guid.NewGuid();
-            dbManagersIds = new DbProjectManagerUser
-            {
-                ProjectId = projectId,
-                Project = project,
-                ManagerUserId = managerId
-            };
             dbWorkersIds = new DbProjectWorkerUser
             {
                 ProjectId = projectId,
@@ -56,8 +46,7 @@ namespace LT.DigitalOffice.ProjectServiceUnitTests.CommandsTests
             {
                 Id = projectId,
                 Name = Name,
-                WorkersUsersIds = new List<DbProjectWorkerUser> { dbWorkersIds },
-                ManagersUsersIds = new List<DbProjectManagerUser> { dbManagersIds }
+                WorkersUsersIds = new List<DbProjectWorkerUser> { dbWorkersIds }
             };
         }
 
@@ -83,7 +72,6 @@ namespace LT.DigitalOffice.ProjectServiceUnitTests.CommandsTests
             var expected = new Project
             {
                 Name = project.Name,
-                ManagersIds = project.ManagersUsersIds?.Select(x => x.ManagerUserId),
                 WorkersIds = project.WorkersUsersIds?.Select(x => x.WorkerUserId)
             };
 

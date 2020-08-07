@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 
@@ -13,8 +13,7 @@ namespace LT.DigitalOffice.ProjectService.Database.Entities
         public Guid DepartmentId { get; set; }
         public bool Deferred { get; set; }
         public bool IsActive { get; set; }
-        public IEnumerable<DbProjectManagerUser> ManagersUsersIds { get; set; }
-        public IEnumerable<DbProjectWorkerUser> WorkersUsersIds { get; set; }
-        public IEnumerable<DbProjectFile> FilesIds { get; set; }
+        public ICollection<DbProjectWorkerUser> WorkersUsersIds { get; set; }
+        public ICollection<DbProjectFile> FilesIds { get; set; }
     }
 }

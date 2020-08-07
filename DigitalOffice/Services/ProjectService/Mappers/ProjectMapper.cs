@@ -18,7 +18,6 @@ namespace LT.DigitalOffice.ProjectService.Mappers
             return new Project
             {
                 Name = value.Name,
-                ManagersIds = value.ManagersUsersIds?.Select(x => x.ManagerUserId),
                 WorkersIds = value.WorkersUsersIds?.Select(x => x.WorkerUserId)
             };
         }
