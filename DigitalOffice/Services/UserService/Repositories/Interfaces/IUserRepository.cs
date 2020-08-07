@@ -1,19 +1,4 @@
 ﻿using System;
-<<<<<<< HEAD
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
-using UserService.Models;
-
-namespace UserService.Repositories.Interfaces
-{
-    public interface IUserRepository
-    {
-        public User GetUserByEmail(string email);
-        public bool ContainsUserWithId(Guid id);
-    }
-}
-=======
 using LT.DigitalOffice.UserService.Database.Entities;
 
 namespace LT.DigitalOffice.UserService.Repositories.Interfaces
@@ -31,6 +16,8 @@ namespace LT.DigitalOffice.UserService.Repositories.Interfaces
         DbUser GetUserInfoById(Guid userId);
 
         bool UserCreate(DbUser user);
+
+        bool UserExists(Guid id);
     }
 }
->>>>>>> develop
+

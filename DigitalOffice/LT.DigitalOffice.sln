@@ -5,7 +5,6 @@ VisualStudioVersion = 16.0.30204.135
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Services", "Services", "{7A10A936-5C0A-476A-AFC4-C5CF8457BBE0}"
 EndProject
-<<<<<<< HEAD
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "UserService", "Services\UserService\UserService.csproj", "{57E38E67-C667-41E5-95C2-98D2DC3E50EA}"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ProjectService", "Services\ProjectService\ProjectService.csproj", "{1F659D47-7DCA-4805-B42A-7FB9DC714DA7}"
@@ -35,41 +34,12 @@ EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Shared", "Shared", "{1DC79DAD-4005-4C3B-8481-74775C29081D}"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Kernel", "Shared\Kernel\Kernel.csproj", "{AD8D618B-DF4D-446A-A3B9-2659471E537F}"
-=======
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "UserService", "D:\Git Repository\DigitalOffice\DigitalOffice\Services\UserService\UserService.csproj", "{57E38E67-C667-41E5-95C2-98D2DC3E50EA}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ProjectService", "D:\Git Repository\DigitalOffice\DigitalOffice\Services\ProjectService\ProjectService.csproj", "{1F659D47-7DCA-4805-B42A-7FB9DC714DA7}"
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Tests", "Tests", "{A4DA860D-70B9-4AFE-823A-D7AD2A547C0D}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "CheckRightsService", "D:\Git Repository\DigitalOffice\DigitalOffice\Services\CheckRightsService\CheckRightsService.csproj", "{F7F15F96-8BC1-4303-BEC0-F88BA921A7C5}"
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Shared", "Shared", "{3F182395-281F-4C1E-8325-73B2A4715B79}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "FileService", "D:\Git Repository\DigitalOffice\DigitalOffice\Services\FileService\FileService.csproj", "{D61F4DF8-DAA4-4051-A232-89299CA3FD49}"
-EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "TimeManagementService", "D:\Git Repository\DigitalOffice\DigitalOffice\Services\TimeManagementService\TimeManagementService.csproj", "{BFEC18E6-CA3F-42AC-AB32-AEBA70AB9603}"
-EndProject
-Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Tests", "Tests", "{726AAF26-0B24-4525-99A3-955F0E354C71}"
-EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "CheckRightsServiceUnitTests", "D:\Git Repository\DigitalOffice\DigitalOffice\Tests\CheckRightsServiceTests\CheckRightsServiceUnitTests.csproj", "{B1995E22-8ED7-4C89-97CE-B062533E5BE8}"
-EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "UserServiceUnitTests", "D:\Git Repository\DigitalOffice\DigitalOffice\Tests\UserServiceTests\UserServiceUnitTests.csproj", "{3F5D097A-C4C9-4D65-9602-9FC2A423D800}"
-EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "FileServiceUnitTests", "D:\Git Repository\DigitalOffice\DigitalOffice\Tests\FileServiceTests\FileServiceUnitTests.csproj", "{7AC1DFDB-F57C-43CB-B86C-1BCBB6AA448B}"
-EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ProjectServiceUnitTests", "D:\Git Repository\DigitalOffice\DigitalOffice\Tests\ProjectServiceTests\ProjectServiceUnitTests.csproj", "{757BF6BC-D97D-45EA-A36E-B5854BB5801F}"
-EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "TimeManagementServiceUnitTests", "D:\Git Repository\DigitalOffice\DigitalOffice\Tests\TimeManagementServiceTests\TimeManagementServiceUnitTests.csproj", "{6E0BD608-AEBA-4881-BFBE-331EDC17202B}"
-EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "CompanyServiceUnitTests", "D:\Git Repository\DigitalOffice\DigitalOffice\Tests\CompanyServiceTests\CompanyServiceUnitTests.csproj", "{1FC00E13-79AD-429A-862B-7F14A6975B4D}"
-EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "CompanyService", "D:\Git Repository\DigitalOffice\DigitalOffice\Services\CompanyService\CompanyService.csproj", "{45D31251-95E5-4BF2-BC66-6A92324227EE}"
-EndProject
-Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Shared", "Shared", "{1DC79DAD-4005-4C3B-8481-74775C29081D}"
-EndProject
-<<<<<<<< HEAD:DigitalOffice/LT.DigitalOffice.sln
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Kernel", "Shared\Kernel\Kernel.csproj", "{AD8D618B-DF4D-446A-A3B9-2659471E537F}"
-========
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "InternalModels", "D:\Git Repository\DigitalOffice\DigitalOffice\Shared\InternalModels\InternalModels.csproj", "{6D1521EE-08DF-4C3B-B2CF-BA2E5AB18952}"
->>>>>>>> develop:DigitalOffice/DigitalOffice.sln
->>>>>>> develop
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

@@ -1,13 +1,3 @@
-<<<<<<< HEAD
-﻿using System;
-namespace UserService.Mappers.Interfaces
-{
-    public interface IMapper<TIn, TOut>
-    {
-        TOut Map(TIn value);
-    }
-}
-=======
 ﻿namespace LT.DigitalOffice.UserService.Mappers.Interfaces
 {
     /// <summary>
@@ -25,4 +15,4 @@ namespace UserService.Mappers.Interfaces
         TOut Map(TIn value);
     }
 }
->>>>>>> develop
+

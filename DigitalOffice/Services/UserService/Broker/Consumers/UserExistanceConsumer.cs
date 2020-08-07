@@ -7,9 +7,9 @@ using System.Linq;
 using System.Threading.Tasks;
 using UserService.Repositories.Interfaces;
 
-namespace UserService.Broker.Consumers
+namespace LT.DigitalOffice.UserService.Broker.Consumers
 {
-    public class UserExistanceConsumer : IConsumer<UserExistanceRequest>
+    public class UserExistanceConsumer : IConsumer<UserExistenceRequest>
     {
         IUserRepository repository;
 
@@ -20,7 +20,7 @@ namespace UserService.Broker.Consumers
 
         public async Task Consume(ConsumeContext<UserExistanceRequest> context)
         {
-            var response = new UserExistanceResponse
+            var response = new UserExistenceResponse
             {
                 Exists = repository.ContainsUserWithId(context.Message.Id)
             };
