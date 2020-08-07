@@ -19,11 +19,11 @@ namespace LT.DigitalOffice.CheckRightsService.Controllers
         
         [Route("AddRightsForUser")]
         [HttpPost]
-        public void AddRightsForUser(
+        public bool AddRightsForUser(
             [FromServices] IAddRightsForUserCommand command,
             [FromBody] RightsForUserRequest request)
         {
-            command.Execute(request);
+            return command.Execute(request);
         }
     }
 }
