@@ -1,16 +1,36 @@
-﻿using System;
-using System.Collections.Generic;
-using System.ComponentModel.DataAnnotations;
+﻿using System.ComponentModel.DataAnnotations;
+using Microsoft.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore.Metadata.Builders;
 
-namespace CheckRightsService.Database.Entities
+namespace LT.DigitalOffice.CheckRightsService.Database.Entities
 {
     public class DbRight
     {
         [Key]
-        public Guid Id { get; set; }
+        public int Id { get; set; }
         [Required]
-        public Guid UserId { get; set; }
-        public ICollection<DbRightTypeLink> Types { get; set; }
-        public ICollection<DbRightProjectLink> PermissionsIds { get; set; }
+        public string Name { get; set; }
+        public string Description { get; set; }
+    }
+
+    public class DbRightConfiguration : IEntityTypeConfiguration<DbRight>
+    {
+        public void Configure(EntityTypeBuilder<DbRight> builder)
+        {
+            builder.HasData(
+                new DbRight
+                {
+                    Id = 1,
+                    Name = "Add/Edit/Remove user",
+                    Description = null
+                },
+                new DbRight
+                {
+                    Id = 2,
+                    Name = "Add/Edit/Remove project",
+                    Description = null
+                }
+            );
+        }
     }
 }

@@ -4,17 +4,29 @@
     <TargetFramework>netcoreapp3.1</TargetFramework>
 
     <IsPackable>false</IsPackable>
+
+    <AssemblyName>LT.DigitalOffice.ProjectServiceUnitTests</AssemblyName>
+    <RootNamespace>LT.DigitalOffice.ProjectServiceUnitTests</RootNamespace>
   </PropertyGroup>
 
   <ItemGroup>
-    <PackageReference Include="Microsoft.EntityFrameworkCore.InMemory" Version="5.0.0-preview.7.20365.15" />
+    <PackageReference Include="Microsoft.EntityFrameworkCore" Version="3.1.6" />
+    <PackageReference Include="FluentValidation" Version="9.0.1" />
+    <PackageReference Include="Microsoft.EntityFrameworkCore.InMemory" Version="3.1.6" />
+    <PackageReference Include="Moq" Version="4.14.5" />
     <PackageReference Include="nunit" Version="3.12.0" />
     <PackageReference Include="NUnit3TestAdapter" Version="3.15.1" />
     <PackageReference Include="Microsoft.NET.Test.Sdk" Version="16.4.0" />
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\..\Services\ProjectService\ProjectService.csproj" />
+  <ProjectReference Include="..\..\Services\ProjectService\ProjectService.csproj" />
   </ItemGroup>
+
+  <PropertyGroup>
+    <LangVersion>preview</LangVersion>
+    <AssemblyName>LT.DigitalOffice.ProjectServiceUnitTests</AssemblyName>
+    <RootNamespace>LT.DigitalOffice.ProjectServiceUnitTests</RootNamespace>
+  </PropertyGroup>
 
 </Project>

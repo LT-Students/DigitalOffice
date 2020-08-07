@@ -4,9 +4,9 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
-using TimeManagementService.Database;
+using LT.DigitalOffice.TimeManagementService.Database;
 
-namespace TimeManagementService
+namespace LT.DigitalOffice.TimeManagementService
 {
     public class Startup
     {

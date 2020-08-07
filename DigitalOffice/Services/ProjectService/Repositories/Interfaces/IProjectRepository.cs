@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 ﻿using Microsoft.AspNetCore.Identity;
 using ProjectService.Database.Entities;
 using ProjectService.Models;
@@ -12,5 +13,16 @@ namespace ProjectService.Repositories.Interfaces
     {
         public bool AddUserToProject(DbProjectWorkerUser user, Guid project);
         public bool AddUserToProject(DbProjectManagerUser user, Guid project);
+=======
+﻿using System;
+using LT.DigitalOffice.ProjectService.Database.Entities;
+
+namespace LT.DigitalOffice.ProjectService.Repositories.Interfaces
+{
+    public interface IProjectRepository
+    {
+        DbProject GetProjectInfoById(Guid projectId);
+        Guid CreateNewProject(DbProject item);
+>>>>>>> develop
     }
 }

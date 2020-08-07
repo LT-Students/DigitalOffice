@@ -2,7 +2,7 @@
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
 using System;
 
-namespace UserService.Database.Entities
+namespace LT.DigitalOffice.UserService.Database.Entities
 {
     public class DbUserCertificateFile
     {

@@ -1,8 +1,8 @@
 ﻿using System.Reflection;
-using CompanyService.Database.Entities;
+using LT.DigitalOffice.CompanyService.Database.Entities;
 using Microsoft.EntityFrameworkCore;
 
-namespace CompanyService.Database
+namespace LT.DigitalOffice.CompanyService.Database
 {
     /// <summary>
     /// A class that defines the tables and its properties in the database.

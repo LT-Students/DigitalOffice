@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 
-namespace CompanyService.Database.Entities
+namespace LT.DigitalOffice.CompanyService.Database.Entities
 {
     public class DbDepartment
     {
@@ -16,7 +16,7 @@ namespace CompanyService.Database.Entities
         public bool IsActive { get; set; }
         [Required]
         public Guid CompanyId { get; set; }
-        
+
         public ICollection<DbDepartmentUser> UserIds { get; set; }
     }
 }

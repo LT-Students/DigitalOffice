@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 
-namespace CompanyService.Database.Entities
+namespace LT.DigitalOffice.CompanyService.Database.Entities
 {
     public class DbPosition
     {

@@ -1,7 +1,7 @@
 ﻿using System;
 using System.ComponentModel.DataAnnotations;
 
-namespace TimeManagementService.Database.Entities
+namespace LT.DigitalOffice.TimeManagementService.Database.Entities
 {
     public class DbLeave
     {
@@ -10,7 +10,7 @@ namespace TimeManagementService.Database.Entities
         public Guid WorkerUserId { get; set; }
         public DateTime StartLeave { get; set; }
         public DateTime EndLeave { get; set; }
-        public LeaveType LeaveType { get; set; }        
+        public LeaveType LeaveType { get; set; }
         public string Comment { get; set; }
     }
 }

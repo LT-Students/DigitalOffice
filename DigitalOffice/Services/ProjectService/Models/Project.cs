@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 
+<<<<<<< HEAD
 namespace ProjectService.Models
 {
     public class Project
@@ -14,5 +15,14 @@ namespace ProjectService.Models
         public ICollection<Guid> ManagersUsersIds { get; set; }
         public ICollection<Guid> WorkersUsersIds { get; set; }
         public ICollection<Guid> FilesIds { get; set; }
+=======
+namespace LT.DigitalOffice.ProjectService.Models
+{
+    public class Project
+    {
+        public string Name { get; set; }
+        public IEnumerable<Guid> ManagersIds { get; set; }
+        public IEnumerable<Guid> WorkersIds { get; set; }
+>>>>>>> develop
     }
 }

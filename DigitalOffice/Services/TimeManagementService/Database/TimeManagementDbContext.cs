@@ -1,7 +1,7 @@
 ﻿using Microsoft.EntityFrameworkCore;
-using TimeManagementService.Database.Entities;
+using LT.DigitalOffice.TimeManagementService.Database.Entities;
 
-namespace TimeManagementService.Database
+namespace LT.DigitalOffice.TimeManagementService.Database
 {
     /// <summary>
     /// TimeManagementDbContext is the primary class that is responsible for interacting with the database.

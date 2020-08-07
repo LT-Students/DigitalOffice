@@ -3,7 +3,7 @@ using System.ComponentModel.DataAnnotations;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
 
-namespace CompanyService.Database.Entities
+namespace LT.DigitalOffice.CompanyService.Database.Entities
 {
     public class DbDepartmentUser
     {

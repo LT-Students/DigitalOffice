@@ -2,13 +2,17 @@
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
 
-namespace ProjectService.Database.Entities
+namespace LT.DigitalOffice.ProjectService.Database.Entities
 {
     public class DbProjectWorkerUser 
     {
         public Guid ProjectId { get; set; }
         public DbProject Project { get; set; }
         public Guid WorkerUserId { get; set; }
+        public DateTime AddedOn { get; set;}
+        public DateTime? RemovedOn { get; set;}
+        public bool IsManager { get; set; }
+        public bool IsActive { get; set; }
     }
 
     public class ProjectWorkerUserConfiguration : IEntityTypeConfiguration<DbProjectWorkerUser>

@@ -1,6 +1,6 @@
 using NUnit.Framework;
 
-namespace TimeManagementServiceUnitTests
+namespace LT.DigitalOffice.TimeManagementServiceUnitTests
 {
     public class Tests
     {

@@ -1,11 +1,11 @@
-using CompanyService.Database;
+using LT.DigitalOffice.CompanyService.Database;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 
-namespace CompanyService
+namespace LT.DigitalOffice.CompanyService
 {
     public class Startup
     {

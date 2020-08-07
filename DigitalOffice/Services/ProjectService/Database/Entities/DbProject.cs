@@ -1,8 +1,8 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 
-namespace ProjectService.Database.Entities
+namespace LT.DigitalOffice.ProjectService.Database.Entities
 {
     public class DbProject
     {
@@ -13,7 +13,6 @@ namespace ProjectService.Database.Entities
         public Guid DepartmentId { get; set; }
         public bool Deferred { get; set; }
         public bool IsActive { get; set; }
-        public ICollection<DbProjectManagerUser> ManagersUsersIds { get; set; }
         public ICollection<DbProjectWorkerUser> WorkersUsersIds { get; set; }
         public ICollection<DbProjectFile> FilesIds { get; set; }
     }

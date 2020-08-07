@@ -1,8 +1,8 @@
-﻿using CheckRightsService.Database.Entities;
+﻿using LT.DigitalOffice.CheckRightsService.Database.Entities;
 using Microsoft.EntityFrameworkCore;
 using System.Reflection;
 
-namespace CheckRightsService.Database
+namespace LT.DigitalOffice.CheckRightsService.Database
 {
     /// <summary>
     /// Represents database for rights checking.
@@ -10,8 +10,6 @@ namespace CheckRightsService.Database
     public class CheckRightsServiceDbContext : DbContext
     {
         public DbSet<DbRight> Rights { get; set; }
-
-        public DbSet<DbRightChangeRecord> RightsHistory { get; set; }
 
         public CheckRightsServiceDbContext(DbContextOptions<CheckRightsServiceDbContext> options) : base(options) { }
 

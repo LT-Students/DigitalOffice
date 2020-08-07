@@ -1,22 +1,22 @@
-using FluentValidation;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
-using ProjectService.Commands;
-using ProjectService.Commands.Interfaces;
-using ProjectService.Database;
-using ProjectService.Database.Entities;
-using ProjectService.Mappers;
-using ProjectService.Mappers.Interfaces;
-using ProjectService.Models;
-using ProjectService.Repositories;
-using ProjectService.Repositories.Interfaces;
-using ProjectService.Validators;
+using LT.DigitalOffice.ProjectService.Commands;
+using LT.DigitalOffice.ProjectService.Commands.Interfaces;
+using LT.DigitalOffice.ProjectService.Database;
+using LT.DigitalOffice.ProjectService.Database.Entities;
+using LT.DigitalOffice.ProjectService.Repositories;
+using LT.DigitalOffice.ProjectService.Repositories.Interfaces;
+using LT.DigitalOffice.ProjectService.Mappers.Interfaces;
+using LT.DigitalOffice.ProjectService.Mappers;
+using LT.DigitalOffice.ProjectService.Models;
+using LT.DigitalOffice.ProjectService.Validators;
+using FluentValidation;
 
-namespace ProjectService
+namespace LT.DigitalOffice.ProjectService
 {
     public class Startup
     {
@@ -29,8 +29,6 @@ namespace ProjectService
 
         public void ConfigureServices(IServiceCollection services)
         {
-            services.AddHealthChecks();
-
             services.AddDbContext<ProjectServiceDbContext>(options =>
             {
                 options.UseSqlServer(Configuration.GetConnectionString("SQLConnectionString"));
@@ -38,32 +36,34 @@ namespace ProjectService
 
             services.AddControllers();
 
-            ConfigureCommands(services);
-            ConfigureRepositories(services);
-            ConfigureValidators(services);
-            ConfigureMappers(services);
+            ConfigCommands(services);
+            ConfigRepositories(services);
+            ConfigMappers(services);
+            ConfigValidators(services);
         }
 
-        private void ConfigureCommands(IServiceCollection services)
+        private void ConfigCommands(IServiceCollection services)
         {
-            services.AddTransient<IAddUserToProjectCommand, AddUserToProjectCommand>();
+            services.AddTransient<IGetProjectInfoByIdCommand, GetProjectInfoByIdCommand>();
+            services.AddTransient<ICreateNewProjectCommand, CreateNewProjectCommand>();
         }
 
-        private void ConfigureRepositories(IServiceCollection services)
+        private void ConfigRepositories(IServiceCollection services)
         {
             services.AddTransient<IProjectRepository, ProjectRepository>();
         }
 
-        private void ConfigureValidators(IServiceCollection services)
+        private void ConfigMappers(IServiceCollection services)
         {
-            services.AddTransient<IValidator<AddUserToProjectRequest>, AddUserToProjectRequestValidator>();
+            services.AddTransient<IMapper<DbProject, Project>, ProjectMapper>();
+            services.AddTransient<IMapper<NewProjectRequest, DbProject>, DbProjectMapper>();
         }
 
-        private void ConfigureMappers(IServiceCollection services)
+        private void ConfigValidators(IServiceCollection services)
         {
-            services.AddTransient<IMapper<AddUserToProjectRequest, DbProjectWorkerUser>, WorkerMapper>();
-            services.AddTransient<IMapper<AddUserToProjectRequest, DbProjectManagerUser>, ManagerMapper>();
+            services.AddTransient<IValidator<NewProjectRequest>, NewProjectValidator>();
         }
+
 
         public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
         {
@@ -84,7 +84,9 @@ namespace ProjectService
             using var serviceScope = app.ApplicationServices
                 .GetRequiredService<IServiceScopeFactory>()
                 .CreateScope();
+
             using var context = serviceScope.ServiceProvider.GetService<ProjectServiceDbContext>();
+
             context.Database.Migrate();
         }
     }

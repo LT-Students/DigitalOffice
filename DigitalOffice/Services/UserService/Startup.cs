@@ -1,16 +1,23 @@
-using MassTransit;
+using FluentValidation;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
-using UserService.Broker.Consumers;
-using UserService.Database;
-using UserService.Repositories;
-using UserService.Repositories.Interfaces;
+using LT.DigitalOffice.UserService.Commands;
+using LT.DigitalOffice.UserService.Commands.Interfaces;
+using LT.DigitalOffice.UserService.Database;
+using LT.DigitalOffice.UserService.Database.Entities;
+using LT.DigitalOffice.UserService.Mappers;
+using LT.DigitalOffice.UserService.Mappers.Interfaces;
+using LT.DigitalOffice.UserService.Models;
+using LT.DigitalOffice.UserService.Repositories;
+using LT.DigitalOffice.UserService.Repositories.Interfaces;
+using LT.DigitalOffice.UserService.RestRequests;
+using LT.DigitalOffice.UserService.Validators;
 
-namespace UserService
+namespace LT.DigitalOffice.UserService
 {
     public class Startup
     {
@@ -23,8 +30,6 @@ namespace UserService
 
         public void ConfigureServices(IServiceCollection services)
         {
-            services.AddHealthChecks();
-
             services.AddDbContext<UserServiceDbContext>(options =>
             {
                 options.UseSqlServer(Configuration.GetConnectionString("SQLConnectionString"));
@@ -32,31 +37,32 @@ namespace UserService
 
             services.AddControllers();
 
-            services.AddMassTransit(x =>
-            {
-                x.AddConsumer<UserExistanceConsumer>();
-
-                x.UsingRabbitMq((context, cfg) =>
-                {
-                    const string serviceSection = "ServiceInfo";
-                    string serviceId = Configuration.GetSection(serviceSection)["ID"];
-                    string serviceName = Configuration.GetSection(serviceSection)["Name"];
-
-                    cfg.Host("localhost", "/", h =>
-                    {
-                        h.Username($"{serviceName}_{serviceId}");
-                        h.Password($"{serviceId}");
-                    });
-
-                    cfg.ReceiveEndpoint($"{serviceName}", ep =>
-                    {
-                        ep.ConfigureConsumer<UserExistanceConsumer>(context);
-                    });
-                }
-            })
-                // wip
-
+            ConfigureCommands(services);
             ConfigureRepositories(services);
+            ConfigureValidators(services);
+            ConfigureMappers(services);
+        }
+
+        private void ConfigureCommands(IServiceCollection services)
+        {
+            services.AddTransient<IUserCreateCommand, UserCreateCommand>();
+            services.AddTransient<IGetUserByIdCommand, GetUserByIdCommand>();
+        }
+
+        private void ConfigureRepositories(IServiceCollection services)
+        {
+            services.AddTransient<IUserRepository, UserRepository>();
+        }
+
+        private void ConfigureValidators(IServiceCollection services)
+        {
+            services.AddTransient<IValidator<UserCreateRequest>, UserCreateRequestValidator>();
+        }
+
+        private void ConfigureMappers(IServiceCollection services)
+        {
+            services.AddTransient<IMapper<UserCreateRequest, DbUser>, UserCreateRequestToDbUserMapper>();
+            services.AddTransient<IMapper<DbUser, User>, UserMapper>();
         }
 
         public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
@@ -75,11 +81,6 @@ namespace UserService
             {
                 endpoints.MapControllers();
             });
-        }
-
-        private void ConfigureRepositories(IServiceCollection services)
-        {
-            services.AddTransient<IUserRepository, UserRepository>();
         }
 
         private void UpdateDatabase(IApplicationBuilder app)
