@@ -4,14 +4,16 @@ using LT.DigitalOffice.ProjectService.Database;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 namespace LT.DigitalOffice.ProjectService.Database.Migrations
 {
     [DbContext(typeof(ProjectServiceDbContext))]
-    partial class ProjectServiceDbContextModelSnapshot : ModelSnapshot
+    [Migration("20200802092425_managersremoved")]
+    partial class managersremoved
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -68,12 +70,6 @@ namespace LT.DigitalOffice.ProjectService.Database.Migrations
 
                     b.Property<DateTime>("AddedOn")
                         .HasColumnType("datetime2");
-
-                    b.Property<bool>("IsActive")
-                        .HasColumnType("bit");
-
-                    b.Property<bool>("IsManager")
-                        .HasColumnType("bit");
 
                     b.Property<DateTime?>("RemovedOn")
                         .HasColumnType("datetime2");
