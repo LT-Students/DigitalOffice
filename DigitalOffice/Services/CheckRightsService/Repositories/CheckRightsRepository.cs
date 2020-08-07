@@ -6,6 +6,7 @@ using LT.DigitalOffice.CheckRightsService.Models;
 using LT.DigitalOffice.CheckRightsService.Repositories.Interfaces;
 using System.Collections.Generic;
 using System.Linq;
+using LT.DigitalOffice.CheckRightsService.RestRequests;
 
 namespace LT.DigitalOffice.CheckRightsService.Repositories
 {
@@ -25,9 +26,29 @@ namespace LT.DigitalOffice.CheckRightsService.Repositories
             return dbContext.Rights.Select(r => mapper.Map(r)).ToList();
         }
 
-        public bool AddRightsToUser(Guid userId)
+        public bool AddRightsToUser(RightsForUserRequest request)
         {
-            if(dbContext.Rights)
+            foreach (var rightId in request.RightsId)
+            {
+                var dbRight = dbContext.Rights.FirstOrDefault(right => right.Id == rightId);
+                if (dbRight == null)
+                {
+                    //TODO add custom exception
+                    throw new Exception("Right doesn't exist");
+                }
+
+                dbRight.UserIds.Add(new DbRightUser
+                {
+                    UserId = request.UserId,
+                    RightId = rightId,
+                });
+
+                dbContext.Rights.Update(dbRight);
+            }
+
+            dbContext.SaveChanges();
+
+            return true;
         }
     }
 }
