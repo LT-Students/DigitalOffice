@@ -1,3 +1,4 @@
+using System;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.EntityFrameworkCore;
@@ -15,6 +16,8 @@ using LT.DigitalOffice.ProjectService.Mappers;
 using LT.DigitalOffice.ProjectService.Models;
 using LT.DigitalOffice.ProjectService.Validators;
 using FluentValidation;
+using LT.DigitalOffice.Broker.Requests;
+using MassTransit;
 
 namespace LT.DigitalOffice.ProjectService
 {
@@ -35,6 +38,21 @@ namespace LT.DigitalOffice.ProjectService
             });
 
             services.AddControllers();
+
+            services.AddMassTransit(configurator =>
+            {
+                configurator.AddRequestClient<CheckIfUserHaveRightRequest>(
+                    new Uri("rabbitmq://localhost/checkrightsservice"));
+
+                configurator.UsingRabbitMq((context, factoryConfigurator) =>
+                {
+                    factoryConfigurator.Host("localhost", hostConfigurator =>
+                    {
+                        hostConfigurator.Username("ProjectService"); //TODO must be changed
+                        hostConfigurator.Password("123"); //TODO must bo changed
+                    });
+                });
+            });
 
             ConfigCommands(services);
             ConfigRepositories(services);

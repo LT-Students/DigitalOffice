@@ -40,8 +40,8 @@ namespace LT.DigitalOffice.CheckRightsService
                 {
                     factoryConfigurator.Host("localhost", hostConfigurator =>
                     {
-                        hostConfigurator.Username("CheckRightService"); //must be changed
-                        hostConfigurator.Password("123");               //must be changed
+                        hostConfigurator.Username("CheckRightsService"); //TODO must be changed
+                        hostConfigurator.Password("123");               //TODO must be changed
                     });
                     
                     factoryConfigurator.ReceiveEndpoint("CheckRightService", endpointConfigurator =>

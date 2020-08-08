@@ -1,3 +1,5 @@
+using System;
+using LT.DigitalOffice.Broker.Requests;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.EntityFrameworkCore;
@@ -5,6 +7,7 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using LT.DigitalOffice.TimeManagementService.Database;
+using MassTransit;
 
 namespace LT.DigitalOffice.TimeManagementService
 {
@@ -25,6 +28,21 @@ namespace LT.DigitalOffice.TimeManagementService
             });
 
             services.AddControllers();
+            
+            services.AddMassTransit(configurator =>
+            {
+                configurator.AddRequestClient<CheckIfUserHaveRightRequest>(
+                    new Uri("rabbitmq://localhost/checkrightsservice"));
+
+                configurator.UsingRabbitMq((context, factoryConfigurator) =>
+                {
+                    factoryConfigurator.Host("localhost", hostConfigurator =>
+                    {
+                        hostConfigurator.Username("TimeManagementService"); //TODO must be changed
+                        hostConfigurator.Password("123"); //TODO must bo changed
+                    });
+                });
+            });
         }
 
         public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
