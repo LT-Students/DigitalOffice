@@ -1,3 +1,4 @@
+using LT.DigitalOffice.CheckRightsService.Broker.Consumers;
 using LT.DigitalOffice.CheckRightsService.Commands;
 using LT.DigitalOffice.CheckRightsService.Commands.Interfaces;
 using LT.DigitalOffice.CheckRightsService.Database;
@@ -7,6 +8,7 @@ using LT.DigitalOffice.CheckRightsService.Mappers.Interfaces;
 using LT.DigitalOffice.CheckRightsService.Models;
 using LT.DigitalOffice.CheckRightsService.Repositories;
 using LT.DigitalOffice.CheckRightsService.Repositories.Interfaces;
+using MassTransit;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.EntityFrameworkCore;
@@ -29,6 +31,27 @@ namespace LT.DigitalOffice.CheckRightsService
             services.AddHealthChecks();
 
             services.AddControllers();
+
+            services.AddMassTransit(configurator =>
+            {
+                configurator.AddConsumer<CheckIfUserHaveRightConsumer>();
+
+                configurator.UsingRabbitMq((context, factoryConfigurator) =>
+                {
+                    factoryConfigurator.Host("localhost", hostConfigurator =>
+                    {
+                        hostConfigurator.Username("CheckRightService"); //must be changed
+                        hostConfigurator.Password("123");               //must be changed
+                    });
+                    
+                    factoryConfigurator.ReceiveEndpoint("CheckRightService", endpointConfigurator =>
+                    {
+                        endpointConfigurator.ConfigureConsumer<CheckIfUserHaveRightConsumer>(context);
+                    });
+                });
+            });
+            
+            services.AddMassTransitHostedService();
 
             services.AddDbContext<CheckRightsServiceDbContext>(options =>
             {
