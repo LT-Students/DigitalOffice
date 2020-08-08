@@ -1,4 +1,3 @@
-using System;
 using LT.DigitalOffice.CheckRightsService.Broker.Consumers;
 using LT.DigitalOffice.CheckRightsService.Commands;
 using LT.DigitalOffice.CheckRightsService.Commands.Interfaces;
