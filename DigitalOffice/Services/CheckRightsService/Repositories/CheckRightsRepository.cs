@@ -5,6 +5,7 @@ using LT.DigitalOffice.CheckRightsService.Models;
 using LT.DigitalOffice.CheckRightsService.Repositories.Interfaces;
 using System.Collections.Generic;
 using System.Linq;
+using LT.DigitalOffice.Broker.Requests;
 
 namespace LT.DigitalOffice.CheckRightsService.Repositories
 {
@@ -22,6 +23,14 @@ namespace LT.DigitalOffice.CheckRightsService.Repositories
         public List<Right> GetRightsList()
         {
             return dbContext.Rights.Select(r => mapper.Map(r)).ToList();
+        }
+
+        public bool CheckIfUserHaveRight(ICheckIfUserHaveRightRequest request)
+        {
+            var (userId, rightId) = (request.UserId, request.RightId);
+
+            return Enumerable.Any(dbContext.Rights.Where(right => right.Id == rightId),
+                right => right.UserIds.Select(rightUser => rightUser.UserId).Contains(userId));
         }
     }
 }
