@@ -43,13 +43,18 @@ namespace LT.DigitalOffice.ProjectService
             {
                 configurator.AddRequestClient<CheckIfUserHaveRightRequest>(
                     new Uri("rabbitmq://localhost/checkrightsservice"));
-
+                
                 configurator.UsingRabbitMq((context, factoryConfigurator) =>
                 {
+                    const string serviceInfoSection = "ServiceInfo";
+
+                    var serviceName = Configuration.GetSection(serviceInfoSection)["Name"];
+                    var serviceId = Configuration.GetSection(serviceInfoSection)["Id"];
+                    
                     factoryConfigurator.Host("localhost", hostConfigurator =>
                     {
-                        hostConfigurator.Username("ProjectService"); //TODO must be changed
-                        hostConfigurator.Password("123"); //TODO must bo changed
+                        hostConfigurator.Username($"{serviceName}_{serviceId}");
+                        hostConfigurator.Password($"{serviceId}");
                     });
                 });
             });
