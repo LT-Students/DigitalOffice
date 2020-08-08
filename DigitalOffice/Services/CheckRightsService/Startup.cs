@@ -1,3 +1,4 @@
+using System;
 using LT.DigitalOffice.CheckRightsService.Broker.Consumers;
 using LT.DigitalOffice.CheckRightsService.Commands;
 using LT.DigitalOffice.CheckRightsService.Commands.Interfaces;
@@ -38,13 +39,18 @@ namespace LT.DigitalOffice.CheckRightsService
 
                 configurator.UsingRabbitMq((context, factoryConfigurator) =>
                 {
+                    const string serviceInfoSection = "ServiceInfo";
+
+                    var serviceName = Configuration.GetSection(serviceInfoSection)["Name"];
+                    var serviceId = Configuration.GetSection(serviceInfoSection)["Id"];
+                    
                     factoryConfigurator.Host("localhost", hostConfigurator =>
                     {
-                        hostConfigurator.Username("CheckRightsService"); //TODO must be changed
-                        hostConfigurator.Password("123");               //TODO must be changed
+                        hostConfigurator.Username($"{serviceName}_{serviceId}");
+                        hostConfigurator.Password(serviceId);
                     });
                     
-                    factoryConfigurator.ReceiveEndpoint("CheckRightService", endpointConfigurator =>
+                    factoryConfigurator.ReceiveEndpoint(serviceName, endpointConfigurator =>
                     {
                         endpointConfigurator.ConfigureConsumer<CheckIfUserHaveRightConsumer>(context);
                     });
