@@ -4,9 +4,9 @@ using MassTransit;
 
 namespace LT.DigitalOffice.CheckRightsService.Broker.Consumers
 {
-    public class CheckIfUserHaveRightConsumer : IConsumer<CheckIfUserHaveRightRequest>
+    public class CheckIfUserHaveRightConsumer : IConsumer<ICheckIfUserHaveRightRequest>
     {
-        public Task Consume(ConsumeContext<CheckIfUserHaveRightRequest> context)
+        public Task Consume(ConsumeContext<ICheckIfUserHaveRightRequest> context)
         {
             throw new System.NotImplementedException();
         }

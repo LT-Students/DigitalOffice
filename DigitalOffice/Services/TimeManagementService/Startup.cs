@@ -31,7 +31,7 @@ namespace LT.DigitalOffice.TimeManagementService
             
             services.AddMassTransit(configurator =>
             {
-                configurator.AddRequestClient<CheckIfUserHaveRightRequest>(
+                configurator.AddRequestClient<ICheckIfUserHaveRightRequest>(
                     new Uri("rabbitmq://localhost/checkrightsservice"));
 
                 configurator.UsingRabbitMq((context, factoryConfigurator) =>

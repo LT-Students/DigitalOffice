@@ -4,7 +4,6 @@ using Microsoft.AspNetCore.Hosting;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
-using Microsoft.Extensions.Hosting;
 using LT.DigitalOffice.ProjectService.Commands;
 using LT.DigitalOffice.ProjectService.Commands.Interfaces;
 using LT.DigitalOffice.ProjectService.Database;
@@ -41,7 +40,7 @@ namespace LT.DigitalOffice.ProjectService
 
             services.AddMassTransit(configurator =>
             {
-                configurator.AddRequestClient<CheckIfUserHaveRightRequest>(
+                configurator.AddRequestClient<ICheckIfUserHaveRightRequest>(
                     new Uri("rabbitmq://localhost/checkrightsservice"));
                 
                 configurator.UsingRabbitMq((context, factoryConfigurator) =>
