@@ -13,6 +13,9 @@ namespace LT.DigitalOffice.CheckRightsService.Broker.Consumers
     {
         private readonly ICheckIfUserHaveRightCommand command;
 
+        public CheckIfUserHaveRightConsumer()
+        { }
+        
         public CheckIfUserHaveRightConsumer([FromServices]ICheckIfUserHaveRightCommand command)
         {
             this.command = command;
@@ -20,7 +23,24 @@ namespace LT.DigitalOffice.CheckRightsService.Broker.Consumers
 
         public async Task Consume(ConsumeContext<ICheckIfUserHaveRightRequest> context)
         {
-            await context.RespondAsync<IOperationResult<bool>>(command.Execute(context.Message));
+            try
+            {
+                await context.RespondAsync<IOperationResult<bool>>(new
+                {
+                    Body = command.Execute(context.Message),
+                    IsSuccess = true,
+                    Errors = new List<string>()
+                });
+            }
+            catch (Exception exception)
+            {
+                await context.RespondAsync<IOperationResult<bool>>(new
+                {
+                    Body = false,
+                    IsSuccess = false,
+                    Errors = new List<string> {exception.Message}
+                });
+            }
         }
     }
 }

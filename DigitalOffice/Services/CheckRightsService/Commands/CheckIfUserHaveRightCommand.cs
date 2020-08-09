@@ -28,28 +28,11 @@ namespace LT.DigitalOffice.CheckRightsService.Commands
             this.validator = validator;
         }
 
-        public object Execute(ICheckIfUserHaveRightRequest request)
+        public bool Execute(ICheckIfUserHaveRightRequest request)
         {
-            try
-            {
-                validator.ValidateAndThrow(request);
+            validator.ValidateAndThrow(request);
 
-                return new
-                {
-                    Body = repository.CheckIfUserHaveRight(request),
-                    IsSuccess = true,
-                    Exceptions = new List<string>()
-                };
-            }
-            catch(Exception e)
-            {
-                return new
-                {
-                    Body = false,
-                    IsSuccess = false,
-                    Exceptions = new List<string> {e.Message}
-                };
-            }
+            return repository.CheckIfUserHaveRight(request);
         }
     }
 }
