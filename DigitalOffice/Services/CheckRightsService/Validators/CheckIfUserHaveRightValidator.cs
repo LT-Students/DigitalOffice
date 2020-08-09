@@ -13,9 +13,6 @@ namespace LT.DigitalOffice.CheckRightsService.Validators
         /// </summary>
         public CheckIfUserHaveRightValidator()
         {
-            RuleFor(request => request)
-                .NotNull();
-
             RuleFor(request => request.RightId)
                 .Must(rightId => rightId > 0)
                 .WithMessage("ID of right must me positive number.");
