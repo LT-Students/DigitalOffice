@@ -26,11 +26,7 @@ namespace LT.DigitalOffice.CheckRightsService.Repositories
         }
 
         public bool CheckIfUserHaveRight(ICheckIfUserHaveRightRequest request)
-        {
-            var (userId, rightId) = (request.UserId, request.RightId);
-
-            return Enumerable.Any(dbContext.Rights.Where(right => right.Id == rightId),
-                right => right.UserIds.Select(rightUser => rightUser.UserId).Contains(userId));
-        }
+            => Enumerable.Any(dbContext.Rights.Where(right => right.Id == request.RightId),
+                right => right.UserIds.Select(rightUser => rightUser.UserId).Contains(request.UserId));
     }
 }

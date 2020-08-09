@@ -4,6 +4,7 @@ using FluentValidation;
 using LT.DigitalOffice.Broker.Requests;
 using LT.DigitalOffice.CheckRightsService.Commands.Interfaces;
 using LT.DigitalOffice.CheckRightsService.Repositories.Interfaces;
+using LT.DigitalOffice.Kernel.Broker;
 
 namespace LT.DigitalOffice.CheckRightsService.Commands
 {
