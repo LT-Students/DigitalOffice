@@ -12,7 +12,7 @@ namespace LT.DigitalOffice.UserService.Repositories.Interfaces
         /// Returns user model from UserServiceDb with specified id.
         /// </summary>
         /// <param name="userId">Specified id.</param>
-        /// <returns>User mode from UserServiceDb.</returns>
+        /// <returns>User model from UserServiceDb.</returns>
         DbUser GetUserInfoById(Guid userId);
 
         bool UserCreate(DbUser user);

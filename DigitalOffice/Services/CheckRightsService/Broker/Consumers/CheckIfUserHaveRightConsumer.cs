@@ -20,13 +20,13 @@ namespace LT.DigitalOffice.CheckRightsService.Broker.Consumers
 
         public async Task Consume(ConsumeContext<ICheckIfUserHaveRightRequest> context)
         {
-            var userHaveRight = false;
+            var body = false;
             var isSuccess = true;
             var exceptions = new List<string>();
 
             try
             {
-                userHaveRight = command.Execute(context.Message);
+                body = command.Execute(context.Message);
             }
             catch (Exception e)
             {
@@ -37,7 +37,7 @@ namespace LT.DigitalOffice.CheckRightsService.Broker.Consumers
             await context.RespondAsync<IOperationResult<bool>>(new
             {
                 IsSuccess = isSuccess,
-                Body = userHaveRight,
+                Body = body,
                 Exceptions = exceptions
             });
         }
