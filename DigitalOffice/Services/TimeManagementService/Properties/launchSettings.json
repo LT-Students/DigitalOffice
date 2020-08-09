@@ -1,7 +1,7 @@
 ﻿{
   "iisSettings": {
-    "windowsAuthentication": false, 
-    "anonymousAuthentication": true, 
+    "windowsAuthentication": false,
+    "anonymousAuthentication": true,
     "iisExpress": {
       "applicationUrl": "http://localhost:50171",
       "sslPort": 44384
@@ -17,7 +17,7 @@
     },
     "TimeManagementService": {
       "commandName": "Project",
-      "launchBrowser": true,
+      "launchBrowser": false,
       "applicationUrl": "https://localhost:9805;http://localhost:9806",
       "environmentVariables": {
         "ASPNETCORE_ENVIRONMENT": "Development"

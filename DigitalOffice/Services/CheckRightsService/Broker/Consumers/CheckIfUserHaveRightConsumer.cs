@@ -17,13 +17,13 @@ namespace LT.DigitalOffice.CheckRightsService.Broker.Consumers
         {
             this.command = command;
         }
-        
+
         public async Task Consume(ConsumeContext<ICheckIfUserHaveRightRequest> context)
         {
             var userHaveRight = false;
             var isSuccess = true;
             var exceptions = new List<string>();
-            
+
             try
             {
                 userHaveRight = command.Execute(context.Message);

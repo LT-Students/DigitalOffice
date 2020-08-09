@@ -7,8 +7,8 @@ namespace LT.DigitalOffice.CheckRightsService.Commands
 {
     public class CheckIfUserHaveRightCommand : ICheckIfUserHaveRightCommand
     {
-        private readonly IValidator<ICheckIfUserHaveRightRequest> validator;
         private readonly ICheckRightsRepository repository;
+        private readonly IValidator<ICheckIfUserHaveRightRequest> validator;
 
         public CheckIfUserHaveRightCommand(ICheckRightsRepository repository,
             IValidator<ICheckIfUserHaveRightRequest> validator)

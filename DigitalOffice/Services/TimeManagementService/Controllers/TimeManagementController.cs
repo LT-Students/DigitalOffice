@@ -7,7 +7,7 @@ using Microsoft.AspNetCore.Mvc;
 
 namespace LT.DigitalOffice.TimeManagementService.Controllers
 {
-    [Route("[controller]")]
+    [Route("api/[controller]")]
     [ApiController]
     public class TimeManagementController : ControllerBase
     {
