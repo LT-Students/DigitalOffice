@@ -8,12 +8,12 @@ namespace LT.DigitalOffice.CheckRightsService.Validator
         public AddRightsForUserValidator()
         {
             RuleFor(rights => rights.UserId)
-                .NotEmpty()
-                .WithMessage("User id is empty.");
-            
+                .NotNull()
+                .WithName("User Id");
+
             RuleFor(rights => rights.RightsId)
-                .NotEmpty()
-                .WithMessage("No rights to add.");
+                .NotNull()
+                .WithName("Right Id");
         }
     }
 }
