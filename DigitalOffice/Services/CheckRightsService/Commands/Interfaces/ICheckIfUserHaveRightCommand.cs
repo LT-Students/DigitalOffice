@@ -11,7 +11,7 @@ namespace LT.DigitalOffice.CheckRightsService.Commands.Interfaces
         /// Checks if user with specified id have right with specified id.
         /// </summary>
         /// <param name="request">Request containing specified user ID and specified right ID.</param>
-        /// <returns>True if user have right; otherwise false.</returns>
-        bool Execute(ICheckIfUserHaveRightRequest request);
+        /// <returns>IOperationResult will be containing true body if user with specified id have right with specified id; otherwise body will be false.</returns>
+        object Execute(ICheckIfUserHaveRightRequest request);
     }
 }

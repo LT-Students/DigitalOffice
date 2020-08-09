@@ -1,4 +1,6 @@
-﻿using FluentValidation;
+﻿using System;
+using System.Collections.Generic;
+using FluentValidation;
 using LT.DigitalOffice.Broker.Requests;
 using LT.DigitalOffice.CheckRightsService.Commands.Interfaces;
 using LT.DigitalOffice.CheckRightsService.Repositories.Interfaces;
@@ -25,11 +27,28 @@ namespace LT.DigitalOffice.CheckRightsService.Commands
             this.validator = validator;
         }
 
-        public bool Execute(ICheckIfUserHaveRightRequest request)
+        public object Execute(ICheckIfUserHaveRightRequest request)
         {
-            validator.ValidateAndThrow(request);
+            try
+            {
+                validator.ValidateAndThrow(request);
 
-            return repository.CheckIfUserHaveRight(request);
+                return new
+                {
+                    Body = repository.CheckIfUserHaveRight(request),
+                    IsSuccess = true,
+                    Exceptions = new List<string>()
+                };
+            }
+            catch(Exception e)
+            {
+                return new
+                {
+                    Body = false,
+                    IsSuccess = false,
+                    Exceptions = new List<string> {e.Message}
+                };
+            }
         }
     }
 }

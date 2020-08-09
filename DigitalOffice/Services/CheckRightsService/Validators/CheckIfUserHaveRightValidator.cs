@@ -18,7 +18,7 @@ namespace LT.DigitalOffice.CheckRightsService.Validators
 
             RuleFor(request => request.RightId)
                 .Must(rightId => rightId > 0)
-                .WithMessage("Id of right must me positive number.");
+                .WithMessage("ID of right must me positive number.");
 
             RuleFor(request => request.UserId)
                 .NotEmpty();
