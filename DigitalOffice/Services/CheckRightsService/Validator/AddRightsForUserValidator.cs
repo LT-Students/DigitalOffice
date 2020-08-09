@@ -8,11 +8,11 @@ namespace LT.DigitalOffice.CheckRightsService.Validator
         public AddRightsForUserValidator()
         {
             RuleFor(rights => rights.UserId)
-                .NotNull()
+                .NotEmpty()
                 .WithName("User Id");
 
             RuleFor(rights => rights.RightsId)
-                .NotNull()
+                .NotEmpty()
                 .WithName("Right Id");
         }
     }
