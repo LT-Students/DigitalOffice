@@ -13,9 +13,6 @@ namespace LT.DigitalOffice.CheckRightsService.Broker.Consumers
     {
         private readonly ICheckIfUserHaveRightCommand command;
 
-        public CheckIfUserHaveRightConsumer()
-        { }
-        
         public CheckIfUserHaveRightConsumer([FromServices]ICheckIfUserHaveRightCommand command)
         {
             this.command = command;

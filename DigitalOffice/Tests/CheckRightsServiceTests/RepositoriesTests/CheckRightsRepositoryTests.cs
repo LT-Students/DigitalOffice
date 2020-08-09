@@ -1,12 +1,12 @@
 ﻿using System;
 using System.Collections.Generic;
-using LT.DigitalOffice.Broker.Requests;
 using LT.DigitalOffice.CheckRightsService.Database;
 using LT.DigitalOffice.CheckRightsService.Database.Entities;
 using LT.DigitalOffice.CheckRightsService.Mappers.Interfaces;
 using LT.DigitalOffice.CheckRightsService.Models;
 using LT.DigitalOffice.CheckRightsService.Repositories;
 using LT.DigitalOffice.CheckRightsService.Repositories.Interfaces;
+using LT.DigitalOffice.CheckRightsServiceUnitTests.UnitTestLibrary;
 using Microsoft.EntityFrameworkCore;
 using Moq;
 using NUnit.Framework;
@@ -18,18 +18,6 @@ namespace LT.DigitalOffice.CheckRightsServiceUnitTests.RepositoriesTests
         private CheckRightsServiceDbContext dbContext;
         private ICheckRightsRepository repository;
         private Mock<IMapper<DbRight, Right>> mapperMock;
-
-        private class CheckIfUserHaveRightRequest : ICheckIfUserHaveRightRequest
-        {
-            public CheckIfUserHaveRightRequest(int rightId, Guid userId)
-            {
-                RightId = rightId;
-                UserId = userId;
-            }
-
-            public int RightId { get; }
-            public Guid UserId { get; }
-        }
 
         [OneTimeSetUp]
         public void OneTimeSetUp()
