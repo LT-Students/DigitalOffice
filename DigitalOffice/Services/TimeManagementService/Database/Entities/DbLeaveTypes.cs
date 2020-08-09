@@ -1,8 +1,7 @@
-﻿using System;
 namespace LT.DigitalOffice.TimeManagementService.Database.Entities
 {
-   public enum LeaveType
-   {
+    public enum LeaveType
+    {
         Vacation = 0,
         SickLeave = 1,
         Training = 2,

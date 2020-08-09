@@ -1,0 +1,35 @@
+﻿using System;
+using System.Collections.Generic;
+using LT.DigitalOffice.TimeManagementService.Database.Entities;
+using LT.DigitalOffice.TimeManagementService.Repositories.Filters;
+
+namespace LT.DigitalOffice.TimeManagementService.Repositories.Interfaces
+{
+    /// <summary>
+    /// Represents interface of repository in repository pattern.
+    /// Provides methods for working with the database of TimeManagementService.
+    /// </summary>
+    public interface IWorkTimeRepository
+    {
+        /// <summary>
+        /// Returns the project with the specified id from database.
+        /// </summary>
+        /// <param name="projectId">Specified id of project.</param>
+        /// <returns>Project with specified id.</returns>
+
+        /// <summary>
+        /// Returns the filtered work times of specified id of user from database.
+        /// </summary>
+        /// <param name="userId">Id of user.</param>
+        /// <param name="filter">Data restrictions.</param>
+        /// <returns>Work times suitable for the specified parameters.</returns>
+        public ICollection<DbWorkTime> GetUserWorkTimes(Guid userId, WorkTimeFilter filter);
+
+        /// <summary>
+        /// Adds new work time to the database. Returns the id of the added work time.
+        /// </summary>
+        /// <param name="workTime">Work time to add.</param>
+        /// <returns>Id of the added work time.</returns>
+        public Guid CreateWorkTime(DbWorkTime workTime);
+    }
+}

@@ -1,5 +1,6 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using LT.DigitalOffice.TimeManagementService.Database.Entities;
+using System.Reflection;
 
 namespace LT.DigitalOffice.TimeManagementService.Database
 {
@@ -17,7 +18,7 @@ namespace LT.DigitalOffice.TimeManagementService.Database
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
+            modelBuilder.ApplyConfigurationsFromAssembly(Assembly.GetExecutingAssembly());
         }
-
     }
 }
