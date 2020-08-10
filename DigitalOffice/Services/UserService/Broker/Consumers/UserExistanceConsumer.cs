@@ -1,4 +1,6 @@
 ﻿using InternalModels;
+using LT.DigitalOffice.UserService.Repositories.Interfaces;
+using LT.DigitalOffice.UserService.RestRequests;
 using MassTransit;
 using Microsoft.AspNetCore.Mvc;
 using System;
