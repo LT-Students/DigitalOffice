@@ -58,6 +58,8 @@ namespace LT.DigitalOffice.ProjectService
                 });
             });
 
+            services.AddMassTransitHostedService();
+            
             ConfigCommands(services);
             ConfigRepositories(services);
             ConfigMappers(services);
