@@ -1,9 +1,11 @@
-﻿using System;
 using System.Threading.Tasks;
 using LT.DigitalOffice.Broker.Requests;
 using LT.DigitalOffice.Kernel.Broker;
 using MassTransit;
 using Microsoft.AspNetCore.Mvc;
+using System;
+using LT.DigitalOffice.TimeManagementService.Commands.Interfaces;
+using LT.DigitalOffice.TimeManagementService.Models;
 
 namespace LT.DigitalOffice.TimeManagementService.Controllers
 {
@@ -27,6 +29,15 @@ namespace LT.DigitalOffice.TimeManagementService.Controllers
             }
 
             return response.Message.Body;
+        }
+        
+        [Route("AddWorkTime")]
+        [HttpPost]
+        public Guid AddWorkTime(
+            [FromBody] CreateWorkTimeRequest workTime,
+            [FromServices] ICreateWorkTimeCommand command)
+        {
+            return command.Execute(workTime);
         }
     }
 }

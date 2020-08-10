@@ -1,13 +1,23 @@
 using System;
 using LT.DigitalOffice.Broker.Requests;
+using FluentValidation;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
+using LT.DigitalOffice.TimeManagementService.Commands;
+using LT.DigitalOffice.TimeManagementService.Commands.Interfaces;
 using LT.DigitalOffice.TimeManagementService.Database;
 using MassTransit;
+using LT.DigitalOffice.TimeManagementService.Database.Entities;
+using LT.DigitalOffice.TimeManagementService.Mappers;
+using LT.DigitalOffice.TimeManagementService.Mappers.Interfaces;
+using LT.DigitalOffice.TimeManagementService.Models;
+using LT.DigitalOffice.TimeManagementService.Repositories;
+using LT.DigitalOffice.TimeManagementService.Repositories.Interfaces;
+using LT.DigitalOffice.TimeManagementService.Validators;
 
 namespace LT.DigitalOffice.TimeManagementService
 {
@@ -48,6 +58,31 @@ namespace LT.DigitalOffice.TimeManagementService
                 configurator.AddRequestClient<ICheckIfUserHaveRightRequest>(
                     new Uri("rabbitmq://localhost/CheckRightsService"));
             });
+            
+            ConfigureCommands(services);
+            ConfigureValidators(services);
+            ConfigureMappers(services);
+            ConfigureRepositories(services);
+        }
+
+        private void ConfigureCommands(IServiceCollection services)
+        {
+            services.AddTransient<ICreateWorkTimeCommand, CreateWorkTimeCommand>();
+        }
+
+        private void ConfigureValidators(IServiceCollection services)
+        {
+            services.AddTransient<IValidator<CreateWorkTimeRequest>, CreateWorkTimeRequestValidator>();
+        }
+
+        private void ConfigureMappers(IServiceCollection services)
+        {
+            services.AddTransient<IMapper<CreateWorkTimeRequest, DbWorkTime>, WorkTimeMapper>();
+        }
+
+        private void ConfigureRepositories(IServiceCollection services)
+        {
+            services.AddTransient<IWorkTimeRepository, WorkTimeRepository>();
         }
 
         public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
