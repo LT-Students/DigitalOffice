@@ -1,30 +1,33 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
+using FluentValidation;
 using LT.DigitalOffice.Broker.Requests;
-using LT.DigitalOffice.CheckRightsService.Commands.Interfaces;
+using LT.DigitalOffice.CheckRightsService.Repositories.Interfaces;
 using LT.DigitalOffice.Kernel.Broker;
 using MassTransit;
-using Microsoft.AspNetCore.Mvc;
 
 namespace LT.DigitalOffice.CheckRightsService.Broker.Consumers
 {
     public class CheckIfUserHaveRightConsumer : IConsumer<ICheckIfUserHaveRightRequest>
     {
-        private readonly ICheckIfUserHaveRightCommand command;
+        private readonly IValidator<ICheckIfUserHaveRightRequest> validator;
+        private readonly ICheckRightsRepository repository;
 
-        public CheckIfUserHaveRightConsumer([FromServices]ICheckIfUserHaveRightCommand command)
+        public CheckIfUserHaveRightConsumer(IValidator<ICheckIfUserHaveRightRequest> validator, ICheckRightsRepository repository)
         {
-            this.command = command;
+            this.validator = validator;
+            this.repository = repository;
         }
 
         public async Task Consume(ConsumeContext<ICheckIfUserHaveRightRequest> context)
         {
             try
             {
+                validator.ValidateAndThrow(context.Message);
                 await context.RespondAsync<IOperationResult<bool>>(new
                 {
-                    Body = command.Execute(context.Message),
+                    Body = repository.CheckIfUserHaveRight(context.Message),
                     IsSuccess = true,
                     Errors = new List<string>()
                 });

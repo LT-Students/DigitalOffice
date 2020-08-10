@@ -100,7 +100,6 @@ namespace LT.DigitalOffice.CheckRightsService
         private void ConfigureCommands(IServiceCollection services)
         {
             services.AddTransient<IGetRightsListCommand, GetRightsListCommand>();
-            services.AddTransient<ICheckIfUserHaveRightCommand, CheckIfUserHaveRightCommand>();
         }
 
         private void ConfigureRepositories(IServiceCollection services)

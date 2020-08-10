@@ -2,9 +2,10 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using FluentValidation;
 using LT.DigitalOffice.Broker.Requests;
 using LT.DigitalOffice.CheckRightsService.Broker.Consumers;
-using LT.DigitalOffice.CheckRightsService.Commands.Interfaces;
+using LT.DigitalOffice.CheckRightsService.Repositories.Interfaces;
 using LT.DigitalOffice.Kernel.Broker;
 using MassTransit;
 using MassTransit.Testing;
@@ -15,7 +16,8 @@ namespace LT.DigitalOffice.CheckRightsServiceUnitTests.Consumers
 {
     public class CheckIfUserHaveRightConsumerTests
     {
-        private readonly Mock<ICheckIfUserHaveRightCommand> commandMock = new Mock<ICheckIfUserHaveRightCommand>();
+        private Mock<ICheckRightsRepository> repositoryMock;
+        private Mock<IValidator<ICheckIfUserHaveRightRequest>> validatorMock;
         private readonly Guid userId = new Guid();
         private const int rightId = 1;
         private InMemoryTestHarness harness;
@@ -24,14 +26,20 @@ namespace LT.DigitalOffice.CheckRightsServiceUnitTests.Consumers
         [SetUp]
         public void SetUp()
         {
+            validatorMock = new Mock<IValidator<ICheckIfUserHaveRightRequest>>();
+            repositoryMock = new Mock<ICheckRightsRepository>();
             harness = new InMemoryTestHarness();
-            consumerTestHarness = harness.Consumer(() => new CheckIfUserHaveRightConsumer(commandMock.Object));
+            consumerTestHarness = harness.Consumer(() => new CheckIfUserHaveRightConsumer(validatorMock.Object, repositoryMock.Object));
         }
         
         [Test]
-        public async Task ShouldConsumeAndPublishIfCommandReturnsSomething()
+        public async Task ShouldConsumeAndPublishIfRequestIsValidAndRepositoryReturnsSomething()
         {
-            commandMock.Setup(command => command.Execute(It.IsAny<ICheckIfUserHaveRightRequest>()))
+            repositoryMock
+                .Setup(repository => repository.CheckIfUserHaveRight(It.IsAny<ICheckIfUserHaveRightRequest>()))
+                .Returns(true)
+                .Verifiable();
+            validatorMock.Setup(validator => validator.Validate(It.IsAny<IValidationContext>()).IsValid)
                 .Returns(true);
             
             await harness.Start();
@@ -48,7 +56,8 @@ namespace LT.DigitalOffice.CheckRightsServiceUnitTests.Consumers
                 Assert.That(await consumerTestHarness.Consumed.Any<ICheckIfUserHaveRightRequest>());
                 Assert.That(await harness.Published.Any<IOperationResult<bool>>());
                 Assert.That(await harness.Published.Any<Fault<IOperationResult<bool>>>(), Is.False);
-                commandMock.Verify();
+                repositoryMock.Verify();
+                validatorMock.Verify(v => v.Validate(It.IsAny<IValidationContext>()), Times.Once);
             }
             finally
             {
@@ -57,9 +66,13 @@ namespace LT.DigitalOffice.CheckRightsServiceUnitTests.Consumers
         }
 
         [Test]
-        public async Task ShouldReturnSuccessfulResponseIfCommandDoesNotThrowException()
+        public async Task ShouldReturnSuccessfulResponseIfRequestIsValid()
         {
-            commandMock.Setup(command => command.Execute(It.IsAny<ICheckIfUserHaveRightRequest>()))
+            repositoryMock
+                .Setup(repository => repository.CheckIfUserHaveRight(It.IsAny<ICheckIfUserHaveRightRequest>()))
+                .Returns(true)
+                .Verifiable();
+            validatorMock.Setup(validator => validator.Validate(It.IsAny<IValidationContext>()).IsValid)
                 .Returns(true);
 
             await harness.Start();
@@ -78,7 +91,8 @@ namespace LT.DigitalOffice.CheckRightsServiceUnitTests.Consumers
                 Assert.That(response.Message.Errors, Is.EquivalentTo(new List<string>()));
                 Assert.That(consumerTestHarness.Consumed.Select<ICheckIfUserHaveRightRequest>().Any(), Is.True);
                 Assert.That(harness.Sent.Select<IOperationResult<bool>>().Any(), Is.True);
-                commandMock.Verify();
+                repositoryMock.Verify();
+                validatorMock.Verify(v => v.Validate(It.IsAny<IValidationContext>()), Times.Once);
             }
             finally
             {
@@ -90,9 +104,13 @@ namespace LT.DigitalOffice.CheckRightsServiceUnitTests.Consumers
         public async Task ShouldReturnUnsuccessfulResponseIfCommandThrowException()
         {
             const string exceptionMessage = "Exception";
-            commandMock.Setup(command => command.Execute(It.IsAny<ICheckIfUserHaveRightRequest>()))
-                .Throws(new Exception(exceptionMessage));
-            
+            repositoryMock
+                .Setup(repository => repository.CheckIfUserHaveRight(It.IsAny<ICheckIfUserHaveRightRequest>()))
+                .Returns(true);
+            validatorMock.Setup(validator => validator.Validate(It.IsAny<IValidationContext>()))
+                .Throws(new Exception(exceptionMessage))
+                .Verifiable();
+
             await harness.Start();
             try
             {
@@ -109,7 +127,10 @@ namespace LT.DigitalOffice.CheckRightsServiceUnitTests.Consumers
                 Assert.That(response.Message.Errors, Is.EquivalentTo(new List<string>{exceptionMessage}));
                 Assert.That(consumerTestHarness.Consumed.Select<ICheckIfUserHaveRightRequest>().Any(), Is.True);
                 Assert.That(harness.Sent.Select<IOperationResult<bool>>().Any(), Is.True);
-                commandMock.Verify();
+                repositoryMock.Verify(
+                    repository => repository.CheckIfUserHaveRight(It.IsAny<ICheckIfUserHaveRightRequest>()),
+                    Times.Never);
+                validatorMock.Verify();
             }
             finally
             {
