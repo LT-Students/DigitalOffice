@@ -46,7 +46,7 @@ namespace LT.DigitalOffice.CheckRightsService
                     var serviceName = Configuration.GetSection(serviceInfoSection)["Name"];
                     var serviceId = Configuration.GetSection(serviceInfoSection)["Id"];
 
-                    factoryConfigurator.Host("localhost", hostConfigurator =>
+                    factoryConfigurator.Host("localhost", "/",hostConfigurator =>
                     {
                         hostConfigurator.Username($"{serviceName}_{serviceId}");
                         hostConfigurator.Password(serviceId);
