@@ -42,14 +42,14 @@ namespace LT.DigitalOffice.ProjectService
             {
                 configurator.AddRequestClient<ICheckIfUserHaveRightRequest>(
                     new Uri("rabbitmq://localhost/checkrightsservice"));
-                
+
                 configurator.UsingRabbitMq((context, factoryConfigurator) =>
                 {
                     const string serviceInfoSection = "ServiceInfo";
 
                     var serviceName = Configuration.GetSection(serviceInfoSection)["Name"];
                     var serviceId = Configuration.GetSection(serviceInfoSection)["Id"];
-                    
+
                     factoryConfigurator.Host("localhost", hostConfigurator =>
                     {
                         hostConfigurator.Username($"{serviceName}_{serviceId}");
@@ -85,7 +85,6 @@ namespace LT.DigitalOffice.ProjectService
         {
             services.AddTransient<IValidator<NewProjectRequest>, NewProjectValidator>();
         }
-
 
         public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
         {

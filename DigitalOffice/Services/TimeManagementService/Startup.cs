@@ -31,9 +31,6 @@ namespace LT.DigitalOffice.TimeManagementService
 
             services.AddMassTransit(configurator =>
             {
-                configurator.AddRequestClient<ICheckIfUserHaveRightRequest>(
-                    new Uri("rabbitmq://localhost/checkrightsservice"));
-
                 configurator.UsingRabbitMq((context, factoryConfigurator) =>
                 {
                     const string serviceInfoSection = "ServiceInfo";
@@ -41,12 +38,15 @@ namespace LT.DigitalOffice.TimeManagementService
                     var serviceName = Configuration.GetSection(serviceInfoSection)["Name"];
                     var serviceId = Configuration.GetSection(serviceInfoSection)["Id"];
 
-                    factoryConfigurator.Host("localhost", hostConfigurator =>
+                    factoryConfigurator.Host("localhost", "/", hostConfigurator =>
                     {
                         hostConfigurator.Username($"{serviceName}_{serviceId}");
                         hostConfigurator.Password(serviceId);
                     });
                 });
+
+                configurator.AddRequestClient<ICheckIfUserHaveRightRequest>(
+                    new Uri("rabbitmq://localhost/CheckRightsService"));
             });
         }
 
