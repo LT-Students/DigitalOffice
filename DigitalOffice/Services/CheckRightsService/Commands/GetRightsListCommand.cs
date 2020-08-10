@@ -1,8 +1,8 @@
 ﻿using LT.DigitalOffice.CheckRightsService.Commands.Interfaces;
-using System.Collections.Generic;
+using LT.DigitalOffice.CheckRightsService.Models;
 using LT.DigitalOffice.CheckRightsService.Repositories.Interfaces;
 using Microsoft.AspNetCore.Mvc;
-using LT.DigitalOffice.CheckRightsService.Models;
+using System.Collections.Generic;
 
 namespace LT.DigitalOffice.CheckRightsService.Commands
 {

@@ -1,5 +1,5 @@
-﻿using System;
-using LT.DigitalOffice.TimeManagementService.Models;
+﻿using LT.DigitalOffice.TimeManagementService.Models;
+using System;
 
 namespace LT.DigitalOffice.TimeManagementService.Commands.Interfaces
 {
@@ -10,7 +10,7 @@ namespace LT.DigitalOffice.TimeManagementService.Commands.Interfaces
     public interface ICreateWorkTimeCommand
     {
         /// <summary>
-        /// Adds a new work time. Returns id of the added file.
+        /// Adds a new work time. Returns id of the added work time.
         /// </summary>
         /// <param name="request">Work time data.</param>
         /// <returns>Id of the added work time.</returns>

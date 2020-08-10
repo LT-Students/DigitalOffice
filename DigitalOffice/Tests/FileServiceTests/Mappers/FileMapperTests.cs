@@ -1,23 +1,23 @@
-﻿using LT.DigitalOffice.FileServiceUnitTests.UnitTestLibrary;
+﻿using LT.DigitalOffice.FileService.Database.Entities;
+using LT.DigitalOffice.FileService.Mappers;
+using LT.DigitalOffice.FileService.Mappers.Interfaces;
+using LT.DigitalOffice.FileService.Models;
+using LT.DigitalOffice.FileServiceUnitTests.UnitTestLibrary;
 using NUnit.Framework;
 using System;
-using LT.DigitalOffice.FileService.Database.Entities;
-using LT.DigitalOffice.FileService.RestRequests;
-using LT.DigitalOffice.FileService.Mappers.Interfaces;
-using LT.DigitalOffice.FileService.Mappers;
-using LT.DigitalOffice.FileService.Models;
 
 namespace LT.DigitalOffice.FileServiceUnitTests.Mappers
 {
     public class FileMapperTests
     {
-        private DbFile dbFile;
-        private FileCreateRequest fileRequest;
         private IMapper<DbFile, File> dbToDtoMapper;
         private IMapper<FileCreateRequest, DbFile> requestToDbMapper;
 
+        private DbFile dbFile;
+        private FileCreateRequest fileRequest;
+
         [SetUp]
-        public void Initialization()
+        public void SetUp()
         {
             dbToDtoMapper = new FileMapper();
             requestToDbMapper = new FileMapper();
@@ -41,7 +41,7 @@ namespace LT.DigitalOffice.FileServiceUnitTests.Mappers
 
         [Test]
         public void FailedDbMappingObjectIsNullTest()
-        {            
+        {
             dbFile = null;
 
             Assert.Throws<ArgumentNullException>(() => dbToDtoMapper.Map(dbFile));
@@ -51,7 +51,7 @@ namespace LT.DigitalOffice.FileServiceUnitTests.Mappers
         public void FailedRequestMappingObjectIsNullTest()
         {
             fileRequest = null;
-            
+
             Assert.Throws<ArgumentNullException>(() => requestToDbMapper.Map(fileRequest));
         }
 
@@ -69,7 +69,7 @@ namespace LT.DigitalOffice.FileServiceUnitTests.Mappers
                 IsActive = true,
                 AddedOn = newFile.AddedOn
             };
-            
+
             SerializerAssert.AreEqual(expectedFile, newFile);
         }
 
@@ -86,7 +86,7 @@ namespace LT.DigitalOffice.FileServiceUnitTests.Mappers
                 Name = dbFile.Name
             };
 
-            Assert.IsInstanceOf<Guid>(newFileDto.Id);            
+            Assert.IsInstanceOf<Guid>(newFileDto.Id);
             SerializerAssert.AreEqual(expectedFileDto, newFileDto);
         }
     }

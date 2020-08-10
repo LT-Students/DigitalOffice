@@ -1,10 +1,10 @@
-﻿using System;
-using Microsoft.AspNetCore.Mvc;
-using LT.DigitalOffice.FileService.Commands.Interfaces;
+﻿using LT.DigitalOffice.FileService.Commands.Interfaces;
 using LT.DigitalOffice.FileService.Database.Entities;
 using LT.DigitalOffice.FileService.Mappers.Interfaces;
 using LT.DigitalOffice.FileService.Models;
 using LT.DigitalOffice.FileService.Repositories.Interfaces;
+using Microsoft.AspNetCore.Mvc;
+using System;
 
 namespace LT.DigitalOffice.FileService.Commands
 {

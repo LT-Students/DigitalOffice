@@ -5,7 +5,7 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
 
-namespace LT.DigitalOffice.FileService.Migrations
+namespace LT.DigitalOffice.FileService.Database.Migrations
 {
     [DbContext(typeof(FileServiceDbContext))]
     partial class FileServiceDbContextModelSnapshot : ModelSnapshot

@@ -1,27 +1,28 @@
 ﻿using FluentValidation;
+using LT.DigitalOffice.FileService.Commands;
+using LT.DigitalOffice.FileService.Commands.Interfaces;
+using LT.DigitalOffice.FileService.Database.Entities;
+using LT.DigitalOffice.FileService.Mappers.Interfaces;
+using LT.DigitalOffice.FileService.Models;
+using LT.DigitalOffice.FileService.Repositories.Interfaces;
 using Moq;
 using NUnit.Framework;
 using System;
-using LT.DigitalOffice.FileService.Database.Entities;
-using LT.DigitalOffice.FileService.RestRequests;
-using LT.DigitalOffice.FileService.Commands;
-using LT.DigitalOffice.FileService.Commands.Interfaces;
-using LT.DigitalOffice.FileService.Repositories.Interfaces;
-using LT.DigitalOffice.FileService.Mappers.Interfaces;
 
 namespace LT.DigitalOffice.FileServiceUnitTests.Commands
 {
     public class AddNewFileCommandTests
     {
-        private DbFile newFile;
-        private FileCreateRequest fileRequest;
         private IAddNewFileCommand command;
         private Mock<IFileRepository> repositoryMock;
         private Mock<IValidator<FileCreateRequest>> validatorMock;
         private Mock<IMapper<FileCreateRequest, DbFile>> mapperMock;
 
+        private DbFile newFile;
+        private FileCreateRequest fileRequest;
+
         [SetUp]
-        public void Initialization()
+        public void SetUp()
         {
             repositoryMock = new Mock<IFileRepository>();
             validatorMock = new Mock<IValidator<FileCreateRequest>>();
@@ -64,9 +65,9 @@ namespace LT.DigitalOffice.FileServiceUnitTests.Commands
                 .Returns(fileId);
 
             Assert.AreEqual(fileId, command.Execute(fileRequest));
-            validatorMock.Verify(v => v.Validate(It.IsAny<IValidationContext>()), Times.Once);            
+            validatorMock.Verify(v => v.Validate(It.IsAny<IValidationContext>()), Times.Once);
             repositoryMock.Verify(r => r.AddNewFile(newFile), Times.Once);
-            mapperMock.Verify(m => m.Map(fileRequest), Times.Once);            
+            mapperMock.Verify(m => m.Map(fileRequest), Times.Once);
         }
 
         [Test]
@@ -77,7 +78,7 @@ namespace LT.DigitalOffice.FileServiceUnitTests.Commands
                  .Returns(false);
 
             Assert.Throws<ValidationException>(() =>
-                command.Execute(fileRequest), "File content encoding validation error");    
+                command.Execute(fileRequest), "File content encoding validation error");
             repositoryMock.Verify(r => r.AddNewFile(newFile), Times.Never);
             mapperMock.Verify(m => m.Map(fileRequest), Times.Never);
         }
@@ -92,7 +93,7 @@ namespace LT.DigitalOffice.FileServiceUnitTests.Commands
             repositoryMock
                 .Setup(x => x.AddNewFile(It.IsAny<DbFile>()))
                 .Throws(new Exception());
-            
+
             Assert.Throws<Exception>(() => command.Execute(fileRequest), "GUID duplicated error");
             validatorMock.Verify(v => v.Validate(It.IsAny<IValidationContext>()), Times.Once);
             repositoryMock.Verify(r => r.AddNewFile(newFile), Times.Once);
@@ -103,7 +104,7 @@ namespace LT.DigitalOffice.FileServiceUnitTests.Commands
         public void FailedAddNewFileNullRequestTest()
         {
             fileRequest = null;
-            Assert.Throws<NullReferenceException>(() => command.Execute(fileRequest), "Request is null");            
+            Assert.Throws<NullReferenceException>(() => command.Execute(fileRequest), "Request is null");
         }
     }
 }

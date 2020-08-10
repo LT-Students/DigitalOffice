@@ -1,4 +1,5 @@
-﻿using System;
+﻿using LT.DigitalOffice.TimeManagementService.Enums;
+using System;
 using System.ComponentModel.DataAnnotations;
 
 namespace LT.DigitalOffice.TimeManagementService.Database.Entities

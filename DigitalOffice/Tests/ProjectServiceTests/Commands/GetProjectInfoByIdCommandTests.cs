@@ -1,5 +1,3 @@
-using Moq;
-using NUnit.Framework;
 using LT.DigitalOffice.ProjectService.Commands;
 using LT.DigitalOffice.ProjectService.Commands.Interfaces;
 using LT.DigitalOffice.ProjectService.Database.Entities;
@@ -7,11 +5,13 @@ using LT.DigitalOffice.ProjectService.Mappers.Interfaces;
 using LT.DigitalOffice.ProjectService.Models;
 using LT.DigitalOffice.ProjectService.Repositories.Interfaces;
 using LT.DigitalOffice.ProjectServiceUnitTests.UnitTestLibrary;
+using Moq;
+using NUnit.Framework;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 
-namespace LT.DigitalOffice.ProjectServiceUnitTests.CommandsTests
+namespace LT.DigitalOffice.ProjectServiceUnitTests.Commands
 {
     public class GetProjectInfoByIdCommandTests
     {
@@ -25,10 +25,8 @@ namespace LT.DigitalOffice.ProjectServiceUnitTests.CommandsTests
         private Guid projectId;
         private Guid workerId;
 
-        private readonly string Name = "Project";
-
         [SetUp]
-        public void Setup()
+        public void SetUp()
         {
             repositoryMock = new Mock<IProjectRepository>();
             mapperMock = new Mock<IMapper<DbProject, Project>>();
@@ -45,7 +43,7 @@ namespace LT.DigitalOffice.ProjectServiceUnitTests.CommandsTests
             project = new DbProject
             {
                 Id = projectId,
-                Name = Name,
+                Name = "Project",
                 WorkersUsersIds = new List<DbProjectWorkerUser> { dbWorkersIds }
             };
         }
@@ -72,7 +70,7 @@ namespace LT.DigitalOffice.ProjectServiceUnitTests.CommandsTests
             var expected = new Project
             {
                 Name = project.Name,
-                WorkersIds = project.WorkersUsersIds?.Select(x => x.WorkerUserId)
+                WorkersIds = project.WorkersUsersIds?.Select(x => x.WorkerUserId).ToList()
             };
 
             repositoryMock

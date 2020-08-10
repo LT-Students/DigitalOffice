@@ -13,6 +13,7 @@ namespace LT.DigitalOffice.FileServiceUnitTests.Repositories
     {
         private FileServiceDbContext dbContext;
         private IFileRepository repository;
+
         private DbFile dbFile;
 
         [SetUp]

@@ -1,4 +1,4 @@
-﻿namespace LT.DigitalOffice.ProjectService.Mappers.Interfaces
+﻿namespace LT.DigitalOffice.CheckRightsService.Mappers.Interfaces
 {
     /// <summary>
     /// Represents interface for a mapper in mapper pattern.

@@ -5,7 +5,7 @@ using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
-namespace LT.DigitalOffice.CheckRightsService.Migrations
+namespace LT.DigitalOffice.CheckRightsService.Database.Migrations
 {
     [DbContext(typeof(CheckRightsServiceDbContext))]
     partial class CheckRightsServiceDbContextModelSnapshot : ModelSnapshot

@@ -16,6 +16,7 @@ namespace LT.DigitalOffice.FileServiceUnitTests.Commands
         private IGetFileByIdCommand command;
         private Mock<IFileRepository> repositoryMock;
         private Mock<IMapper<DbFile, File>> mapperMock;
+
         private DbFile file;
         private Guid fileId;
 

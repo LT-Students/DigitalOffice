@@ -1,5 +1,5 @@
 ﻿using FluentValidation;
-using LT.DigitalOffice.UserService.RestRequests;
+using LT.DigitalOffice.UserService.Models;
 
 namespace LT.DigitalOffice.UserService.Validators
 {
@@ -8,50 +8,50 @@ namespace LT.DigitalOffice.UserService.Validators
         public UserCreateRequestValidator()
         {
             RuleFor(user => user.FirstName)
-                    .NotEmpty()
-                    .WithMessage("First name is empty.")
-                    .MaximumLength(32)
-                    .WithMessage("First name is too long.")
-                    .MinimumLength(2)
-                    .WithMessage("First name is too short.")
-                    .Matches("^[A-Z][a-z]+$")
-                    .WithMessage("First name with error.");
+                .NotEmpty()
+                .WithMessage("First name is empty.")
+                .MaximumLength(32)
+                .WithMessage("First name is too long.")
+                .MinimumLength(2)
+                .WithMessage("First name is too short.")
+                .Matches("^[A-Z][a-z]+$")
+                .WithMessage("First name with error.");
 
             RuleFor(user => user.LastName)
-                    .NotEmpty()
-                    .WithMessage("Last name is empty.")
-                    .MaximumLength(32)
-                    .WithMessage("Last name is too long.")
-                    .MinimumLength(2)
-                    .WithMessage("Last name is too short.")
-                    .Matches("^[A-Z][a-z]+$")
-                    .WithMessage("Last name with error.");
+                .NotEmpty()
+                .WithMessage("Last name is empty.")
+                .MaximumLength(32)
+                .WithMessage("Last name is too long.")
+                .MinimumLength(2)
+                .WithMessage("Last name is too short.")
+                .Matches("^[A-Z][a-z]+$")
+                .WithMessage("Last name with error.");
 
             RuleFor(user => user.MiddleName)
-                    .NotEmpty()
-                    .WithMessage("Middle name is empty.")
-                    .MaximumLength(32)
-                    .WithMessage("Middle name is too long.")
-                    .MinimumLength(2)
-                    .WithMessage("Middle name is too short.")
-                    .Matches("^[A-Z][a-z]+$")
-                    .WithMessage("Middle name with error.");
+                .NotEmpty()
+                .WithMessage("Middle name is empty.")
+                .MaximumLength(32)
+                .WithMessage("Middle name is too long.")
+                .MinimumLength(2)
+                .WithMessage("Middle name is too short.")
+                .Matches("^[A-Z][a-z]+$")
+                .WithMessage("Middle name with error.");
 
             RuleFor(user => user.Email)
-                    .NotEmpty()
-                    .WithMessage("Email is empty.")
-                    .MaximumLength(50)
-                    .WithMessage("Email is too long.")
-                    .EmailAddress()
-                    .WithMessage("Email is invalid.");
+                .NotEmpty()
+                .WithMessage("Email is empty.")
+                .MaximumLength(50)
+                .WithMessage("Email is too long.")
+                .EmailAddress()
+                .WithMessage("Email is invalid.");
 
             RuleFor(user => user.Status)
-                    .MaximumLength(300)
-                    .WithMessage("Status is too long.");
+                .MaximumLength(300)
+                .WithMessage("Status is too long.");
 
             RuleFor(user => user.Password)
-                    .NotEmpty()
-                    .WithMessage("Password is empty.");
+                .NotEmpty()
+                .WithMessage("Password is empty.");
         }
     }
 }

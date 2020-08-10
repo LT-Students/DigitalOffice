@@ -1,21 +1,22 @@
-﻿using NUnit.Framework;
+﻿using LT.DigitalOffice.UserService.Database.Entities;
+using LT.DigitalOffice.UserService.Mappers;
+using LT.DigitalOffice.UserService.Mappers.Interfaces;
+using LT.DigitalOffice.UserService.Models;
+using NUnit.Framework;
 using System;
 using System.Security.Cryptography;
 using System.Text;
-using LT.DigitalOffice.UserService.Database.Entities;
-using LT.DigitalOffice.UserService.Mappers;
-using LT.DigitalOffice.UserService.RestRequests;
 
 namespace LT.DigitalOffice.UserServiceUnitTests.Mappers
 {
-    class UserCreateRequestToDbUserMapperTests
+    public class UserCreateRequestToDbUserMapperTests
     {
-        private UserCreateRequestToDbUserMapper mapper;
+        private IMapper<UserCreateRequest, DbUser> mapper;
 
         [SetUp]
-        public void Initialization()
+        public void SetUp()
         {
-            mapper = new UserCreateRequestToDbUserMapper();
+            mapper = new UserMapper();
         }
 
         [Test]

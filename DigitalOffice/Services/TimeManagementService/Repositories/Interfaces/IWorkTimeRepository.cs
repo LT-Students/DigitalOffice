@@ -1,7 +1,7 @@
-﻿using System;
-using System.Collections.Generic;
-using LT.DigitalOffice.TimeManagementService.Database.Entities;
+﻿using LT.DigitalOffice.TimeManagementService.Database.Entities;
 using LT.DigitalOffice.TimeManagementService.Repositories.Filters;
+using System;
+using System.Collections.Generic;
 
 namespace LT.DigitalOffice.TimeManagementService.Repositories.Interfaces
 {
@@ -11,12 +11,6 @@ namespace LT.DigitalOffice.TimeManagementService.Repositories.Interfaces
     /// </summary>
     public interface IWorkTimeRepository
     {
-        /// <summary>
-        /// Returns the project with the specified id from database.
-        /// </summary>
-        /// <param name="projectId">Specified id of project.</param>
-        /// <returns>Project with specified id.</returns>
-
         /// <summary>
         /// Returns the filtered work times of specified id of user from database.
         /// </summary>

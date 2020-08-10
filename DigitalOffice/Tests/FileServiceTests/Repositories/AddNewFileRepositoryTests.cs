@@ -10,15 +10,15 @@ namespace LT.DigitalOffice.FileServiceUnitTests.Repositories
 {
     public class AddNewFileRepositoryTests
     {
-        private DbFile newFile;
         private IFileRepository repository;
         private FileServiceDbContext dbContext;
-        private DbContextOptions<FileServiceDbContext> dbOptionsFileService;
+
+        private DbFile newFile;
 
         [SetUp]
-        public void Initialization()
+        public void SetUp()
         {
-            dbOptionsFileService = new DbContextOptionsBuilder<FileServiceDbContext>()
+            var dbOptionsFileService = new DbContextOptionsBuilder<FileServiceDbContext>()
                 .UseInMemoryDatabase(databaseName: "FileServiceTestDatabase")
                 .Options;
 

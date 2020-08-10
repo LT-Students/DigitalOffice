@@ -1,9 +1,9 @@
-﻿using System;
-using LT.DigitalOffice.UserService.Commands.Interfaces;
+﻿using LT.DigitalOffice.UserService.Commands.Interfaces;
 using LT.DigitalOffice.UserService.Database.Entities;
 using LT.DigitalOffice.UserService.Mappers.Interfaces;
 using LT.DigitalOffice.UserService.Models;
 using LT.DigitalOffice.UserService.Repositories.Interfaces;
+using System;
 
 namespace LT.DigitalOffice.UserService.Commands
 {

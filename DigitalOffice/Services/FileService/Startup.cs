@@ -1,20 +1,19 @@
 using FluentValidation;
+using LT.DigitalOffice.FileService.Commands;
+using LT.DigitalOffice.FileService.Commands.Interfaces;
 using LT.DigitalOffice.FileService.Database;
+using LT.DigitalOffice.FileService.Database.Entities;
+using LT.DigitalOffice.FileService.Mappers;
+using LT.DigitalOffice.FileService.Mappers.Interfaces;
+using LT.DigitalOffice.FileService.Models;
+using LT.DigitalOffice.FileService.Repositories;
+using LT.DigitalOffice.FileService.Repositories.Interfaces;
+using LT.DigitalOffice.FileService.Validators;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
-using LT.DigitalOffice.FileService.Database.Entities;
-using LT.DigitalOffice.FileService.Mappers.Interfaces;
-using LT.DigitalOffice.FileService.RestRequests;
-using LT.DigitalOffice.FileService.Mappers;
-using LT.DigitalOffice.FileService.Repositories.Interfaces;
-using LT.DigitalOffice.FileService.Commands;
-using LT.DigitalOffice.FileService.Commands.Interfaces;
-using LT.DigitalOffice.FileService.Validators;
-using LT.DigitalOffice.FileService.Repositories;
-using LT.DigitalOffice.FileService.Models;
 
 namespace LT.DigitalOffice.FileService
 {
@@ -62,7 +61,7 @@ namespace LT.DigitalOffice.FileService
             services.AddTransient<IValidator<FileCreateRequest>, NewFileValidator>();
         }
 
-        public void Configure(IApplicationBuilder app)
+        public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
         {
             UpdateDatabase(app);
 
@@ -74,6 +73,7 @@ namespace LT.DigitalOffice.FileService
                 endpoints.MapControllers();
             });
         }
+
         private void UpdateDatabase(IApplicationBuilder app)
         {
             using var serviceScope = app.ApplicationServices

@@ -7,7 +7,7 @@ using Microsoft.EntityFrameworkCore.Metadata;
 using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
-namespace LT.DigitalOffice.FileService.Migrations
+namespace LT.DigitalOffice.FileService.Database.Migrations
 {
     [DbContext(typeof(FileServiceDbContext))]
     [Migration("20200714165819_InitialCreate")]

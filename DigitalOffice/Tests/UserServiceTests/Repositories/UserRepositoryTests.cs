@@ -1,14 +1,14 @@
-﻿using System;
-using System.Collections.ObjectModel;
-using System.Security.Cryptography;
-using System.Text;
-using LT.DigitalOffice.UserService.Database;
+﻿using LT.DigitalOffice.UserService.Database;
 using LT.DigitalOffice.UserService.Database.Entities;
 using LT.DigitalOffice.UserService.Repositories;
 using LT.DigitalOffice.UserService.Repositories.Interfaces;
 using LT.DigitalOffice.UserServiceUnitTests.UnitTestLibrary;
 using Microsoft.EntityFrameworkCore;
 using NUnit.Framework;
+using System;
+using System.Collections.ObjectModel;
+using System.Security.Cryptography;
+using System.Text;
 
 namespace LT.DigitalOffice.UserServiceUnitTests.Repositories
 {

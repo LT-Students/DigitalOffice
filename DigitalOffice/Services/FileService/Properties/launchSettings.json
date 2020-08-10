@@ -1,7 +1,7 @@
 ﻿{
   "iisSettings": {
-    "windowsAuthentication": false, 
-    "anonymousAuthentication": true, 
+    "windowsAuthentication": false,
+    "anonymousAuthentication": true,
     "iisExpress": {
       "applicationUrl": "http://localhost:58996",
       "sslPort": 44306
@@ -16,7 +16,7 @@
       }
     },
     "FileService": {
-      "commandName": "File",
+      "commandName": "Project",
       "launchBrowser": true,
       "applicationUrl": "https://localhost:9813;http://localhost:9814",
       "environmentVariables": {

@@ -1,21 +1,22 @@
-﻿using System;
-using NUnit.Framework;
+﻿using LT.DigitalOffice.ProjectService.Database.Entities;
 using LT.DigitalOffice.ProjectService.Models;
 using LT.DigitalOffice.ProjectService.Mappers;
-using LT.DigitalOffice.ProjectService.Database.Entities;
 using LT.DigitalOffice.ProjectServiceUnitTests.UnitTestLibrary;
+using NUnit.Framework;
+using System;
 
-namespace LT.DigitalOffice.ProjectServiceUnitTests.MappersTests
+namespace LT.DigitalOffice.ProjectServiceUnitTests.Mappers
 {
     class DbProjectMapperTests
     {
+        private ProjectMapper mapper;
+
         private NewProjectRequest newRequest;
-        private DbProjectMapper mapper;
 
         [SetUp]
-        public void Initialization()
+        public void SetUp()
         {
-            mapper = new DbProjectMapper();
+            mapper = new ProjectMapper();
 
             newRequest = new NewProjectRequest
             {
