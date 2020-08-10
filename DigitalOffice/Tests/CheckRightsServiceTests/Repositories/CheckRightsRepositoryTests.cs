@@ -11,7 +11,7 @@ using Microsoft.EntityFrameworkCore;
 using Moq;
 using NUnit.Framework;
 
-namespace LT.DigitalOffice.CheckRightsServiceUnitTests.RepositoriesTests
+namespace LT.DigitalOffice.CheckRightsServiceUnitTests.Repositories
 {
     class CheckRightsRepositoryTests
     {
@@ -26,7 +26,7 @@ namespace LT.DigitalOffice.CheckRightsServiceUnitTests.RepositoriesTests
         }
         
         [SetUp]
-        public void Setup()
+        public void SetUp()
         {
             var dbOptions = new DbContextOptionsBuilder<CheckRightsServiceDbContext>()
                                     .UseInMemoryDatabase(databaseName: "InMemoryDatabase")

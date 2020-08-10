@@ -1,12 +1,6 @@
 using System;
 using LT.DigitalOffice.Broker.Requests;
 using FluentValidation;
-using Microsoft.AspNetCore.Builder;
-using Microsoft.AspNetCore.Hosting;
-using Microsoft.EntityFrameworkCore;
-using Microsoft.Extensions.Configuration;
-using Microsoft.Extensions.DependencyInjection;
-using Microsoft.Extensions.Hosting;
 using LT.DigitalOffice.TimeManagementService.Commands;
 using LT.DigitalOffice.TimeManagementService.Commands.Interfaces;
 using LT.DigitalOffice.TimeManagementService.Database;
@@ -18,6 +12,11 @@ using LT.DigitalOffice.TimeManagementService.Models;
 using LT.DigitalOffice.TimeManagementService.Repositories;
 using LT.DigitalOffice.TimeManagementService.Repositories.Interfaces;
 using LT.DigitalOffice.TimeManagementService.Validators;
+using Microsoft.AspNetCore.Builder;
+using Microsoft.AspNetCore.Hosting;
+using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Configuration;
+using Microsoft.Extensions.DependencyInjection;
 
 namespace LT.DigitalOffice.TimeManagementService
 {
@@ -90,11 +89,6 @@ namespace LT.DigitalOffice.TimeManagementService
         public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
         {
             UpdateDatabase(app);
-
-            if (env.IsDevelopment())
-            {
-                app.UseDeveloperExceptionPage();
-            }
 
             app.UseHttpsRedirection();
 

@@ -1,10 +1,10 @@
-﻿using Microsoft.EntityFrameworkCore;
-using LT.DigitalOffice.FileService.Database.Entities;
+﻿using LT.DigitalOffice.FileService.Database.Entities;
+using Microsoft.EntityFrameworkCore;
 
 namespace LT.DigitalOffice.FileService.Database
 {
     /// <summary>
-    /// A class that defines the tables and its properties in the database for the LT.DigitalOffice.FileService.
+    /// A class that defines the tables and its properties in the database of FileService.
     /// </summary>
     public class FileServiceDbContext : DbContext
     {
@@ -15,6 +15,7 @@ namespace LT.DigitalOffice.FileService.Database
 
         public DbSet<DbFile> Files { get; set; }
 
+        // Fluent API is written here.
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
         }

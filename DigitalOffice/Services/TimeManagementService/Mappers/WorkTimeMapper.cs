@@ -1,7 +1,7 @@
-﻿using System;
-using LT.DigitalOffice.TimeManagementService.Database.Entities;
+﻿using LT.DigitalOffice.TimeManagementService.Database.Entities;
 using LT.DigitalOffice.TimeManagementService.Mappers.Interfaces;
 using LT.DigitalOffice.TimeManagementService.Models;
+using System;
 
 namespace LT.DigitalOffice.TimeManagementService.Mappers
 {

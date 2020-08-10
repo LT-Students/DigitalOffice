@@ -1,23 +1,23 @@
-﻿using System;
-using NUnit.Framework;
-using LT.DigitalOffice.ProjectService.Database;
+﻿using LT.DigitalOffice.ProjectService.Database;
+using LT.DigitalOffice.ProjectService.Database.Entities;
 using LT.DigitalOffice.ProjectService.Repositories;
 using Microsoft.EntityFrameworkCore;
-using LT.DigitalOffice.ProjectService.Database.Entities;
+using NUnit.Framework;
+using System;
 
-namespace LT.DigitalOffice.ProjectServiceUnitTests.RepositoriesTests
+namespace LT.DigitalOffice.ProjectServiceUnitTests.Repositories
 {
     class CreateNewProjectRepositoryTests
     {
-        private DbProject newProject;
         private ProjectRepository repository;
         private ProjectServiceDbContext dbContext;
-        private DbContextOptions<ProjectServiceDbContext> dbOptionsProjectService;
+
+        private DbProject newProject;
 
         [SetUp]
-        public void Initialization()
+        public void SetUp()
         {
-            dbOptionsProjectService = new DbContextOptionsBuilder<ProjectServiceDbContext>()
+            var dbOptionsProjectService = new DbContextOptionsBuilder<ProjectServiceDbContext>()
                 .UseInMemoryDatabase(databaseName: "ProjectServiceTest")
                 .Options;
 

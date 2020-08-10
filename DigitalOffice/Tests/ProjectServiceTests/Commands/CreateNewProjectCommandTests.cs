@@ -1,27 +1,28 @@
-﻿using System;
-using Moq;
-using FluentValidation;
-using NUnit.Framework;
-using LT.DigitalOffice.ProjectService.Models;
+﻿using FluentValidation;
 using LT.DigitalOffice.ProjectService.Commands;
+using LT.DigitalOffice.ProjectService.Commands.Interfaces;
 using LT.DigitalOffice.ProjectService.Database.Entities;
 using LT.DigitalOffice.ProjectService.Mappers.Interfaces;
-using LT.DigitalOffice.ProjectService.Commands.Interfaces;
+using LT.DigitalOffice.ProjectService.Models;
 using LT.DigitalOffice.ProjectService.Repositories.Interfaces;
+using Moq;
+using NUnit.Framework;
+using System;
 
-namespace LT.DigitalOffice.ProjectServiceUnitTests.CommandsTests
+namespace LT.DigitalOffice.ProjectServiceUnitTests.Commands
 {
     class CreateNewProjectCommandTests
     {
-        private DbProject newProject;
-        private NewProjectRequest newRequest;
         private ICreateNewProjectCommand command;
         private Mock<IProjectRepository> repositoryMock;
         private Mock<IValidator<NewProjectRequest>> validatorMock;
         private Mock<IMapper<NewProjectRequest, DbProject>> mapperMock;
 
+        private DbProject newProject;
+        private NewProjectRequest newRequest;
+
         [OneTimeSetUp]
-        public void Initialization()
+        public void OneTimeSetUp()
         {
             validatorMock = new Mock<IValidator<NewProjectRequest>>();
             repositoryMock = new Mock<IProjectRepository>();
@@ -66,7 +67,7 @@ namespace LT.DigitalOffice.ProjectServiceUnitTests.CommandsTests
                  .Returns(true);
 
             mapperMock
-                .Setup(X => X.Map(It.IsAny<NewProjectRequest>()))
+                .Setup(x => x.Map(It.IsAny<NewProjectRequest>()))
                 .Returns(newProject);
 
             repositoryMock
@@ -86,7 +87,7 @@ namespace LT.DigitalOffice.ProjectServiceUnitTests.CommandsTests
                  .Returns(true);
 
             mapperMock
-                .Setup(X => X.Map(It.IsAny<NewProjectRequest>()))
+                .Setup(x => x.Map(It.IsAny<NewProjectRequest>()))
                 .Returns(newProject);
 
             repositoryMock
@@ -104,7 +105,7 @@ namespace LT.DigitalOffice.ProjectServiceUnitTests.CommandsTests
                  .Returns(true);
 
             mapperMock
-                .Setup(X => X.Map(It.IsAny<NewProjectRequest>()))
+                .Setup(x => x.Map(It.IsAny<NewProjectRequest>()))
                 .Returns(newProject);
 
             repositoryMock

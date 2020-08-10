@@ -1,4 +1,3 @@
-using System;
 using LT.DigitalOffice.UserService.Commands;
 using LT.DigitalOffice.UserService.Commands.Interfaces;
 using LT.DigitalOffice.UserService.Database.Entities;
@@ -7,6 +6,7 @@ using LT.DigitalOffice.UserService.Models;
 using LT.DigitalOffice.UserService.Repositories.Interfaces;
 using Moq;
 using NUnit.Framework;
+using System;
 
 namespace LT.DigitalOffice.UserServiceUnitTests.Commands
 {
@@ -15,20 +15,21 @@ namespace LT.DigitalOffice.UserServiceUnitTests.Commands
         private IGetUserByIdCommand getUserInfoByIdCommand;
         private Mock<IUserRepository> repositoryMock;
         private Mock<IMapper<DbUser, User>> mapperMock;
+
         private Guid userId;
         private User user;
         private DbUser dbUser;
 
         [SetUp]
-        public void Setup()
+        public void SetUp()
         {
             repositoryMock = new Mock<IUserRepository>();
             mapperMock = new Mock<IMapper<DbUser, User>>();
             getUserInfoByIdCommand = new GetUserByIdCommand(repositoryMock.Object, mapperMock.Object);
 
             userId = Guid.NewGuid();
-            user = new User {Id = userId};
-            dbUser = new DbUser{Id = userId};
+            user = new User { Id = userId };
+            dbUser = new DbUser { Id = userId };
         }
 
         [Test]

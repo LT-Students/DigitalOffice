@@ -3,6 +3,7 @@ using LT.DigitalOffice.FileService.Database.Entities;
 using LT.DigitalOffice.FileService.Repositories.Interfaces;
 using Microsoft.AspNetCore.Mvc;
 using System;
+using System.Linq;
 
 namespace LT.DigitalOffice.FileService.Repositories
 {
@@ -19,8 +20,20 @@ namespace LT.DigitalOffice.FileService.Repositories
         {
             dbContext.Files.Add(file);
             dbContext.SaveChanges();
-            
+
             return file.Id;
+        }
+
+        public DbFile GetFileById(Guid fileId)
+        {
+            var dbFile = dbContext.Files.FirstOrDefault(file => file.Id == fileId);
+
+            if (dbFile == null)
+            {
+                throw new Exception("File with this id was not found.");
+            }
+
+            return dbFile;
         }
     }
 }

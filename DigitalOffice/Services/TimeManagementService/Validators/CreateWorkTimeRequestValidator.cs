@@ -1,17 +1,15 @@
 ﻿using FluentValidation;
-using Microsoft.AspNetCore.Mvc;
-using System;
 using LT.DigitalOffice.TimeManagementService.Models;
 using LT.DigitalOffice.TimeManagementService.Repositories.Filters;
 using LT.DigitalOffice.TimeManagementService.Repositories.Interfaces;
+using Microsoft.AspNetCore.Mvc;
+using System;
 using System.Globalization;
 
 namespace LT.DigitalOffice.TimeManagementService.Validators
 {
     public class CreateWorkTimeRequestValidator : AbstractValidator<CreateWorkTimeRequest>
     {
-        private IWorkTimeRepository repository;
-
         /// <summary>
         /// How many days ago can WorkTime be added.
         /// </summary>
@@ -31,8 +29,6 @@ namespace LT.DigitalOffice.TimeManagementService.Validators
 
         public CreateWorkTimeRequestValidator([FromServices] IWorkTimeRepository repository)
         {
-            this.repository = repository;
-
             RuleFor(wt => wt.WorkerUserId)
                     .NotEmpty();
 

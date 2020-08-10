@@ -7,7 +7,7 @@ using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using LT.DigitalOffice.TimeManagementService.Database;
 
-namespace LT.DigitalOffice.TimeManagementService.Migrations
+namespace LT.DigitalOffice.TimeManagementService.Database.Migrations
 {
     [DbContext(typeof(TimeManagementDbContext))]
     [Migration("20200711012245_InitialCreate")]

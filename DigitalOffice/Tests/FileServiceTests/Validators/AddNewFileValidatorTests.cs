@@ -1,6 +1,6 @@
 ﻿using FluentValidation;
 using FluentValidation.TestHelper;
-using LT.DigitalOffice.FileService.RestRequests;
+using LT.DigitalOffice.FileService.Models;
 using LT.DigitalOffice.FileService.Validators;
 using NUnit.Framework;
 
@@ -9,10 +9,11 @@ namespace LT.DigitalOffice.FileServiceUnitTests.Validators
     public class AddNewFileRequestValidatorTests
     {
         private IValidator<FileCreateRequest> validator;
+
         private FileCreateRequest fileRequest;
 
         [SetUp]
-        public void Initialization()
+        public void SetUp()
         {
             fileRequest = new FileCreateRequest
             {

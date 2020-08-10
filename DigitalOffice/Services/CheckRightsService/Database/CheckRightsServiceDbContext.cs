@@ -5,7 +5,7 @@ using System.Reflection;
 namespace LT.DigitalOffice.CheckRightsService.Database
 {
     /// <summary>
-    /// Represents database for rights checking.
+    /// A class that defines the tables and its properties in the database of CheckRightsService.
     /// </summary>
     public class CheckRightsServiceDbContext : DbContext
     {
@@ -13,6 +13,7 @@ namespace LT.DigitalOffice.CheckRightsService.Database
 
         public CheckRightsServiceDbContext(DbContextOptions<CheckRightsServiceDbContext> options) : base(options) { }
 
+        // Fluent API is written here.
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
             modelBuilder.ApplyConfigurationsFromAssembly(Assembly.GetExecutingAssembly());

@@ -1,14 +1,14 @@
 using FluentValidation;
 using FluentValidation.TestHelper;
-using Moq;
-using NUnit.Framework;
-using System;
-using System.Collections.Generic;
 using LT.DigitalOffice.TimeManagementService.Database.Entities;
 using LT.DigitalOffice.TimeManagementService.Models;
 using LT.DigitalOffice.TimeManagementService.Repositories.Filters;
 using LT.DigitalOffice.TimeManagementService.Repositories.Interfaces;
 using LT.DigitalOffice.TimeManagementService.Validators;
+using Moq;
+using NUnit.Framework;
+using System;
+using System.Collections.Generic;
 
 namespace LT.DigitalOffice.TimeManagementServiceUnitTests.Validators
 {

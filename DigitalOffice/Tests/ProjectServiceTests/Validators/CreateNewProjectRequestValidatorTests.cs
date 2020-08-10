@@ -1,18 +1,18 @@
-﻿using System;
-using NUnit.Framework;
-using FluentValidation;
+﻿using FluentValidation;
 using FluentValidation.TestHelper;
 using LT.DigitalOffice.ProjectService.Models;
 using LT.DigitalOffice.ProjectService.Validators;
+using NUnit.Framework;
+using System;
 
-namespace LT.DigitalOffice.ProjectServiceUnitTests.ValidatorsTest
+namespace LT.DigitalOffice.ProjectServiceUnitTests.Validators
 {
-    class CreateNewProjectRequestValidatorTests
+    public class CreateNewProjectRequestValidatorTests
     {
         private IValidator<NewProjectRequest> validator;
 
         [SetUp]
-        public void Initialization()
+        public void SetUp()
         {
             validator = new NewProjectValidator();
         }

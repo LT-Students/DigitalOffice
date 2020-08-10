@@ -36,7 +36,10 @@ namespace LT.DigitalOffice.CompanyService
 
             app.UseRouting();
 
-            app.UseEndpoints(endpoints => { endpoints.MapControllers(); });
+            app.UseEndpoints(endpoints =>
+            {
+                endpoints.MapControllers();
+            });
         }
 
         private void UpdateDatabase(IApplicationBuilder app)
