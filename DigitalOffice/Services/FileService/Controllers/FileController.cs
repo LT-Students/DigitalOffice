@@ -1,4 +1,5 @@
 ﻿using LT.DigitalOffice.FileService.Commands.Interfaces;
+using LT.DigitalOffice.FileService.Models;
 using LT.DigitalOffice.FileService.RestRequests;
 using Microsoft.AspNetCore.Mvc;
 using System;
@@ -15,6 +16,13 @@ namespace LT.DigitalOffice.FileService.Controllers
             [FromServices] IAddNewFileCommand command)
         {
             return command.Execute(request);
+        }
+
+        [Route("GetFileByIdById")]
+        [HttpGet]
+        public File GetFileById([FromServices] IGetFileByIdCommand command, [FromQuery] Guid fileId)
+        {
+            return command.Execute(fileId);
         }
     }
 }

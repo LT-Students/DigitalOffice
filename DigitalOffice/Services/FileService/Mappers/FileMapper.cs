@@ -28,7 +28,7 @@ namespace LT.DigitalOffice.FileService.Mappers
             if (file == null)
             {
                 throw new ArgumentNullException(nameof(file));
-            }    
+            }
 
             return new DbFile()
             {

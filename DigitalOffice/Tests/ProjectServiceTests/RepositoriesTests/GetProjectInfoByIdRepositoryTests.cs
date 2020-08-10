@@ -13,7 +13,6 @@ namespace LT.DigitalOffice.ProjectServiceUnitTests.RepositoriesTests
     {
         private ProjectServiceDbContext dbContext;
         private IProjectRepository repository;
-        private Guid projectId;
         private DbProject dbProject;
 
         [SetUp]
@@ -25,7 +24,6 @@ namespace LT.DigitalOffice.ProjectServiceUnitTests.RepositoriesTests
             dbContext = new ProjectServiceDbContext(dbOptions);
             repository = new ProjectRepository(dbContext);
 
-            projectId = Guid.NewGuid();
             dbProject = new DbProject
             {
                 Id = Guid.NewGuid(),

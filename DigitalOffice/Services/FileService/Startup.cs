@@ -33,16 +33,17 @@ namespace LT.DigitalOffice.FileService
                 options.UseSqlServer(Configuration.GetConnectionString("SQLConnectionString"));
             });
             services.AddControllers();
-            
+
             ConfigureCommands(services);
             ConfigureMappers(services);
             ConfigureRepositories(services);
             ConfigureValidators(services);
         }
-        
+
         private void ConfigureCommands(IServiceCollection services)
         {
             services.AddTransient<IAddNewFileCommand, AddNewFileCommand>();
+            services.AddTransient<IGetFileByIdCommand, GetFileByIdCommand>();
         }
 
         private void ConfigureRepositories(IServiceCollection services)
@@ -60,8 +61,8 @@ namespace LT.DigitalOffice.FileService
         {
             services.AddTransient<IValidator<FileCreateRequest>, NewFileValidator>();
         }
-        
-        public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
+
+        public void Configure(IApplicationBuilder app)
         {
             UpdateDatabase(app);
 

@@ -25,7 +25,7 @@ namespace LT.DigitalOffice.ProjectServiceUnitTests.CommandsTests
         private Guid projectId;
         private Guid workerId;
 
-        private string Name = "Project";
+        private readonly string Name = "Project";
 
         [SetUp]
         public void Setup()

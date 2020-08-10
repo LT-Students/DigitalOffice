@@ -41,15 +41,16 @@ namespace LT.DigitalOffice.FileServiceUnitTests.Repositories
             Assert.AreEqual(newFile.Id, repository.AddNewFile(newFile));
             Assert.NotNull(dbContext.Files.Find(newFile.Id));
         }
-        
+
         [Test]
         public void FailedAddNewFileFileAlreadyExistsTest()
         {
-            repository.AddNewFile(newFile);            
+            repository.AddNewFile(newFile);
+
             Assert.Throws<ArgumentException>(() => repository.AddNewFile(newFile));
             Assert.NotNull(dbContext.Files.Find(newFile.Id));
         }
-        
+
         [TearDown]
         public void CleanInMemoryDatabase()
         {

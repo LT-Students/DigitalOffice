@@ -6,5 +6,6 @@ namespace LT.DigitalOffice.FileService.Repositories.Interfaces
     public interface IFileRepository
     {
         Guid AddNewFile(DbFile file);
+        DbFile GetFileById(Guid fileId);
     }
 }

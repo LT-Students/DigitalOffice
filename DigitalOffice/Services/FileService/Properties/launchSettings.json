@@ -16,7 +16,7 @@
       }
     },
     "FileService": {
-      "commandName": "Project",
+      "commandName": "File",
       "launchBrowser": true,
       "applicationUrl": "https://localhost:9813;http://localhost:9814",
       "environmentVariables": {
