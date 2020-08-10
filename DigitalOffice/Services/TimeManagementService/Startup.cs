@@ -58,7 +58,9 @@ namespace LT.DigitalOffice.TimeManagementService
                 configurator.AddRequestClient<ICheckIfUserHaveRightRequest>(
                     new Uri("rabbitmq://localhost/CheckRightsService"));
             });
-            
+
+            services.AddMassTransitHostedService();
+
             ConfigureCommands(services);
             ConfigureValidators(services);
             ConfigureMappers(services);
