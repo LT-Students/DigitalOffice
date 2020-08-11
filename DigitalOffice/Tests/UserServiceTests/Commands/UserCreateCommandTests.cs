@@ -1,19 +1,19 @@
 ﻿using FluentValidation;
-using Moq;
-using NUnit.Framework;
-using System;
 using LT.DigitalOffice.UserService.Commands;
 using LT.DigitalOffice.UserService.Commands.Interfaces;
 using LT.DigitalOffice.UserService.Database.Entities;
 using LT.DigitalOffice.UserService.Mappers;
 using LT.DigitalOffice.UserService.Mappers.Interfaces;
+using LT.DigitalOffice.UserService.Models;
 using LT.DigitalOffice.UserService.Repositories.Interfaces;
-using LT.DigitalOffice.UserService.RestRequests;
 using LT.DigitalOffice.UserService.Validators;
+using Moq;
+using NUnit.Framework;
+using System;
 
 namespace LT.DigitalOffice.UserServiceUnitTests.Commands
 {
-    class UserCreateCommandTests
+    public class UserCreateCommandTests
     {
         private Mock<IUserRepository> repositoryMock;
         private IUserCreateCommand command;
@@ -21,10 +21,10 @@ namespace LT.DigitalOffice.UserServiceUnitTests.Commands
         private IMapper<UserCreateRequest, DbUser> mapper;
 
         [SetUp]
-        public void Initialization()
+        public void SetUp()
         {
             repositoryMock = new Mock<IUserRepository>();
-            mapper = new UserCreateRequestToDbUserMapper();
+            mapper = new UserMapper();
             validator = new UserCreateRequestValidator();
 
             command = new UserCreateCommand(validator, repositoryMock.Object, mapper);

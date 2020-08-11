@@ -1,31 +1,28 @@
-﻿using NUnit.Framework;
-using LT.DigitalOffice.ProjectService.Database.Entities;
+﻿using LT.DigitalOffice.ProjectService.Database.Entities;
 using LT.DigitalOffice.ProjectService.Mappers;
 using LT.DigitalOffice.ProjectService.Mappers.Interfaces;
 using LT.DigitalOffice.ProjectService.Models;
 using LT.DigitalOffice.ProjectServiceUnitTests.UnitTestLibrary;
+using NUnit.Framework;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 
-namespace LT.DigitalOffice.ProjectServiceUnitTests.MappersTests
+namespace LT.DigitalOffice.ProjectServiceUnitTests.Mappers
 {
     public class GetProjectInfoByIdMappersTests
     {
         private IMapper<DbProject, Project> mapper;
 
-        private const string Name = "Project";
-
-        public Guid projectId;
+        private Guid projectId;
         private Guid workerId;
-        public Guid DepartmentId;
 
         private DbProjectWorkerUser dbWorkersIds;
 
         private DbProject dbProject;
 
         [SetUp]
-        public void Setup()
+        public void SetUp()
         {
             mapper = new ProjectMapper();
             projectId = Guid.NewGuid();
@@ -40,7 +37,7 @@ namespace LT.DigitalOffice.ProjectServiceUnitTests.MappersTests
             dbProject = new DbProject
             {
                 Id = projectId,
-                Name = Name,
+                Name = "Project",
                 WorkersUsersIds = new List<DbProjectWorkerUser> { dbWorkersIds }
             };
         }
@@ -59,7 +56,7 @@ namespace LT.DigitalOffice.ProjectServiceUnitTests.MappersTests
             var expected = new Project
             {
                 Name = dbProject.Name,
-                WorkersIds = dbProject.WorkersUsersIds?.Select(x => x.WorkerUserId)
+                WorkersIds = dbProject.WorkersUsersIds?.Select(x => x.WorkerUserId).ToList()
             };
 
             SerializerAssert.AreEqual(expected, result);

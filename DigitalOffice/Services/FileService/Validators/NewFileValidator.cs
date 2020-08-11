@@ -1,6 +1,6 @@
 ﻿using FluentValidation;
+using LT.DigitalOffice.FileService.Models;
 using System;
-using LT.DigitalOffice.FileService.RestRequests;
 
 namespace LT.DigitalOffice.FileService.Validators
 {
@@ -23,7 +23,7 @@ namespace LT.DigitalOffice.FileService.Validators
 
         private bool IsBase64Coded(string base64String)
         {
-            Span<byte> byteString = new Span<byte>(new byte[base64String.Length]);
+            var byteString = new Span<byte>(new byte[base64String.Length]);
             return Convert.TryFromBase64String(base64String, byteString, out _);
         }
     }

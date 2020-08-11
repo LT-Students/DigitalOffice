@@ -8,12 +8,12 @@ namespace LT.DigitalOffice.ProjectService.Validators
         public NewProjectValidator()
         {
             RuleFor(project => project.Name)
-                    .NotEmpty()
-                    .WithMessage("Project name is empty.")
-                    .MaximumLength(80)
-                    .WithMessage("Project name too long.")
-                    .Matches("^[A-Z 0-9][A-Z a-z 0-9]+$")
-                    .WithMessage("Incorrect project name.");
+                .NotEmpty()
+                .WithMessage("Project name is empty.")
+                .MaximumLength(80)
+                .WithMessage("Project name too long.")
+                .Matches("^[A-Z 0-9][A-Z a-z 0-9]+$")
+                .WithMessage("Incorrect project name.");
         }
     }
 }

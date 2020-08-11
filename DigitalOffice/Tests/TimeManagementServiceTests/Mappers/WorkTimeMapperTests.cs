@@ -1,10 +1,10 @@
-using System;
 using LT.DigitalOffice.TimeManagementService.Database.Entities;
 using LT.DigitalOffice.TimeManagementService.Mappers;
 using LT.DigitalOffice.TimeManagementService.Mappers.Interfaces;
 using LT.DigitalOffice.TimeManagementService.Models;
 using LT.DigitalOffice.TimeManagementServiceUnitTests.UnitTestLibrary;
 using NUnit.Framework;
+using System;
 
 namespace LT.DigitalOffice.TimeManagementServiceUnitTests.Mappers
 {

@@ -1,9 +1,9 @@
-﻿using System;
-using System.Linq;
-using LT.DigitalOffice.ProjectService.Database;
-using Microsoft.AspNetCore.Mvc;
+﻿using LT.DigitalOffice.ProjectService.Database;
 using LT.DigitalOffice.ProjectService.Database.Entities;
 using LT.DigitalOffice.ProjectService.Repositories.Interfaces;
+using Microsoft.AspNetCore.Mvc;
+using System;
+using System.Linq;
 
 namespace LT.DigitalOffice.ProjectService.Repositories
 {
@@ -17,14 +17,14 @@ namespace LT.DigitalOffice.ProjectService.Repositories
         }
         public DbProject GetProjectInfoById(Guid projectId)
         {
-            var project = dbContext.Projects.FirstOrDefault(project => project.Id == projectId);
+            var dbProject = dbContext.Projects.FirstOrDefault(project => project.Id == projectId);
 
-            if (project == null)
+            if (dbProject == null)
             {
                 throw new Exception("Project with this id was not found.");
             }
 
-            return project;
+            return dbProject;
         }
 
         public Guid CreateNewProject(DbProject newProject)

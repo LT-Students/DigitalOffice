@@ -1,11 +1,11 @@
-﻿using Microsoft.EntityFrameworkCore;
 using LT.DigitalOffice.TimeManagementService.Database.Entities;
+using Microsoft.EntityFrameworkCore;
 using System.Reflection;
 
 namespace LT.DigitalOffice.TimeManagementService.Database
 {
     /// <summary>
-    /// TimeManagementDbContext is the primary class that is responsible for interacting with the database.
+    /// A class that defines the tables and its properties in the database of TimeManagementService.
     /// </summary>
     public class TimeManagementDbContext : DbContext
     {
@@ -16,6 +16,7 @@ namespace LT.DigitalOffice.TimeManagementService.Database
         {
         }
 
+        // Fluent API is written here.
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
             modelBuilder.ApplyConfigurationsFromAssembly(Assembly.GetExecutingAssembly());

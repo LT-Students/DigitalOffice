@@ -1,13 +1,13 @@
 using FluentValidation;
-using Moq;
-using NUnit.Framework;
-using System;
 using LT.DigitalOffice.TimeManagementService.Commands;
 using LT.DigitalOffice.TimeManagementService.Commands.Interfaces;
 using LT.DigitalOffice.TimeManagementService.Database.Entities;
 using LT.DigitalOffice.TimeManagementService.Mappers.Interfaces;
 using LT.DigitalOffice.TimeManagementService.Models;
 using LT.DigitalOffice.TimeManagementService.Repositories.Interfaces;
+using Moq;
+using NUnit.Framework;
+using System;
 
 namespace LT.DigitalOffice.TimeManagementServiceUnitTests.Commands
 {
@@ -75,7 +75,7 @@ namespace LT.DigitalOffice.TimeManagementServiceUnitTests.Commands
                  .Returns(true);
 
             mapperMock
-                .Setup(X => X.Map(It.IsAny<CreateWorkTimeRequest>()))
+                .Setup(x => x.Map(It.IsAny<CreateWorkTimeRequest>()))
                 .Returns(createdWorkTime);
 
             repositoryMock
@@ -93,7 +93,7 @@ namespace LT.DigitalOffice.TimeManagementServiceUnitTests.Commands
                  .Returns(true);
 
             mapperMock
-                .Setup(X => X.Map(It.IsAny<CreateWorkTimeRequest>()))
+                .Setup(x => x.Map(It.IsAny<CreateWorkTimeRequest>()))
                 .Returns(createdWorkTime);
 
             repositoryMock

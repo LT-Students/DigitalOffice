@@ -1,10 +1,10 @@
 ﻿using FluentValidation;
-using Microsoft.AspNetCore.Mvc;
 using LT.DigitalOffice.UserService.Commands.Interfaces;
 using LT.DigitalOffice.UserService.Database.Entities;
 using LT.DigitalOffice.UserService.Mappers.Interfaces;
+using LT.DigitalOffice.UserService.Models;
 using LT.DigitalOffice.UserService.Repositories.Interfaces;
-using LT.DigitalOffice.UserService.RestRequests;
+using Microsoft.AspNetCore.Mvc;
 
 namespace LT.DigitalOffice.UserService.Commands
 {
@@ -28,6 +28,7 @@ namespace LT.DigitalOffice.UserService.Commands
         {
             validator.ValidateAndThrow(request);
             var user = mapper.Map(request);
+
             return repository.UserCreate(user);
         }
     }

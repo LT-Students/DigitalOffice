@@ -1,10 +1,4 @@
 using FluentValidation;
-using Microsoft.AspNetCore.Builder;
-using Microsoft.AspNetCore.Hosting;
-using Microsoft.EntityFrameworkCore;
-using Microsoft.Extensions.Configuration;
-using Microsoft.Extensions.DependencyInjection;
-using Microsoft.Extensions.Hosting;
 using LT.DigitalOffice.UserService.Commands;
 using LT.DigitalOffice.UserService.Commands.Interfaces;
 using LT.DigitalOffice.UserService.Database;
@@ -14,8 +8,12 @@ using LT.DigitalOffice.UserService.Mappers.Interfaces;
 using LT.DigitalOffice.UserService.Models;
 using LT.DigitalOffice.UserService.Repositories;
 using LT.DigitalOffice.UserService.Repositories.Interfaces;
-using LT.DigitalOffice.UserService.RestRequests;
 using LT.DigitalOffice.UserService.Validators;
+using Microsoft.AspNetCore.Builder;
+using Microsoft.AspNetCore.Hosting;
+using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Configuration;
+using Microsoft.Extensions.DependencyInjection;
 
 namespace LT.DigitalOffice.UserService
 {
@@ -61,18 +59,13 @@ namespace LT.DigitalOffice.UserService
 
         private void ConfigureMappers(IServiceCollection services)
         {
-            services.AddTransient<IMapper<UserCreateRequest, DbUser>, UserCreateRequestToDbUserMapper>();
+            services.AddTransient<IMapper<UserCreateRequest, DbUser>, UserMapper>();
             services.AddTransient<IMapper<DbUser, User>, UserMapper>();
         }
 
         public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
         {
             UpdateDatabase(app);
-
-            if (env.IsDevelopment())
-            {
-                app.UseDeveloperExceptionPage();
-            }
 
             app.UseHttpsRedirection();
             app.UseRouting();

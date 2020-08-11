@@ -1,12 +1,12 @@
 ﻿using LinqKit;
-using Microsoft.AspNetCore.Mvc;
-using System;
-using System.Collections.Generic;
-using System.Linq;
 using LT.DigitalOffice.TimeManagementService.Database;
 using LT.DigitalOffice.TimeManagementService.Database.Entities;
 using LT.DigitalOffice.TimeManagementService.Repositories.Filters;
 using LT.DigitalOffice.TimeManagementService.Repositories.Interfaces;
+using Microsoft.AspNetCore.Mvc;
+using System;
+using System.Collections.Generic;
+using System.Linq;
 
 namespace LT.DigitalOffice.TimeManagementService.Repositories
 {

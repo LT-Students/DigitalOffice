@@ -1,23 +1,15 @@
-﻿using System;
-using System.Linq;
-using LT.DigitalOffice.UserService.Database;
-using LT.DigitalOffice.UserService.Database.Entities;
+﻿using LT.DigitalOffice.UserService.Database.Entities;
 using LT.DigitalOffice.UserService.Mappers.Interfaces;
 using LT.DigitalOffice.UserService.Models;
+using System;
+using System.Linq;
+using System.Security.Cryptography;
+using System.Text;
 
 namespace LT.DigitalOffice.UserService.Mappers
 {
-    /// <summary>
-    /// Represents mapper. Provides methods for converting an object of <see cref="DbUser"/> type into an object of <see cref="User"/> type according to some rule.
-    /// </summary>
-    public class UserMapper : IMapper<DbUser, User>
+    public class UserMapper : IMapper<DbUser, User>, IMapper<UserCreateRequest, DbUser>
     {
-        /// <summary>
-        /// Convert an object of <see cref="DbUser"/> type into an object of <see cref="User"/> type according to some rule.
-        /// </summary>
-        /// <param name="dbUser">Incoming model of <see cref="UserServiceDbContext"/>.</param>
-        /// <returns>User model for response.</returns>
-        /// <exception cref="ArgumentNullException"><paramref name="dbUser"/> is null.</exception>
         public User Map(DbUser dbUser)
         {
             if (dbUser == null)
@@ -33,15 +25,37 @@ namespace LT.DigitalOffice.UserService.Mappers
                     Id = dbUserAchievement.Achievement.Id,
                     Message = dbUserAchievement.Achievement.Message,
                     PictureFileId = dbUserAchievement.Achievement.PictureFileId
-                }),
+                }).ToList(),
                 AvatarId = dbUser.AvatarFileId,
-                CertificatesIds = dbUser.CertificatesFilesIds?.Select(x => x.CertificateId),
+                CertificatesIds = dbUser.CertificatesFilesIds?.Select(x => x.CertificateId).ToList(),
                 Email = dbUser.Email,
                 FirstName = dbUser.FirstName,
                 LastName = dbUser.LastName,
                 MiddleName = dbUser.MiddleName,
                 Status = dbUser.Status,
                 IsAdmin = dbUser.IsAdmin
+            };
+        }
+
+        public DbUser Map(UserCreateRequest request)
+        {
+            if (request == null)
+            {
+                throw new ArgumentNullException(nameof(request));
+            }
+
+            return new DbUser
+            {
+                Id = Guid.NewGuid(),
+                Email = request.Email,
+                FirstName = request.FirstName,
+                LastName = request.LastName,
+                MiddleName = request.MiddleName,
+                Status = request.Status,
+                PasswordHash = (new SHA512Managed().ComputeHash(Encoding.Default.GetBytes(request.Password))).ToString(),
+                AvatarFileId = null,
+                IsActive = true,
+                IsAdmin = request.IsAdmin
             };
         }
     }

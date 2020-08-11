@@ -1,6 +1,6 @@
 ﻿using Microsoft.EntityFrameworkCore.Migrations;
 
-namespace LT.DigitalOffice.CheckRightsService.Migrations
+namespace LT.DigitalOffice.CheckRightsService.Database.Migrations
 {
     public partial class NewDbRight : Migration
     {

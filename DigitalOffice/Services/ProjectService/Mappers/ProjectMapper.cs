@@ -7,7 +7,7 @@ using System.Linq;
 
 namespace LT.DigitalOffice.ProjectService.Mappers
 {
-    public class ProjectMapper : IMapper<DbProject, Project>
+    public class ProjectMapper : IMapper<DbProject, Project>, IMapper<NewProjectRequest, DbProject>
     {
         public Project Map(DbProject value)
         {
@@ -19,7 +19,24 @@ namespace LT.DigitalOffice.ProjectService.Mappers
             return new Project
             {
                 Name = value.Name,
-                WorkersIds = value.WorkersUsersIds?.Select(x => x.WorkerUserId)
+                WorkersIds = value.WorkersUsersIds?.Select(x => x.WorkerUserId).ToList()
+            };
+        }
+
+        public DbProject Map(NewProjectRequest request)
+        {
+            if (request == null)
+            {
+                throw new ArgumentNullException(nameof(request));
+            }
+
+            return new DbProject
+            {
+                Id = Guid.NewGuid(),
+                DepartmentId = request.DepartmentId,
+                Description = request.Description,
+                IsActive = request.IsActive,
+                Deferred = false
             };
         }
     }

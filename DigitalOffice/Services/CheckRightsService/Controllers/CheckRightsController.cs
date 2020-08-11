@@ -9,8 +9,7 @@ namespace LT.DigitalOffice.CheckRightsService.Controllers
     [ApiController]
     public class CheckRightsController : ControllerBase
     {
-        [Route("GetRightsList")]
-        [HttpGet]
+        [HttpGet("getRightsList")]
         public List<Right> GetRightsList([FromServices] IGetRightsListCommand command)
         {
             return command.Execute();

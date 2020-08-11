@@ -13,7 +13,7 @@ namespace LT.DigitalOffice.ProjectService.Database.Entities
         public Guid DepartmentId { get; set; }
         public bool Deferred { get; set; }
         public bool IsActive { get; set; }
-        public ICollection<DbProjectWorkerUser> WorkersUsersIds { get; set; }
-        public ICollection<DbProjectFile> FilesIds { get; set; }
+        public List<DbProjectWorkerUser> WorkersUsersIds { get; set; }
+        public List<DbProjectFile> FilesIds { get; set; }
     }
 }

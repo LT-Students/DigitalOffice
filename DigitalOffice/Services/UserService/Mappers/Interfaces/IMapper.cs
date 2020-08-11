@@ -1,7 +1,8 @@
 ﻿namespace LT.DigitalOffice.UserService.Mappers.Interfaces
 {
     /// <summary>
-    /// Represents mapper. Provides methods for converting an object of <see cref="TIn"/> type into an object of <see cref="TOut"/> type according to some rule.
+    /// Represents interface for a mapper in mapper pattern.
+    /// Provides methods for converting an object of <see cref="TIn"/> type into an object of <see cref="TOut"/> type according to some rule.
     /// </summary>
     /// <typeparam name="TIn">Incoming object type.</typeparam>
     /// <typeparam name="TOut">Outgoing object type.</typeparam>

@@ -1,4 +1,4 @@
-﻿namespace LT.DigitalOffice.FileService.RestRequests
+﻿namespace LT.DigitalOffice.FileService.Models
 {
     public class FileCreateRequest
     {

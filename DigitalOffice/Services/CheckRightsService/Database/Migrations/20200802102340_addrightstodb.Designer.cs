@@ -6,7 +6,7 @@ using Microsoft.EntityFrameworkCore.Metadata;
 using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
-namespace LT.DigitalOffice.CheckRightsService.Migrations
+namespace LT.DigitalOffice.CheckRightsService.Database.Migrations
 {
     [DbContext(typeof(CheckRightsServiceDbContext))]
     [Migration("20200802102340_addrightstodb")]

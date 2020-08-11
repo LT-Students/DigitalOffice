@@ -6,7 +6,7 @@ using Microsoft.EntityFrameworkCore.Metadata;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using LT.DigitalOffice.TimeManagementService.Database;
 
-namespace LT.DigitalOffice.TimeManagementService.Migrations
+namespace LT.DigitalOffice.TimeManagementService.Database.Migrations
 {
     [DbContext(typeof(TimeManagementDbContext))]
     partial class TimeManagementDbContextModelSnapshot : ModelSnapshot

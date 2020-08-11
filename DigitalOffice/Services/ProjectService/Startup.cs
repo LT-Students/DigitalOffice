@@ -1,23 +1,19 @@
-using Microsoft.AspNetCore.Builder;
-using Microsoft.AspNetCore.Hosting;
-using Microsoft.EntityFrameworkCore;
-using Microsoft.Extensions.Configuration;
-using Microsoft.Extensions.DependencyInjection;
+using FluentValidation;
 using LT.DigitalOffice.ProjectService.Commands;
 using LT.DigitalOffice.ProjectService.Commands.Interfaces;
 using LT.DigitalOffice.ProjectService.Database;
 using LT.DigitalOffice.ProjectService.Database.Entities;
 using LT.DigitalOffice.ProjectService.Mappers;
+using LT.DigitalOffice.ProjectService.Mappers.Interfaces;
 using LT.DigitalOffice.ProjectService.Models;
+using LT.DigitalOffice.ProjectService.Repositories;
+using LT.DigitalOffice.ProjectService.Repositories.Interfaces;
 using LT.DigitalOffice.ProjectService.Validators;
-using FluentValidation;
-using MassTransit;
-using ProjectService.Mappers.Interfaces;
-using ProjectService.Models;
-using ProjectService.Repositories.Interfaces;
-using ProjectService.Repositories;
-using LT.DigitalOffice.ProjectService.Broker.Requests;
-using System;
+using Microsoft.AspNetCore.Builder;
+using Microsoft.AspNetCore.Hosting;
+using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Configuration;
+using Microsoft.Extensions.DependencyInjection;
 
 namespace LT.DigitalOffice.ProjectService
 {
@@ -59,35 +55,12 @@ namespace LT.DigitalOffice.ProjectService
         private void ConfigMappers(IServiceCollection services)
         {
             services.AddTransient<IMapper<DbProject, Project>, ProjectMapper>();
-            services.AddTransient<IMapper<NewProjectRequest, DbProject>, DbProjectMapper>();
+            services.AddTransient<IMapper<NewProjectRequest, DbProject>, ProjectMapper>();
         }
 
         private void ConfigValidators(IServiceCollection services)
         {
             services.AddTransient<IValidator<NewProjectRequest>, NewProjectValidator>();
-        }
-
-        private void ConfigRabbitMq(IServiceCollection services)
-        {
-            string appSettingSection = "ServiceInfo";
-            string serviceId = Configuration.GetSection(appSettingSection)["ID"];
-            string serviceName = Configuration.GetSection(appSettingSection)["Name"];
-
-            var uri = $"rabbitmq://localhost/ProjectService_{serviceName}";
-
-            services.AddMassTransit(x =>
-            {
-                x.UsingRabbitMq((context, cfg) =>
-                {
-                    cfg.Host("localhost", "/", host =>
-                    {
-                        host.Username($"{serviceName}");
-                        host.Password($"{serviceName}_{serviceId}");
-                    });
-                });
-
-                x.AddRequestClient<IUserExistenceRequest>(new Uri(uri));
-            });
         }
 
         public void Configure(IApplicationBuilder app, IWebHostEnvironment env)

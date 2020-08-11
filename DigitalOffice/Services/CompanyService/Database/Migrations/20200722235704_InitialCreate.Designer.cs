@@ -7,7 +7,7 @@ using Microsoft.EntityFrameworkCore.Metadata;
 using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
-namespace LT.DigitalOffice.CompanyService.Migrations
+namespace LT.DigitalOffice.CompanyService.Database.Migrations
 {
     [DbContext(typeof(CompanyServiceDbContext))]
     [Migration("20200722235704_InitialCreate")]
