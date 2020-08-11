@@ -3,7 +3,7 @@
 namespace LT.DigitalOffice.Broker.Requests
 {
     /// <summary>
-    /// Represents request for RabbitMQ logic.
+    /// Represents request for CheckIfUserHaveRightConsumer in MassTransit logic.
     /// </summary>
     public interface ICheckIfUserHaveRightRequest
     {
