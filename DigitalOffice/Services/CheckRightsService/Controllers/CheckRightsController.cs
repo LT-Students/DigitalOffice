@@ -10,15 +10,13 @@ namespace LT.DigitalOffice.CheckRightsService.Controllers
     [ApiController]
     public class CheckRightsController : ControllerBase
     {
-        [Route("GetRightsList")]
-        [HttpGet]
+        [HttpGet("getRightsList")]
         public List<Right> GetRightsList([FromServices] IGetRightsListCommand command)
         {
             return command.Execute();
         }
-        
-        [Route("AddRightsForUser")]
-        [HttpPost]
+
+        [HttpPost("addRightsForUser")]
         public bool AddRightsForUser(
             [FromServices] IAddRightsForUserCommand command,
             [FromBody] RightsForUserRequest request)

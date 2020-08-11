@@ -5,9 +5,18 @@ using LT.DigitalOffice.CheckRightsService.RestRequests;
 
 namespace LT.DigitalOffice.CheckRightsService.Repositories.Interfaces
 {
+    /// <summary>
+    /// Represents interface of repository. Provides method for rights.
+    /// </summary>
     public interface ICheckRightsRepository
     {
         List<Right> GetRightsList();
-        bool AddRightsToUser(RightsForUserRequest userId);
+
+        /// <summary>
+        /// Adds rights for user
+        /// </summary>
+        /// <param name="request">Request with rights and user id</param>
+        /// <returns>Return true if successfully else return false</returns>
+        bool AddRightsToUser(RightsForUserRequest request);
     }
 }
