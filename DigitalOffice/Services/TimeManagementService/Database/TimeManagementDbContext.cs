@@ -9,7 +9,7 @@ namespace LT.DigitalOffice.TimeManagementService.Database
     /// </summary>
     public class TimeManagementDbContext : DbContext
     {
-        public DbSet<DbLeave> Leaves { get; set; }
+        public DbSet<DbLeaveTime> LeaveTimes { get; set; }
         public DbSet<DbWorkTime> WorkTimes { get; set; }
 
         public TimeManagementDbContext(DbContextOptions<TimeManagementDbContext> options) : base(options)

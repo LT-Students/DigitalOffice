@@ -16,8 +16,8 @@ namespace LT.DigitalOffice.TimeManagementServiceUnitTests.Commands
         private Mock<IValidator<CreateWorkTimeRequest>> validatorMock;
         private Mock<IMapper<CreateWorkTimeRequest, DbWorkTime>> mapperMock;
         private Mock<IWorkTimeRepository> repositoryMock;
-
         private ICreateWorkTimeCommand command;
+
         private CreateWorkTimeRequest request;
         private DbWorkTime createdWorkTime;
 
