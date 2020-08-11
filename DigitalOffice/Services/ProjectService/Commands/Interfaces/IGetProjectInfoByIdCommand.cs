@@ -1,4 +1,4 @@
-﻿using LT.DigitalOffice.ProjectService.Models;
+﻿using ProjectService.Models;
 using System;
 
 namespace LT.DigitalOffice.ProjectService.Commands.Interfaces

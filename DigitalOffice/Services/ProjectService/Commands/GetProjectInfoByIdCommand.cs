@@ -2,9 +2,9 @@
 using LT.DigitalOffice.ProjectService.Commands.Interfaces;
 using LT.DigitalOffice.ProjectService.Database.Entities;
 using LT.DigitalOffice.ProjectService.Mappers.Interfaces;
-using LT.DigitalOffice.ProjectService.Models;
 using LT.DigitalOffice.ProjectService.Repositories.Interfaces;
 using System;
+using ProjectService.Models;
 
 namespace LT.DigitalOffice.ProjectService.Commands
 {

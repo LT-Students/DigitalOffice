@@ -1,6 +1,6 @@
-﻿using ProjectService.Models;
+﻿using LT.DigitalOffice.ProjectService.Models;
 
-namespace ProjectService.Commands.Interfaces
+namespace LT.DigitalOffice.ProjectService.Commands.Interfaces
 {
     public interface IAddUserToProjectCommand
     {

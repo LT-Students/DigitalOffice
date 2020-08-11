@@ -39,8 +39,6 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Tests", "Tests", "{A4DA860D
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Shared", "Shared", "{3F182395-281F-4C1E-8325-73B2A4715B79}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "InternalModels", "D:\Git Repository\DigitalOffice\DigitalOffice\Shared\InternalModels\InternalModels.csproj", "{6D1521EE-08DF-4C3B-B2CF-BA2E5AB18952}"
-EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU

@@ -1,6 +1,7 @@
 ﻿using LT.DigitalOffice.ProjectService.Database.Entities;
-using LT.DigitalOffice.ProjectService.Mappers.Interfaces;
 using LT.DigitalOffice.ProjectService.Models;
+using ProjectService.Mappers.Interfaces;
+using ProjectService.Models;
 using System;
 using System.Linq;
 

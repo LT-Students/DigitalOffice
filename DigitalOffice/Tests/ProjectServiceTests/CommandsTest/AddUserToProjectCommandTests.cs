@@ -49,7 +49,7 @@ namespace ProjectServiceUnitTests.CommandsTest
             var repository = new ProjectRepository(dbContext);
             var validator = new AddUserToProjectRequestValidator();
             var workerMapper = new WorkerMapper();
-            var managerMapper = new ManagerMapper();
+            var managerMapper = new ProjectUserMapper();
 
             command = new AddUserToProjectCommand(validator, repository, workerMapper, managerMapper);
 

@@ -1,14 +1,11 @@
-﻿using ProjectService.Database.Entities;
+﻿using LT.DigitalOffice.ProjectService.Database.Entities;
 using ProjectService.Mappers.Interfaces;
 using ProjectService.Models;
 using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
 
-namespace ProjectService.Mappers
+namespace LT.DigitalOffice.ProjectService.Mappers
 {
-    public class WorkerMapper : IMapper<AddUserToProjectRequest, DbProjectWorkerUser>
+    public class ProjectUserMapper : IMapper<AddUserToProjectRequest, DbProjectWorkerUser>
     {
         public DbProjectWorkerUser Map(AddUserToProjectRequest value)
         {
@@ -20,7 +17,8 @@ namespace ProjectService.Mappers
             return new DbProjectWorkerUser
             {
                 WorkerUserId = value.UserId,
-                ProjectId = value.ProjectId
+                ProjectId = value.ProjectId,
+                IsManager = value.IsManager
             };
         }
     }

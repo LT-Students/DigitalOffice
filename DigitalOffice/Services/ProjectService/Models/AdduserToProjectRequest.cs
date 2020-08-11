@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace ProjectService.Models
+namespace LT.DigitalOffice.ProjectService.Models
 {
     public class AddUserToProjectRequest
     {

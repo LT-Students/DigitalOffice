@@ -1,16 +1,10 @@
 ﻿using FluentValidation;
+using LT.DigitalOffice.ProjectService.Database.Entities;
+using LT.DigitalOffice.ProjectService.Mappers.Interfaces;
+using LT.DigitalOffice.ProjectService.Models;
+using LT.DigitalOffice.ProjectService.Repositories.Interfaces;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.AspNetCore.Mvc.ModelBinding.Validation;
 using ProjectService.Commands.Interfaces;
-using ProjectService.Database.Entities;
-using ProjectService.Mappers;
-using ProjectService.Mappers.Interfaces;
-using ProjectService.Models;
-using ProjectService.Repositories.Interfaces;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
 
 namespace ProjectService.Commands
 {
@@ -18,37 +12,26 @@ namespace ProjectService.Commands
     {
         private readonly IValidator<AddUserToProjectRequest> validator;
         private readonly IProjectRepository repository;
-        private readonly IMapper<AddUserToProjectRequest, DbProjectWorkerUser> workerMapper;
-        private readonly IMapper<AddUserToProjectRequest, DbProjectManagerUser> managerMapper;
+        private readonly IMapper<AddUserToProjectRequest, DbProjectWorkerUser> projectUserMapper;
 
         public AddUserToProjectCommand(
             [FromServices] IValidator<AddUserToProjectRequest> validator,
             [FromServices] IProjectRepository repository,
-            [FromServices] IMapper<AddUserToProjectRequest, DbProjectWorkerUser> workerMapper,
-            [FromServices] IMapper<AddUserToProjectRequest, DbProjectManagerUser> managerMapper)
+            [FromServices] IMapper<AddUserToProjectRequest, DbProjectWorkerUser> projectUserMapper)
         {
             this.validator = validator;
             this.repository = repository;
-            this.workerMapper = workerMapper;
-            this.managerMapper = managerMapper;
+            this.projectUserMapper = projectUserMapper;
         }
 
         public bool Execute(AddUserToProjectRequest request)
         {
             validator.ValidateAndThrow(request);
 
-            //check if user actually exists in UserService here
+            // TODO: check if user actually exists in UserService here
 
-            if (request.IsManager)
-            {
-                return repository.AddUserToProject(
-                    managerMapper.Map(request), request.ProjectId);
-            }
-            else
-            {
-                return repository.AddUserToProject(
-                    workerMapper.Map(request), request.ProjectId);
-            }
+            return repository.AddUserToProject(
+                projectUserMapper.Map(request), request.ProjectId);
         }
     }
 }
