@@ -7,7 +7,7 @@ namespace LT.DigitalOffice.Broker.Requests
     /// </summary>
     public interface ICheckIfUserHaveRightRequest
     {
-        public int RightId { get; }
-        public Guid UserId { get; }
+        int RightId { get; }
+        Guid UserId { get; }
     }
 }
