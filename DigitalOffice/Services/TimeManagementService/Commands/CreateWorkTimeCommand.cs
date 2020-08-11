@@ -1,11 +1,11 @@
 ﻿using FluentValidation;
-using Microsoft.AspNetCore.Mvc;
-using System;
 using LT.DigitalOffice.TimeManagementService.Commands.Interfaces;
 using LT.DigitalOffice.TimeManagementService.Database.Entities;
 using LT.DigitalOffice.TimeManagementService.Mappers.Interfaces;
 using LT.DigitalOffice.TimeManagementService.Models;
 using LT.DigitalOffice.TimeManagementService.Repositories.Interfaces;
+using Microsoft.AspNetCore.Mvc;
+using System;
 
 namespace LT.DigitalOffice.TimeManagementService.Commands
 {

@@ -21,7 +21,7 @@ namespace LT.DigitalOffice.UserService.Database.Entities
         public void Configure(EntityTypeBuilder<DbUserAchievement> builder)
         {
             builder.HasKey(pm => new { pm.UserId, pm.AchievementId });
-            builder.HasOne<DbUser>(pm => pm.User)
+            builder.HasOne(pm => pm.User)
                 .WithMany(p => p.AchievementsIds)
                 .HasForeignKey(pm => pm.UserId);
         }

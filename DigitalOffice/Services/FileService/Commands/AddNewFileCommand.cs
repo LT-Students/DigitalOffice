@@ -1,11 +1,11 @@
 ﻿using FluentValidation;
+using LT.DigitalOffice.FileService.Commands.Interfaces;
+using LT.DigitalOffice.FileService.Database.Entities;
+using LT.DigitalOffice.FileService.Mappers.Interfaces;
+using LT.DigitalOffice.FileService.Models;
+using LT.DigitalOffice.FileService.Repositories.Interfaces;
 using Microsoft.AspNetCore.Mvc;
 using System;
-using LT.DigitalOffice.FileService.Database.Entities;
-using LT.DigitalOffice.FileService.Commands.Interfaces;
-using LT.DigitalOffice.FileService.Repositories.Interfaces;
-using LT.DigitalOffice.FileService.RestRequests;
-using LT.DigitalOffice.FileService.Mappers.Interfaces;
 
 namespace LT.DigitalOffice.FileService.Commands
 {
@@ -30,7 +30,7 @@ namespace LT.DigitalOffice.FileService.Commands
             validator.ValidateAndThrow(request);
 
             var newFile = mapper.Map(request);
-            
+
             return repository.AddNewFile(newFile);
         }
     }

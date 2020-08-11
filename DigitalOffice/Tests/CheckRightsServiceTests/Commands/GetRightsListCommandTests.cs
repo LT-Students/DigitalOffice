@@ -6,7 +6,7 @@ using Moq;
 using NUnit.Framework;
 using System.Collections.Generic;
 
-namespace LT.DigitalOffice.CheckRightsServiceUnitTests.CommandsTests
+namespace LT.DigitalOffice.CheckRightsServiceUnitTests.Commands
 {
     public class GetRightsListCommandTests
     {

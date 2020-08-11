@@ -5,7 +5,7 @@ using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
 using Microsoft.EntityFrameworkCore.Migrations;
 
-namespace LT.DigitalOffice.FileService.Migrations
+namespace LT.DigitalOffice.FileService.Database.Migrations
 {
     [DbContext(typeof(FileServiceDbContext))]
     [Migration("20200729053610_NewAddedOnProperty")]

@@ -1,20 +1,19 @@
+using FluentValidation;
+using LT.DigitalOffice.ProjectService.Commands;
+using LT.DigitalOffice.ProjectService.Commands.Interfaces;
+using LT.DigitalOffice.ProjectService.Database;
+using LT.DigitalOffice.ProjectService.Database.Entities;
+using LT.DigitalOffice.ProjectService.Mappers;
+using LT.DigitalOffice.ProjectService.Mappers.Interfaces;
+using LT.DigitalOffice.ProjectService.Models;
+using LT.DigitalOffice.ProjectService.Repositories;
+using LT.DigitalOffice.ProjectService.Repositories.Interfaces;
+using LT.DigitalOffice.ProjectService.Validators;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
-using Microsoft.Extensions.Hosting;
-using LT.DigitalOffice.ProjectService.Commands;
-using LT.DigitalOffice.ProjectService.Commands.Interfaces;
-using LT.DigitalOffice.ProjectService.Database;
-using LT.DigitalOffice.ProjectService.Database.Entities;
-using LT.DigitalOffice.ProjectService.Repositories;
-using LT.DigitalOffice.ProjectService.Repositories.Interfaces;
-using LT.DigitalOffice.ProjectService.Mappers.Interfaces;
-using LT.DigitalOffice.ProjectService.Mappers;
-using LT.DigitalOffice.ProjectService.Models;
-using LT.DigitalOffice.ProjectService.Validators;
-using FluentValidation;
 
 namespace LT.DigitalOffice.ProjectService
 {
@@ -56,14 +55,13 @@ namespace LT.DigitalOffice.ProjectService
         private void ConfigMappers(IServiceCollection services)
         {
             services.AddTransient<IMapper<DbProject, Project>, ProjectMapper>();
-            services.AddTransient<IMapper<NewProjectRequest, DbProject>, DbProjectMapper>();
+            services.AddTransient<IMapper<NewProjectRequest, DbProject>, ProjectMapper>();
         }
 
         private void ConfigValidators(IServiceCollection services)
         {
             services.AddTransient<IValidator<NewProjectRequest>, NewProjectValidator>();
         }
-
 
         public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
         {

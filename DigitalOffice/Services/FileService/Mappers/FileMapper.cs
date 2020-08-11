@@ -1,7 +1,6 @@
 ﻿using LT.DigitalOffice.FileService.Database.Entities;
 using LT.DigitalOffice.FileService.Mappers.Interfaces;
 using LT.DigitalOffice.FileService.Models;
-using LT.DigitalOffice.FileService.RestRequests;
 using System;
 
 namespace LT.DigitalOffice.FileService.Mappers
@@ -23,12 +22,13 @@ namespace LT.DigitalOffice.FileService.Mappers
                 Name = dbFile.Name
             };
         }
+
         public DbFile Map(FileCreateRequest file)
         {
             if (file == null)
             {
                 throw new ArgumentNullException(nameof(file));
-            }    
+            }
 
             return new DbFile()
             {

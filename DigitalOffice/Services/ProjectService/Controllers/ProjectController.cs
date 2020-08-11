@@ -1,6 +1,6 @@
-﻿using Microsoft.AspNetCore.Mvc;
-using LT.DigitalOffice.ProjectService.Commands.Interfaces;
+﻿using LT.DigitalOffice.ProjectService.Commands.Interfaces;
 using LT.DigitalOffice.ProjectService.Models;
+using Microsoft.AspNetCore.Mvc;
 using System;
 
 namespace LT.DigitalOffice.ProjectService.Controllers
@@ -9,15 +9,13 @@ namespace LT.DigitalOffice.ProjectService.Controllers
     [ApiController]
     public class ProjectController : ControllerBase
     {
-        [Route("getProjectInfoById")]
-        [HttpGet]
+        [HttpGet("getProjectInfoById")]
         public Project GetProjectInfoById([FromServices] IGetProjectInfoByIdCommand command, [FromQuery] Guid projectId)
         {
             return command.Execute(projectId);
         }
 
-        [Route("createNewProject")]
-        [HttpPost]
+        [HttpPost("createNewProject")]
         public Guid CreateNewProject(
             [FromServices] ICreateNewProjectCommand command,
             [FromBody] NewProjectRequest request) => command.Execute(request);

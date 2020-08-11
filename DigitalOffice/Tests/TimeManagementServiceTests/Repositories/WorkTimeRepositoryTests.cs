@@ -1,13 +1,13 @@
-using Microsoft.EntityFrameworkCore;
-using NUnit.Framework;
-using System;
-using System.Collections.Generic;
-using System.Linq;
 using LT.DigitalOffice.TimeManagementService.Database;
 using LT.DigitalOffice.TimeManagementService.Database.Entities;
 using LT.DigitalOffice.TimeManagementService.Repositories;
 using LT.DigitalOffice.TimeManagementService.Repositories.Filters;
 using LT.DigitalOffice.TimeManagementService.Repositories.Interfaces;
+using Microsoft.EntityFrameworkCore;
+using NUnit.Framework;
+using System;
+using System.Collections.Generic;
+using System.Linq;
 
 namespace LT.DigitalOffice.TimeManagementServiceUnitTests.Repositories
 {
@@ -76,7 +76,7 @@ namespace LT.DigitalOffice.TimeManagementServiceUnitTests.Repositories
         }
 
         [TearDown]
-        public void CleanDB()
+        public void CleanDb()
         {
             if (dbContext.Database.IsInMemory())
             {
@@ -121,7 +121,7 @@ namespace LT.DigitalOffice.TimeManagementServiceUnitTests.Repositories
                 EndTime = DateTime.Now.AddDays(10)
             };
 
-            var filerForGetOnlyWT2 = new WorkTimeFilter
+            var filerForGetOnlyWorkTime2 = new WorkTimeFilter
             {
                 StartTime = DateTime.Now.AddDays(-0.95),
                 EndTime = DateTime.Now.AddDays(-0.6)
@@ -137,9 +137,9 @@ namespace LT.DigitalOffice.TimeManagementServiceUnitTests.Repositories
             Assert.AreEqual(repository.GetUserWorkTimes(worker1, filterForGetNothing).Count, 0);
             Assert.AreEqual(repository.GetUserWorkTimes(worker2, filterForGetNothing).Count, 0);
 
-            Assert.AreEqual(repository.GetUserWorkTimes(worker1, filerForGetOnlyWT2).Count, 0);
+            Assert.AreEqual(repository.GetUserWorkTimes(worker1, filerForGetOnlyWorkTime2).Count, 0);
             Assert.AreEqual(
-                repository.GetUserWorkTimes(worker2, filerForGetOnlyWT2).Count,
+                repository.GetUserWorkTimes(worker2, filerForGetOnlyWorkTime2).Count,
                 workTimesOfWorker2.Count);
         }
         #endregion

@@ -1,8 +1,9 @@
-﻿using System;
-using System.Linq;
-using LT.DigitalOffice.UserService.Database;
+﻿using LT.DigitalOffice.UserService.Database;
 using LT.DigitalOffice.UserService.Database.Entities;
 using LT.DigitalOffice.UserService.Repositories.Interfaces;
+using System;
+using System.Linq;
+using LT.DigitalOffice.UserService.Mappers.Interfaces;
 
 namespace LT.DigitalOffice.UserService.Repositories
 {

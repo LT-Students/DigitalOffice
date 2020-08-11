@@ -1,23 +1,23 @@
-using Microsoft.EntityFrameworkCore;
-using NUnit.Framework;
 using LT.DigitalOffice.ProjectService.Database;
 using LT.DigitalOffice.ProjectService.Database.Entities;
 using LT.DigitalOffice.ProjectService.Repositories;
 using LT.DigitalOffice.ProjectService.Repositories.Interfaces;
 using LT.DigitalOffice.ProjectServiceUnitTests.UnitTestLibrary;
+using Microsoft.EntityFrameworkCore;
+using NUnit.Framework;
 using System;
 
-namespace LT.DigitalOffice.ProjectServiceUnitTests.RepositoriesTests
+namespace LT.DigitalOffice.ProjectServiceUnitTests.Repositories
 {
     public class GetProjectInfoByIdRepositoryTests
     {
-        private ProjectServiceDbContext dbContext;
         private IProjectRepository repository;
-        private Guid projectId;
+        private ProjectServiceDbContext dbContext;
+
         private DbProject dbProject;
 
         [SetUp]
-        public void Setup()
+        public void SetUp()
         {
             var dbOptions = new DbContextOptionsBuilder<ProjectServiceDbContext>()
                                     .UseInMemoryDatabase(databaseName: "InMemoryDatabase")
@@ -25,7 +25,6 @@ namespace LT.DigitalOffice.ProjectServiceUnitTests.RepositoriesTests
             dbContext = new ProjectServiceDbContext(dbOptions);
             repository = new ProjectRepository(dbContext);
 
-            projectId = Guid.NewGuid();
             dbProject = new DbProject
             {
                 Id = Guid.NewGuid(),

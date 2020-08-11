@@ -5,7 +5,7 @@ using LT.DigitalOffice.CheckRightsService.Models;
 using NUnit.Framework;
 using System;
 
-namespace LT.DigitalOffice.CheckRightsServiceUnitTests.MappersTests
+namespace LT.DigitalOffice.CheckRightsServiceUnitTests.Mappers
 {
     class RightsMapperTests
     {
@@ -18,7 +18,7 @@ namespace LT.DigitalOffice.CheckRightsServiceUnitTests.MappersTests
         private DbRight dbRight;
 
         [SetUp]
-        public void Setup()
+        public void SetUp()
         {
             mapper = new RightsMapper();
             dbRight = new DbRight
@@ -36,7 +36,7 @@ namespace LT.DigitalOffice.CheckRightsServiceUnitTests.MappersTests
         }
 
         [Test]
-        public void ReturnRightModelSuccesfully()
+        public void ReturnRightModelSuccessfully()
         {
             var result = mapper.Map(dbRight);
 

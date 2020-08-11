@@ -1,7 +1,7 @@
 ﻿using System;
 using Microsoft.EntityFrameworkCore.Migrations;
 
-namespace LT.DigitalOffice.FileService.Migrations
+namespace LT.DigitalOffice.FileService.Database.Migrations
 {
     public partial class NewAddedOnProperty : Migration
     {

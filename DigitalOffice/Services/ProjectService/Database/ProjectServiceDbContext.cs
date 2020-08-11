@@ -1,12 +1,11 @@
-﻿using System.Reflection;
+﻿using LT.DigitalOffice.ProjectService.Database.Entities;
 using Microsoft.EntityFrameworkCore;
-using LT.DigitalOffice.ProjectService.Database.Entities;
+using System.Reflection;
 
 namespace LT.DigitalOffice.ProjectService.Database
 {
     /// <summary>
-    /// A class that defines the tables and its properties in the database.
-    /// For this particular case, it defines the database for the LT.DigitalOffice.ProjectService.
+    /// A class that defines the tables and its properties in the database of ProjectService.
     /// </summary>
     public class ProjectServiceDbContext : DbContext
     {
