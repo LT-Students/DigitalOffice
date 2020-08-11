@@ -10,7 +10,7 @@ namespace LT.DigitalOffice.CheckRightsService.Commands
     {
         private readonly ICheckRightsRepository repository;
         private readonly IValidator<RightsForUserRequest> validator;
-        
+
         public AddRightsForUserCommand(
             [FromServices] ICheckRightsRepository repository,
             [FromServices] IValidator<RightsForUserRequest> validator)
