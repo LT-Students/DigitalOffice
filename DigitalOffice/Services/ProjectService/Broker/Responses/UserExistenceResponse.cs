@@ -2,6 +2,6 @@
 {
     public class UserExistenceResponse
     {
-        public bool Exists { get; }
+        public bool Exists { get; set; }
     }
 }

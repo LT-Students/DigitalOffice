@@ -1,6 +1,6 @@
 ﻿using LT.DigitalOffice.Kernel.Broker;
-using LT.DigitalOffice.UserService.Broker.Consumers.Requests;
-using LT.DigitalOffice.UserService.Broker.Consumers.Responses;
+using LT.DigitalOffice.UserService.Broker.Requests;
+using LT.DigitalOffice.UserService.Broker.Responses;
 using LT.DigitalOffice.UserService.Repositories.Interfaces;
 using MassTransit;
 using Microsoft.AspNetCore.Mvc;

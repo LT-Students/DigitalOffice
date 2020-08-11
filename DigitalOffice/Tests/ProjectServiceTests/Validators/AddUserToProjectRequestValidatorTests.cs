@@ -1,13 +1,13 @@
 ﻿using FluentValidation;
 using FluentValidation.TestHelper;
+using LT.DigitalOffice.ProjectService.Models;
 using NUnit.Framework;
-using ProjectService.Models;
 using ProjectService.Validators;
 using System;
 
-namespace ProjectServiceUnitTests.ValidatorsTests
+namespace LT.DigitalOffice.ProjectServiceUnitTests.ValidatorsTests
 {
-    class AddUserToProjectRequestTests
+    class AddUserToProjectRequestValidatorTests
     {
         private IValidator<AddUserToProjectRequest> validator;
 

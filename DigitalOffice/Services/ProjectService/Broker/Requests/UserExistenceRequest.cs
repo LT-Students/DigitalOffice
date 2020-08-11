@@ -1,4 +1,6 @@
-﻿namespace LT.DigitalOffice.ProjectService.Broker.Requests
+﻿using System;
+
+namespace LT.DigitalOffice.ProjectService.Broker.Requests
 {
     public class UserExistenceRequest : IUserExistenceRequest
     {

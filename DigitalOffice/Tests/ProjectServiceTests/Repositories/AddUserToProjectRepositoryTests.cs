@@ -1,17 +1,15 @@
-﻿using Microsoft.EntityFrameworkCore;
+﻿using LT.DigitalOffice.ProjectService.Database;
+using LT.DigitalOffice.ProjectService.Database.Entities;
+using LT.DigitalOffice.ProjectService.Repositories;
+using Microsoft.EntityFrameworkCore;
 using NUnit.Framework;
-using ProjectService.Database;
-using ProjectService.Database.Entities;
-using ProjectService.Mappers;
-using ProjectService.Models;
-using ProjectService.Repositories;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 
-namespace ProjectServiceUnitTests.RepositoryTests
+namespace LT.DigitalOffice.ProjectServiceUnitTests.Repositories
 {
-    class ProjectRepositoryTests
+    class AddUserToProjectRepositoryTests
     {
         ProjectServiceDbContext dbContext;
         ProjectRepository repository;
@@ -34,7 +32,6 @@ namespace ProjectServiceUnitTests.RepositoryTests
             dbContext.Projects.Add(new DbProject
             {
                 Id = new Guid("ff15f706-8409-4464-8ea9-980247bd8b91"),
-                ManagersUsersIds = new List<DbProjectManagerUser>(),
                 WorkersUsersIds = new List<DbProjectWorkerUser>()
             });
 
@@ -53,29 +50,9 @@ namespace ProjectServiceUnitTests.RepositoryTests
         }
 
         [Test]
-        public void ShouldNotAddManagerUserWhenProjectIsNotFound()
-        {
-            var user = new DbProjectManagerUser();
-            var id = new Guid();
-
-            Assert.Throws<Exception>(() => repository.AddUserToProject(user, id));
-        }
-
-        [Test]
-        public void ShouldNotAddWorkerUserWhenUserAlreadyAdded()
+        public void ShouldNotAddWorkerUserWhenUserIsAlreadyAdded()
         {
             var user = new DbProjectWorkerUser();
-            var id = new Guid("ff15f706-8409-4464-8ea9-980247bd8b91");
-
-            repository.AddUserToProject(user, id);
-
-            Assert.Throws<Exception>(() => repository.AddUserToProject(user, id));
-        }
-
-        [Test]
-        public void ShouldNotAddManagerUserWhenUserAlreadyAdded()
-        {
-            var user = new DbProjectManagerUser();
             var id = new Guid("ff15f706-8409-4464-8ea9-980247bd8b91");
 
             repository.AddUserToProject(user, id);
@@ -91,16 +68,6 @@ namespace ProjectServiceUnitTests.RepositoryTests
 
             repository.AddUserToProject(user, id);
             Assert.AreEqual(1, dbContext.Projects.FirstOrDefault().WorkersUsersIds.Count);
-        }
-
-        [Test]
-        public void ShouldAddManagerUser()
-        {
-            var user = new DbProjectManagerUser();
-            var id = new Guid("ff15f706-8409-4464-8ea9-980247bd8b91");
-
-            repository.AddUserToProject(user, id);
-            Assert.AreEqual(1, dbContext.Projects.FirstOrDefault().ManagersUsersIds.Count);
         }
 
         [TearDown]

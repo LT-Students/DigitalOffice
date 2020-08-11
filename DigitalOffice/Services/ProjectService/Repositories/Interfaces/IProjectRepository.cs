@@ -22,5 +22,13 @@ namespace LT.DigitalOffice.ProjectService.Repositories.Interfaces
         /// <param name="item">Project to add.</param>
         /// <returns>Id of the added project.</returns>
         Guid CreateNewProject(DbProject item);
+
+        /// <summary>
+        /// Adds new user to the project. Returns whether the operation was successful or not.
+        /// </summary>
+        /// <param name="user">User to add.</param>
+        /// <param name="projectId">Project to whcih the user is added.</param>
+        /// <returns>Result of the operation.</returns>
+        bool AddUserToProject(DbProjectWorkerUser user, Guid projectId);
     }
 }
