@@ -34,7 +34,7 @@ namespace LT.DigitalOffice.CheckRightsService.Repositories
                 if (dbRight == null)
                 {
                     //TODO add custom exception
-                    throw new Exception("Right doesn't exist");
+                    throw new Exception("Right doesn't exist.");
                 }
 
                 dbRight.UserIds.Add(new DbRightUser

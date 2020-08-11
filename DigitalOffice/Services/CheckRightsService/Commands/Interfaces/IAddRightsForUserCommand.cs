@@ -3,7 +3,7 @@
 namespace LT.DigitalOffice.CheckRightsService.Commands.Interfaces
 {
     /// <summary>
-    /// Add rights for user
+    /// Add rights for user.
     /// </summary>
     public interface IAddRightsForUserCommand
     {
