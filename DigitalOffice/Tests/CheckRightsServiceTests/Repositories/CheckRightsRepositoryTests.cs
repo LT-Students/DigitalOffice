@@ -73,7 +73,7 @@ namespace LT.DigitalOffice.CheckRightsServiceUnitTests.Repositories
         }
 
         [Test]
-        public void AddRightsForUserSuccessfully()
+        public void ShouldAddRightsForUser()
         {
             var request = new RightsForUserRequest
             {
@@ -105,7 +105,7 @@ namespace LT.DigitalOffice.CheckRightsServiceUnitTests.Repositories
         }
 
         [Test]
-        public void ShouldThrowExceptionAddRightsForUser()
+        public void ShouldThrowExceptionWhenRightIdIsNoFound()
         {
             var request = new RightsForUserRequest
             {

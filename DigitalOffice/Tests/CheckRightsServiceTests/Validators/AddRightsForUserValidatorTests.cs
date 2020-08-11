@@ -6,7 +6,7 @@ using LT.DigitalOffice.CheckRightsService.RestRequests;
 using LT.DigitalOffice.CheckRightsService.Validator;
 using NUnit.Framework;
 
-namespace LT.DigitalOffice.CheckRightsServiceUnitTests.ValidatorsTests
+namespace LT.DigitalOffice.CheckRightsServiceUnitTests.Validators
 {
     public class AddRightsForUserValidatorTests
     {
@@ -17,7 +17,7 @@ namespace LT.DigitalOffice.CheckRightsServiceUnitTests.ValidatorsTests
         {
             validator = new AddRightsForUserValidator();
         }
-        
+
         [Test]
         public void ShouldThrowValidationExceptionWhenUserIdNull()
         {

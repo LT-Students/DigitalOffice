@@ -8,7 +8,7 @@ using LT.DigitalOffice.CheckRightsService.RestRequests;
 using Moq;
 using NUnit.Framework;
 
-namespace LT.DigitalOffice.CheckRightsServiceUnitTests.CommandsTests
+namespace LT.DigitalOffice.CheckRightsServiceUnitTests.Commands
 {
     public class AddRightsForUserCommandTests
     {
@@ -25,7 +25,7 @@ namespace LT.DigitalOffice.CheckRightsServiceUnitTests.CommandsTests
         }
 
         [Test]
-        public void AddRightsForUserSuccessfully()
+        public void ShouldAddRightsForUser()
         {
             var request = new RightsForUserRequest
             {
@@ -45,7 +45,7 @@ namespace LT.DigitalOffice.CheckRightsServiceUnitTests.CommandsTests
         }
 
         [Test]
-        public void ShouldThrowValidationException()
+        public void ShouldThrowValidationExceptionIfUserIdIsEmpty()
         {
             var request = new RightsForUserRequest
             {
