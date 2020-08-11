@@ -1,5 +1,4 @@
-﻿using System;
-using LT.DigitalOffice.CheckRightsService.Models;
+﻿using LT.DigitalOffice.CheckRightsService.Models;
 using System.Collections.Generic;
 using LT.DigitalOffice.CheckRightsService.RestRequests;
 
