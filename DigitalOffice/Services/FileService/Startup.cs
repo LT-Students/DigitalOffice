@@ -58,7 +58,7 @@ namespace LT.DigitalOffice.FileService
 
         private void ConfigureValidators(IServiceCollection services)
         {
-            services.AddTransient<IValidator<FileCreateRequest>, NewFileValidator>();
+            services.AddTransient<IValidator<FileCreateRequest>, AddNewFileValidator>();
         }
 
         public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
