@@ -2,8 +2,6 @@ using Microsoft.AspNetCore.Mvc;
 using System;
 using LT.DigitalOffice.TimeManagementService.Commands.Interfaces;
 using LT.DigitalOffice.TimeManagementService.Models;
-using Microsoft.AspNetCore.Mvc;
-using System;
 
 namespace LT.DigitalOffice.TimeManagementService.Controllers
 {
