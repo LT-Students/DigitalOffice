@@ -1,4 +1,6 @@
 using FluentValidation;
+using LT.DigitalOffice.UserService.Broker.Consumers;
+using LT.DigitalOffice.UserService.Broker.Requests;
 using LT.DigitalOffice.UserService.Commands;
 using LT.DigitalOffice.UserService.Commands.Interfaces;
 using LT.DigitalOffice.UserService.Database;
@@ -9,11 +11,13 @@ using LT.DigitalOffice.UserService.Models;
 using LT.DigitalOffice.UserService.Repositories;
 using LT.DigitalOffice.UserService.Repositories.Interfaces;
 using LT.DigitalOffice.UserService.Validators;
+using MassTransit;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
+using System;
 
 namespace LT.DigitalOffice.UserService
 {
@@ -33,12 +37,43 @@ namespace LT.DigitalOffice.UserService
                 options.UseSqlServer(Configuration.GetConnectionString("SQLConnectionString"));
             });
 
+            services.AddHealthChecks();
             services.AddControllers();
+            services.AddMassTransitHostedService();
+
+            ConfigRabbitMQ(services);
+            ConfigBrokerConsumers(services);
 
             ConfigureCommands(services);
             ConfigureRepositories(services);
             ConfigureValidators(services);
             ConfigureMappers(services);
+        }
+
+        private void ConfigRabbitMQ(IServiceCollection services)
+        {
+            string appSettingSection = "ServiceInfo";
+            string serviceId = Configuration.GetSection(appSettingSection)["ID"];
+            string serviceName = Configuration.GetSection(appSettingSection)["Name"];
+
+            var uri = $"rabbitmq://localhost/UserService_{serviceName}";
+
+            services.AddMassTransit(x =>
+            {
+                x.UsingRabbitMq((context, cfg) =>
+                {
+                    cfg.Host("localhost", "/", host =>
+                    {
+                        host.Username($"{serviceName}");
+                        host.Password($"{serviceName}_{serviceId}");
+                    });
+                });
+            });
+        }
+
+        private void ConfigBrokerConsumers(IServiceCollection services)
+        {
+            services.AddTransient<IConsumer<UserExistenceRequest>, UserExistenceConsumer>();
         }
 
         private void ConfigureCommands(IServiceCollection services)

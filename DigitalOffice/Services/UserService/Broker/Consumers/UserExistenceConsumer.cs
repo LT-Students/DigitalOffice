@@ -4,9 +4,7 @@ using LT.DigitalOffice.UserService.Broker.Responses;
 using LT.DigitalOffice.UserService.Repositories.Interfaces;
 using MassTransit;
 using Microsoft.AspNetCore.Mvc;
-using System;
 using System.Collections.Generic;
-using System.Linq;
 using System.Threading.Tasks;
 
 namespace LT.DigitalOffice.UserService.Broker.Consumers

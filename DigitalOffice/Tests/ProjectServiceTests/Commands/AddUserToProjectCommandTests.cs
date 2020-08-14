@@ -3,14 +3,13 @@ using LT.DigitalOffice.Kernel.Broker;
 using LT.DigitalOffice.ProjectService.Broker.Requests;
 using LT.DigitalOffice.ProjectService.Broker.Responses;
 using LT.DigitalOffice.ProjectService.Broker.Senders;
-using LT.DigitalOffice.ProjectService.Controllers;
+using LT.DigitalOffice.ProjectService.Broker.Senders.Interfaces;
 using LT.DigitalOffice.ProjectService.Database;
 using LT.DigitalOffice.ProjectService.Database.Entities;
 using LT.DigitalOffice.ProjectService.Mappers;
+using LT.DigitalOffice.ProjectService.Models;
 using LT.DigitalOffice.ProjectService.Repositories;
 using MassTransit;
-using MassTransit.Clients;
-using Microsoft.AspNetCore.SignalR;
 using Microsoft.EntityFrameworkCore;
 using Moq;
 using NUnit.Framework;
@@ -18,14 +17,15 @@ using ProjectService.Commands;
 using ProjectService.Validators;
 using System;
 using System.Collections.Generic;
-using System.Security.Cryptography.X509Certificates;
+using System.Linq;
+using System.Threading;
 using System.Threading.Tasks;
 
 namespace ProjectServiceUnitTests.Commands
 {
+    [TestFixture]
     class AddUserToProjectCommandTests
     {
-        
         private class ImplementationResponse : Response<IOperationResult<IUserExistenceResponse>>
         {
             public Guid? MessageId { get; }
@@ -92,13 +92,9 @@ namespace ProjectServiceUnitTests.Commands
             return new ProjectServiceDbContext(options);
         }
 
-        AddUserToProjectCommand command;
-        ProjectController pc;
-
-        [SetUp]
-        public void Initialization()
+        private ProjectServiceDbContext SetupDb()
         {
-            var dbContext = GetMemoryContext();
+            dbContext = GetMemoryContext();
             dbContext.Database.EnsureDeleted();
 
             dbContext.Projects.Add(new DbProject
@@ -109,17 +105,43 @@ namespace ProjectServiceUnitTests.Commands
 
             dbContext.SaveChanges();
 
+            dbContext.Projects.FirstOrDefault().WorkersUsersIds.Add(
+                new DbProjectWorkerUser
+                {
+                    WorkerUserId = new Guid("331d4b44-c7f9-4508-98b2-96a324252dba")
+                });
+
+            dbContext.SaveChanges();
+
+            return dbContext;
+        }
+
+        private Mock<IRequestClient<IUserExistenceRequest>> requestClientMock;
+        private AddUserToProjectCommand command;
+        private ISender<Guid, IUserExistenceResponse> sender;
+        private ProjectServiceDbContext dbContext;
+
+        [OneTimeSetUp]
+        public void Initialization()
+        {
+            requestClientMock = new Mock<IRequestClient<IUserExistenceRequest>>();
+
+            var dbContext = SetupDb();
+
             var repository = new ProjectRepository(dbContext);
             var validator = new AddUserToProjectRequestValidator();
             var workerMapper = new ProjectUserMapper();
 
-            Mock<IRequestClient<IUserExistenceRequest>> requestClientMock;
+            var response = new ImplementationResponse(new OperationResult(new UserExistenceResponse(true), new List<string>(), true));
 
-            var sender = new Mock<UserExistenceSender>();
+            requestClientMock.Setup(c =>
+            c.GetResponse<IOperationResult<IUserExistenceResponse>>(It.IsAny<object>(),
+            It.IsAny<CancellationToken>(), It.IsAny<RequestTimeout>()))
+                .Returns(Task.FromResult<Response<IOperationResult<IUserExistenceResponse>>>(response));
 
-            command = new AddUserToProjectCommand(validator, repository, workerMapper, sender.Object);
+            sender = new UserExistenceSender(requestClientMock.Object);
 
-            pc = new ProjectController();
+            command = new AddUserToProjectCommand(validator, repository, workerMapper, sender);
         }
 
         [Test]
@@ -132,7 +154,7 @@ namespace ProjectServiceUnitTests.Commands
                 IsManager = false
             };
 
-            Assert.IsTrue(pc.AdduserToProject(request, command));
+            Assert.IsTrue(command.Execute(request).Result);
         }
 
         [Test]
@@ -145,14 +167,44 @@ namespace ProjectServiceUnitTests.Commands
                 IsManager = true
             };
 
-            Assert.Throws<ValidationException>(() => pc.AdduserToProject(request, command));
+            Assert.ThrowsAsync<ValidationException>(() => command.Execute(request));
         }
 
         [Test]
         public void ShouldThrowWhenUserNotFound()
         {
-            // Will be implemented when communication with UserService is done
+            var response = new ImplementationResponse(new OperationResult(new UserExistenceResponse(false), new List<string>(), true));
+
+            var request = new AddUserToProjectRequest
+            {
+                ProjectId = new Guid("ff15f706-8409-4464-8ea9-980247bd8b91"),
+                UserId = new Guid("9e1ed7b0-da55-4048-9657-b4fe17574b2e"),
+                IsManager = false
+            };
+
+            requestClientMock.Setup(c =>
+            c.GetResponse<IOperationResult<IUserExistenceResponse>>(It.IsAny<object>(),
+            It.IsAny<CancellationToken>(), It.IsAny<RequestTimeout>()))
+                .Returns(Task.FromResult<Response<IOperationResult<IUserExistenceResponse>>>(response));
+
+            Assert.ThrowsAsync<ArgumentException>(() => command.Execute(request));
+
+            response = new ImplementationResponse(new OperationResult(new UserExistenceResponse(true), new List<string>(), true));
+
+            requestClientMock.Setup(c =>
+            c.GetResponse<IOperationResult<IUserExistenceResponse>>(It.IsAny<object>(),
+            It.IsAny<CancellationToken>(), It.IsAny<RequestTimeout>()))
+                .Returns(Task.FromResult<Response<IOperationResult<IUserExistenceResponse>>>(response));
+        }
+
+
+        [OneTimeTearDown]
+        public void ClearDb()
+        {
+            if (dbContext.Database.IsInMemory())
+            {
+                dbContext.Database.EnsureDeleted();
+            }
         }
     }
-}
 }
