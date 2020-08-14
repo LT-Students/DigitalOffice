@@ -12,7 +12,7 @@ namespace LT.DigitalOffice.ProjectService.Commands.Interfaces
         /// <summary>
         /// Adds a new user to a project. 
         /// </summary>
-        /// <param name="request">Request containing the user id & project id.</param>
+        /// <param name="request">Request containing the user id and project id.</param>
         /// <returns>Whether the operation was successful or not.</returns>
         Task<bool> Execute(AddUserToProjectRequest request);
     }
