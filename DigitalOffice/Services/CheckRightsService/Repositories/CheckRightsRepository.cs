@@ -25,7 +25,7 @@ namespace LT.DigitalOffice.CheckRightsService.Repositories
             return dbContext.Rights.Select(r => mapper.Map(r)).ToList();
         }
 
-        public bool CheckIfUserHaveRight(ICheckIfUserHaveRightRequest request)
+        public bool CheckIfUserHasRight(ICheckIfUserHasRightRequest request)
             => dbContext.Rights.Where(right => right.Id == request.RightId)
                 .Any(right => right.UserIds.Select(rightUser => rightUser.UserId).Contains(request.UserId));
     }

@@ -40,7 +40,7 @@ namespace LT.DigitalOffice.ProjectService
 
             services.AddMassTransit(configurator =>
             {
-                configurator.AddRequestClient<ICheckIfUserHaveRightRequest>(
+                configurator.AddRequestClient<ICheckIfUserHasRightRequest>(
                     new Uri("rabbitmq://localhost/checkrightsservice"));
 
                 configurator.UsingRabbitMq((context, factoryConfigurator) =>

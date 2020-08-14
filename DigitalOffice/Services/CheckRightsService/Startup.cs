@@ -37,7 +37,7 @@ namespace LT.DigitalOffice.CheckRightsService
 
             services.AddMassTransit(configurator =>
             {
-                configurator.AddConsumer<CheckIfUserHaveRightConsumer>();
+                configurator.AddConsumer<CheckIfUserHasRightConsumer>();
 
                 configurator.UsingRabbitMq((context, factoryConfigurator) =>
                 {
@@ -54,7 +54,7 @@ namespace LT.DigitalOffice.CheckRightsService
 
                     factoryConfigurator.ReceiveEndpoint(serviceName, endpointConfigurator =>
                     {
-                        endpointConfigurator.ConfigureConsumer<CheckIfUserHaveRightConsumer>(context);
+                        endpointConfigurator.ConfigureConsumer<CheckIfUserHasRightConsumer>(context);
                     });
                 });
             });
@@ -114,7 +114,7 @@ namespace LT.DigitalOffice.CheckRightsService
 
         private void ConfigureValidators(IServiceCollection services)
         {
-            services.AddTransient<IValidator<ICheckIfUserHaveRightRequest>, CheckIfUserHaveRightValidator>();
+            services.AddTransient<IValidator<ICheckIfUserHasRightRequest>, CheckIfUserHasRightValidator>();
         }
     }
 }

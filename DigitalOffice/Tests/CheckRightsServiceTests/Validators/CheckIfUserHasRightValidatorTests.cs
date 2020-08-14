@@ -7,11 +7,11 @@ using NUnit.Framework;
 
 namespace LT.DigitalOffice.CheckRightsServiceUnitTests.Validators
 {
-    public class CheckIfUserHaveRightValidatorTests
+    public class CheckIfUserHasRightValidatorTests
     {
-        private IValidator<ICheckIfUserHaveRightRequest> validator;
+        private IValidator<ICheckIfUserHasRightRequest> validator;
 
-        private class CheckIfUserHaveRightRequest : ICheckIfUserHaveRightRequest
+        private class CheckIfUserHaveRightRequest : ICheckIfUserHasRightRequest
         {
             public CheckIfUserHaveRightRequest(int rightId, Guid userId)
             {
@@ -26,7 +26,7 @@ namespace LT.DigitalOffice.CheckRightsServiceUnitTests.Validators
         [SetUp]
         public void SetUp()
         {
-            validator = new CheckIfUserHaveRightValidator();
+            validator = new CheckIfUserHasRightValidator();
         }
         
         [Test]
@@ -41,6 +41,13 @@ namespace LT.DigitalOffice.CheckRightsServiceUnitTests.Validators
         {
             validator.ShouldHaveValidationErrorFor(request => request.UserId,
                 new CheckIfUserHaveRightRequest(1, Guid.Empty));
+        }
+
+        [Test]
+        public void ShouldNotHaveAnyValidationErrorsWhenRequestIsValid()
+        {
+            validator.TestValidate(new UnitTestLibrary.CheckIfUserHaveRightRequest(1, Guid.NewGuid()))
+                .ShouldNotHaveAnyValidationErrors();
         }
     }
 }

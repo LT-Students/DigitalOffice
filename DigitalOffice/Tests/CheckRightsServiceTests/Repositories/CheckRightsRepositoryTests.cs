@@ -60,7 +60,7 @@ namespace LT.DigitalOffice.CheckRightsServiceUnitTests.Repositories
         }
 
         [Test]
-        public void CheckIfUserHaveRightReturnsTrueIfUserHaveRight()
+        public void ShouldCheckIfUserHasRightWhenUserHasRight()
         {
             var userId = new Guid();
             const int rightId = 1;
@@ -69,24 +69,24 @@ namespace LT.DigitalOffice.CheckRightsServiceUnitTests.Repositories
             dbContext.Rights.Add(dbRight);
             dbContext.SaveChanges();
             
-            Assert.IsTrue(repository.CheckIfUserHaveRight(new CheckIfUserHaveRightRequest(rightId, userId)));
+            Assert.IsTrue(repository.CheckIfUserHasRight(new CheckIfUserHaveRightRequest(rightId, userId)));
         }
 
         [Test]
-        public void CheckIfUserHaveRightReturnsFalseIfUserHaveNotRight()
+        public void ShouldCheckIfUserHasRightWhenUserDoesNotHaveRight()
         {
             const int rightId = 1;
             var dbRight = new DbRight {Id = rightId, Name = "Right", UserIds = new List<DbRightUser>()};
             dbContext.Rights.Add(dbRight);
             dbContext.SaveChanges();
-            
-            Assert.IsFalse(repository.CheckIfUserHaveRight(new CheckIfUserHaveRightRequest(rightId, new Guid())));
+
+            Assert.IsFalse(repository.CheckIfUserHasRight(new CheckIfUserHaveRightRequest(rightId, new Guid())));
         }
 
         [Test]
-        public void CheckIfUserHaveRightReturnsFalseIfDatabaseDoesNotContainSuchRight()
+        public void ShouldCheckIfUserHasRightWhenDatabaseDoesNotContainSuchRight()
         {
-            Assert.IsFalse(repository.CheckIfUserHaveRight(new CheckIfUserHaveRightRequest(1, new Guid())));
+            Assert.IsFalse(repository.CheckIfUserHasRight(new CheckIfUserHaveRightRequest(1, new Guid())));
         }
     }
 }

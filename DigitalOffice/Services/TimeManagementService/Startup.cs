@@ -54,7 +54,7 @@ namespace LT.DigitalOffice.TimeManagementService
                     });
                 });
 
-                configurator.AddRequestClient<ICheckIfUserHaveRightRequest>(
+                configurator.AddRequestClient<ICheckIfUserHasRightRequest>(
                     new Uri("rabbitmq://localhost/CheckRightsService"));
             });
 

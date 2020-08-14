@@ -3,7 +3,7 @@ using LT.DigitalOffice.Broker.Requests;
 
 namespace LT.DigitalOffice.CheckRightsServiceUnitTests.UnitTestLibrary
 {
-    public class CheckIfUserHaveRightRequest : ICheckIfUserHaveRightRequest
+    public class CheckIfUserHaveRightRequest : ICheckIfUserHasRightRequest
     {
         public CheckIfUserHaveRightRequest(int rightId, Guid userId)
         {
