@@ -73,7 +73,7 @@ namespace LT.DigitalOffice.UserService
 
         private void ConfigBrokerConsumers(IServiceCollection services)
         {
-            services.AddTransient<IConsumer<UserExistenceRequest>, UserExistenceConsumer>();
+            services.AddTransient<IConsumer<IUserExistenceRequest>, UserExistenceConsumer>();
         }
 
         private void ConfigureCommands(IServiceCollection services)

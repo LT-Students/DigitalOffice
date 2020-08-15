@@ -22,7 +22,7 @@ namespace LT.DigitalOffice.ProjectService.Controllers
             [FromBody] NewProjectRequest request) => command.Execute(request);
 
         [HttpPut("addUserToProject")]
-        public async Task<bool> AdduserToProject(
+        public async Task<bool> AddUserToProject(
             [FromBody] AddUserToProjectRequest request,
             [FromServices] IAddUserToProjectCommand command)
         {

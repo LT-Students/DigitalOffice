@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 
 namespace LT.DigitalOffice.UserService.Validators
 {
-    public class UserExistenceRequestValidator : AbstractValidator<UserExistenceRequest>
+    public class UserExistenceRequestValidator : AbstractValidator<IUserExistenceRequest>
     {
         public UserExistenceRequestValidator()
         {
