@@ -8,11 +8,11 @@ namespace ProjectService.Validators
         public AddUserToProjectRequestValidator()
         {
             RuleFor(r => r.UserId)
-                .NotEmpty()
-                .NotNull();
+                .NotEmpty();
+
             RuleFor(r => r.ProjectId)
-                .NotEmpty()
-                .NotNull();
+                .NotEmpty();
+
             RuleFor(r => r.IsManager)
                 .NotNull();
         }

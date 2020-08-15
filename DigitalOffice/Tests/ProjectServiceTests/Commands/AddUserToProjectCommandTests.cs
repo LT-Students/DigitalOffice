@@ -31,25 +31,15 @@ namespace ProjectServiceUnitTests.Commands
             public Guid? MessageId { get; }
             public Guid? RequestId { get; }
             public Guid? CorrelationId { get; }
-
             public Guid? ConversationId { get; }
-
             public Guid? InitiatorId { get; }
-
             public DateTime? ExpirationTime { get; }
-
             public Uri SourceAddress { get; }
-
             public Uri DestinationAddress { get; }
-
             public Uri ResponseAddress { get; }
-
             public Uri FaultAddress { get; }
-
             public DateTime? SentTime { get; }
-
             public Headers Headers { get; }
-
             public HostInfo Host { get; }
             public IOperationResult<IUserExistenceResponse> Message { get; }
 
@@ -196,7 +186,6 @@ namespace ProjectServiceUnitTests.Commands
             It.IsAny<CancellationToken>(), It.IsAny<RequestTimeout>()))
                 .Returns(Task.FromResult<Response<IOperationResult<IUserExistenceResponse>>>(response));
         }
-
 
         [OneTimeTearDown]
         public void ClearDb()

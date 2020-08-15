@@ -11,7 +11,7 @@ namespace LT.DigitalOffice.ProjectService.Mappers
         {
             if (value == null)
             {
-                throw new ArgumentNullException("value");
+                throw new ArgumentNullException(nameof(value));
             }
 
             return new DbProjectWorkerUser

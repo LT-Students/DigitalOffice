@@ -35,7 +35,6 @@ namespace ProjectService.Commands
         {
             validator.ValidateAndThrow(request);
 
-            // TODO: check if user actually exists in UserService here
             var brokerResponse = await userExistenceSender.GetResponseFromBroker(request.UserId);
 
             if (!brokerResponse.Message.Body.Exists)
