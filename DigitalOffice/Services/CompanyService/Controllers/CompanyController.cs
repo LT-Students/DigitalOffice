@@ -9,20 +9,26 @@ namespace LT.DigitalOffice.CompanyService.Controllers
     [ApiController]
     public class CompanyController : ControllerBase
     {
-        [HttpPost("addPosition")]
-        public Guid AddPosition([FromServices] IAddPositionCommand command, [FromBody] AddPositionRequest request)
+        [HttpPost("getCompanyById")]
+        public Company GetCompanyById([FromServices] IGetCompanyByIdCommand command, [FromQuery] Guid companyId)
+        {
+            return command.Execute(companyId);
+        }
+
+        [HttpPost("addCompany")]
+        public Guid AddCompany([FromServices] IAddCompanyCommand command, [FromBody] AddCompanyRequest request)
         {
             return command.Execute(request);
         }
-        
+
         [HttpGet("getPositionById")]
         public Position GetPositionById([FromServices] IGetPositionByIdCommand command, [FromQuery] Guid positionId)
         {
             return command.Execute(positionId);
         }
 
-        [HttpPost("addCompany")]
-        public Guid AddCompany([FromServices] IAddCompanyCommand command, [FromBody] AddCompanyRequest request)
+        [HttpPost("addPosition")]
+        public Guid AddPosition([FromServices] IAddPositionCommand command, [FromBody] AddPositionRequest request)
         {
             return command.Execute(request);
         }
