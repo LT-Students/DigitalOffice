@@ -32,33 +32,8 @@ namespace LT.DigitalOffice.CheckRightsService
         public void ConfigureServices(IServiceCollection services)
         {
             services.AddHealthChecks();
-
             services.AddControllers();
-
-            services.AddMassTransit(configurator =>
-            {
-                configurator.AddConsumer<CheckIfUserHasRightConsumer>();
-
-                configurator.UsingRabbitMq((context, factoryConfigurator) =>
-                {
-                    const string serviceInfoSection = "ServiceInfo";
-
-                    var serviceName = Configuration.GetSection(serviceInfoSection)["Name"];
-                    var serviceId = Configuration.GetSection(serviceInfoSection)["Id"];
-
-                    factoryConfigurator.Host("localhost", "/",hostConfigurator =>
-                    {
-                        hostConfigurator.Username($"{serviceName}_{serviceId}");
-                        hostConfigurator.Password(serviceId);
-                    });
-
-                    factoryConfigurator.ReceiveEndpoint(serviceName, endpointConfigurator =>
-                    {
-                        endpointConfigurator.ConfigureConsumer<CheckIfUserHasRightConsumer>(context);
-                    });
-                });
-            });
-
+            ConfigureMassTransit(services);
             services.AddMassTransitHostedService();
 
             services.AddDbContext<CheckRightsServiceDbContext>(options =>
@@ -115,6 +90,33 @@ namespace LT.DigitalOffice.CheckRightsService
         private void ConfigureValidators(IServiceCollection services)
         {
             services.AddTransient<IValidator<ICheckIfUserHasRightRequest>, CheckIfUserHasRightValidator>();
+        }
+
+        private void ConfigureMassTransit(IServiceCollection services)
+        {
+            services.AddMassTransit(configurator =>
+            {
+                configurator.AddConsumer<CheckIfUserHasRightConsumer>();
+
+                configurator.UsingRabbitMq((context, factoryConfigurator) =>
+                {
+                    const string serviceInfoSection = "ServiceInfo";
+
+                    var serviceName = Configuration.GetSection(serviceInfoSection)["Name"];
+                    var serviceId = Configuration.GetSection(serviceInfoSection)["Id"];
+
+                    factoryConfigurator.Host("localhost", "/",hostConfigurator =>
+                    {
+                        hostConfigurator.Username($"{serviceName}_{serviceId}");
+                        hostConfigurator.Password(serviceId);
+                    });
+
+                    factoryConfigurator.ReceiveEndpoint(serviceName, endpointConfigurator =>
+                    {
+                        endpointConfigurator.ConfigureConsumer<CheckIfUserHasRightConsumer>(context);
+                    });
+                });
+            });
         }
     }
 }

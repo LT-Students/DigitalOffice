@@ -37,7 +37,17 @@ namespace LT.DigitalOffice.TimeManagementService
             });
 
             services.AddControllers();
+            ConfigureMassTransit(services);
+            services.AddMassTransitHostedService();
 
+            ConfigureCommands(services);
+            ConfigureValidators(services);
+            ConfigureMappers(services);
+            ConfigureRepositories(services);
+        }
+
+        private void ConfigureMassTransit(IServiceCollection services)
+        {
             services.AddMassTransit(configurator =>
             {
                 configurator.UsingRabbitMq((context, factoryConfigurator) =>
@@ -57,13 +67,6 @@ namespace LT.DigitalOffice.TimeManagementService
                 configurator.AddRequestClient<ICheckIfUserHasRightRequest>(
                     new Uri("rabbitmq://localhost/CheckRightsService"));
             });
-
-            services.AddMassTransitHostedService();
-
-            ConfigureCommands(services);
-            ConfigureValidators(services);
-            ConfigureMappers(services);
-            ConfigureRepositories(services);
         }
 
         private void ConfigureCommands(IServiceCollection services)

@@ -37,7 +37,17 @@ namespace LT.DigitalOffice.ProjectService
             });
 
             services.AddControllers();
+            ConfigureMassTransit(services);
+            services.AddMassTransitHostedService();
+            
+            ConfigCommands(services);
+            ConfigRepositories(services);
+            ConfigMappers(services);
+            ConfigValidators(services);
+        }
 
+        private void ConfigureMassTransit(IServiceCollection services)
+        {
             services.AddMassTransit(configurator =>
             {
                 configurator.AddRequestClient<ICheckIfUserHasRightRequest>(
@@ -57,13 +67,6 @@ namespace LT.DigitalOffice.ProjectService
                     });
                 });
             });
-
-            services.AddMassTransitHostedService();
-            
-            ConfigCommands(services);
-            ConfigRepositories(services);
-            ConfigMappers(services);
-            ConfigValidators(services);
         }
 
         private void ConfigCommands(IServiceCollection services)
