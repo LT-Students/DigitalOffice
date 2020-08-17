@@ -45,6 +45,7 @@ namespace LT.DigitalOffice.CompanyService
 
         private void ConfigureCommands(IServiceCollection services)
         {
+            services.AddTransient<IGetPositionByIdCommand, GetPositionByIdCommand>();
             services.AddTransient<IAddCompanyCommand, AddCompanyCommand>();
         }
 
@@ -52,7 +53,7 @@ namespace LT.DigitalOffice.CompanyService
         {
             services.AddTransient<ICompanyRepository, CompanyRepository>();
         }
-
+      
         private void ConfigureValidators(IServiceCollection services)
         {
             services.AddTransient<IValidator<AddCompanyRequest>, AddCompanyValidator>();
@@ -60,6 +61,7 @@ namespace LT.DigitalOffice.CompanyService
 
         private void ConfigureMappers(IServiceCollection services)
         {
+            services.AddTransient<IMapper<DbPosition, Position>, PositionMapper>();
             services.AddTransient<IMapper<AddCompanyRequest, DbCompany>, CompanyMapper>();
         }
 
