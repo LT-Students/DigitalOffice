@@ -18,10 +18,8 @@ namespace LT.DigitalOffice.TimeManagementServiceUnitTests.Repositories
 
         private Guid project1;
         private Guid project2;
-
         private Guid worker1;
         private Guid worker2;
-
         private List<DbWorkTime> workTimesOfWorker1;
         private List<DbWorkTime> workTimesOfWorker2;
 

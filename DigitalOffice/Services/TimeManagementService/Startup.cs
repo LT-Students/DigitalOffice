@@ -43,21 +43,25 @@ namespace LT.DigitalOffice.TimeManagementService
 
         private void ConfigureCommands(IServiceCollection services)
         {
+            services.AddTransient<ICreateLeaveTimeCommand, CreateLeaveTimeCommand>();
             services.AddTransient<ICreateWorkTimeCommand, CreateWorkTimeCommand>();
         }
 
         private void ConfigureValidators(IServiceCollection services)
         {
+            services.AddTransient<IValidator<CreateLeaveTimeRequest>, CreateLeaveTimeRequestValidator>();
             services.AddTransient<IValidator<CreateWorkTimeRequest>, CreateWorkTimeRequestValidator>();
         }
 
         private void ConfigureMappers(IServiceCollection services)
         {
+            services.AddTransient<IMapper<CreateLeaveTimeRequest, DbLeaveTime>, LeaveTimeMapper>();
             services.AddTransient<IMapper<CreateWorkTimeRequest, DbWorkTime>, WorkTimeMapper>();
         }
 
         private void ConfigureRepositories(IServiceCollection services)
         {
+            services.AddTransient<ILeaveTimeRepository, LeaveTimeRepository>();
             services.AddTransient<IWorkTimeRepository, WorkTimeRepository>();
         }
 

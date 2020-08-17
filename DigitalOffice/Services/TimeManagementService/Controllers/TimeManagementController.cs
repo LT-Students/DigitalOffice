@@ -9,6 +9,14 @@ namespace LT.DigitalOffice.TimeManagementService.Controllers
     [ApiController]
     public class TimeManagementController : ControllerBase
     {
+        [HttpPost("addLeaveTime")]
+        public Guid AddLeaveTime(
+            [FromBody] CreateLeaveTimeRequest leaveTime,
+            [FromServices] ICreateLeaveTimeCommand command)
+        {
+            return command.Execute(leaveTime);
+        }
+
         [HttpPost("addWorkTime")]
         public Guid AddWorkTime(
             [FromBody] CreateWorkTimeRequest workTime,

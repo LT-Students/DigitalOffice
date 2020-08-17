@@ -22,7 +22,7 @@ namespace LT.DigitalOffice.FileServiceUnitTests.Validators
                 Name = "DigitalOfficeTestFile"
             };
 
-            validator = new NewFileValidator();
+            validator = new AddNewFileValidator();
         }
 
         [Test]
