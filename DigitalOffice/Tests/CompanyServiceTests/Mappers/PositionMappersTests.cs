@@ -12,15 +12,36 @@ namespace LT.DigitalOffice.CompanyServiceUnitTests.Mappers
 {
     class PositionMappersTests
     {
+        private IMapper<AddPositionRequest, DbPosition> mapperAddPositionRequest;
         private IMapper<DbPosition, Position> mapper;
 
         private DbCompanyUser dbUserIds;
         private DbPosition dbPosition;
 
-        [SetUp]
-        public void Setup()
+        private AddPositionRequest request;
+        private DbPosition expectedDbPosition;
+
+        [OneTimeSetUp]
+        public void OneTimeSetUp()
         {
             mapper = new PositionMapper();
+            mapperAddPositionRequest = new PositionMapper();
+        }
+
+        [SetUp]
+        public void SetUp()
+        {
+            request = new AddPositionRequest
+            {
+                Name = "Name",
+                Description = "Description"
+            };
+            expectedDbPosition = new DbPosition
+            {
+                Name = request.Name,
+                Description = request.Description
+            };
+
             dbUserIds = new DbCompanyUser
             {
                 UserId = Guid.NewGuid(),
@@ -38,8 +59,27 @@ namespace LT.DigitalOffice.CompanyServiceUnitTests.Mappers
             };
         }
 
+        #region AddPositionRequest to DbPosition
         [Test]
-        public void ShouldThrowExceptionIfArgumentIsNull()
+        public void ShouldThrowExceptionIfArgumentIsNullAddPositionRequestToDbPosition()
+        {
+            Assert.Throws<ArgumentNullException>(() => mapperAddPositionRequest.Map(null));
+        }
+
+        public void ShouldMapAddPositionRequestToDbPositionSuccessfully()
+        {
+            var resultDbPosition = mapperAddPositionRequest.Map(request);
+
+            expectedDbPosition.Id = resultDbPosition.Id;
+
+            Assert.IsInstanceOf<Guid>(resultDbPosition.Id);
+            SerializerAssert.AreEqual(expectedDbPosition, resultDbPosition);
+        }
+        #endregion
+
+        #region DbPosition to Position
+        [Test]
+        public void ShouldThrowExceptionIfArgumentIsNullDbPositionToPosition()
         {
             Assert.Throws<ArgumentNullException>(() => mapper.Map(null));
         }
@@ -58,5 +98,6 @@ namespace LT.DigitalOffice.CompanyServiceUnitTests.Mappers
 
             SerializerAssert.AreEqual(expected, result);
         }
+        #endregion
     }
 }

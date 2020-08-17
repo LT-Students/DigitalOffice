@@ -10,6 +10,13 @@ namespace LT.DigitalOffice.CompanyService.Repositories.Interfaces
     public interface ICompanyRepository
     {
         /// <summary>
+        /// Adds new position to the database. Returns its Id.
+        /// </summary>
+        /// <param name="position">Position to add.</param>
+        /// <returns>New position Id.</returns>
+        Guid AddPosition(DbPosition position);
+        
+        /// <summary>
         /// Returns the position with the specified id from database.
         /// </summary>
         /// <param name="positionId">Specified id of position.</param>

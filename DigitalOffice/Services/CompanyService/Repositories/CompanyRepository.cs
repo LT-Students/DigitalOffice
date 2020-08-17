@@ -16,6 +16,14 @@ namespace LT.DigitalOffice.CompanyService.Repositories
             this.dbContext = dbContext;
         }
 
+        public Guid AddPosition(DbPosition newPosition)
+        {
+            dbContext.Positions.Add(newPosition);
+            dbContext.SaveChanges();
+
+            return newPosition.Id;
+        }
+        
         public DbPosition GetPositionById(Guid positionId)
         {
             var dbPosition = dbContext.Positions.FirstOrDefault(position => position.Id == positionId);

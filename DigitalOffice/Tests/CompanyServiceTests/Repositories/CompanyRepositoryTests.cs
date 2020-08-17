@@ -16,7 +16,7 @@ namespace LT.DigitalOffice.CompanyServiceUnitTests.Repositories
         private ICompanyRepository repository;
 
         private DbPosition dbPosition;
-
+        private DbPosition dbPositionToAdd;
         private DbCompany dbCompany;
 
         [OneTimeSetUp]
@@ -35,6 +35,13 @@ namespace LT.DigitalOffice.CompanyServiceUnitTests.Repositories
                 Description = "Description"
             };
 
+            dbPositionToAdd = new DbPosition
+            {
+                Id = Guid.NewGuid(),
+                Name = "Position",
+                Description = "Description"
+            };
+
             dbCompany = new DbCompany
             {
                 Id = Guid.NewGuid(),
@@ -46,7 +53,6 @@ namespace LT.DigitalOffice.CompanyServiceUnitTests.Repositories
         [SetUp]
         public void SetUp()
         {
-
             dbContext.Positions.Add(dbPosition);
             dbContext.SaveChanges();
         }
@@ -59,6 +65,19 @@ namespace LT.DigitalOffice.CompanyServiceUnitTests.Repositories
                 dbContext.Database.EnsureDeleted();
             }
         }
+
+        #region AddPosition
+        [Test]
+        public void ShouldAddNewPositionSuccessfully()
+        {
+            var expected = dbPositionToAdd.Id;
+
+            var result = repository.AddPosition(dbPositionToAdd);
+
+            Assert.AreEqual(expected, result);
+            Assert.NotNull(dbContext.Positions.Find(dbPositionToAdd.Id));
+        }
+        #endregion
 
         #region GetPositionById
         [Test]
