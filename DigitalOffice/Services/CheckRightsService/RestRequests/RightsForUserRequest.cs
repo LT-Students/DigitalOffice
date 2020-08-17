@@ -6,6 +6,6 @@ namespace LT.DigitalOffice.CheckRightsService.RestRequests
     public class RightsForUserRequest
     {
         public Guid UserId { get; set; }
-        public List<int> RightsId { get; set; }
+        public IEnumerable<int> RightsId { get; set; }
     }
 }

@@ -8,10 +8,10 @@ namespace LT.DigitalOffice.CheckRightsService.Commands.Interfaces
     public interface IAddRightsForUserCommand
     {
         /// <summary>
-        /// Add rights for user
+        /// Add rights for user.
         /// </summary>
-        /// <param name="request">Request with rights and user id</param>
-        /// <returns>Return true if successfully else return false</returns>
+        /// <param name="request">Request with rights and user id.</param>
+        /// <returns>Return true if successfully else return false.</returns>
         bool Execute(RightsForUserRequest request);
     }
 }
