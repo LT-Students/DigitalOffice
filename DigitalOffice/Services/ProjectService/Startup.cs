@@ -63,7 +63,7 @@ namespace LT.DigitalOffice.ProjectService
                     factoryConfigurator.Host("localhost", hostConfigurator =>
                     {
                         hostConfigurator.Username($"{serviceName}_{serviceId}");
-                        hostConfigurator.Password($"{serviceId}");
+                        hostConfigurator.Password(serviceId);
                     });
                 });
             });
