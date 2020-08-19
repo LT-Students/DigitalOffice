@@ -14,40 +14,40 @@ namespace LT.DigitalOffice.TimeManagementServiceUnitTests.Repositories
         private TimeManagementDbContext dbContext;
         private ILeaveTimeRepository repository;
 
-        private Guid worker1;
-        private Guid worker2;
-        private DbLeaveTime testLeaveTime1;
-        private DbLeaveTime testLeaveTime2;
+        private Guid firstWorkerId;
+        private Guid secondWorkerId;
+        private DbLeaveTime firstLeaveTime;
+        private DbLeaveTime secondLeaveTime;
 
         [OneTimeSetUp]
         public void OneTimeSetUp()
         {
             var dbOptions = new DbContextOptionsBuilder<TimeManagementDbContext>()
-                                    .UseInMemoryDatabase(databaseName: "InMemoryDatabase")
+                                    .UseInMemoryDatabase("InMemoryDatabase")
                                     .Options;
             dbContext = new TimeManagementDbContext(dbOptions);
             repository = new LeaveTimeRepository(dbContext);
 
-            worker1 = Guid.NewGuid();
-            worker2 = Guid.NewGuid();
+            firstWorkerId = Guid.NewGuid();
+            secondWorkerId = Guid.NewGuid();
 
-            testLeaveTime1 = new DbLeaveTime
+            firstLeaveTime = new DbLeaveTime
             {
                 Id = Guid.NewGuid(),
                 LeaveType = LeaveType.SickLeave,
                 Comment = "SickLeave",
                 StartTime = new DateTime(2020, 7, 5),
                 EndTime = new DateTime(2020, 7, 25),
-                WorkerUserId = worker1
+                WorkerUserId = firstWorkerId
             };
-            testLeaveTime2 = new DbLeaveTime
+            secondLeaveTime = new DbLeaveTime
             {
                 Id = Guid.NewGuid(),
                 LeaveType = LeaveType.Training,
                 Comment = "SickLeave",
                 StartTime = new DateTime(2020, 7, 10),
                 EndTime = new DateTime(2020, 7, 20),
-                WorkerUserId = worker2
+                WorkerUserId = secondWorkerId
             };
         }
 
@@ -62,31 +62,29 @@ namespace LT.DigitalOffice.TimeManagementServiceUnitTests.Repositories
 
         #region CreateLeaveTimeTests
         [Test]
-        public void SuccessfulAddNewLeaveTimeInDb()
+        public void ShouldAddNewLeaveTimeInDb()
         {
-            var guidOfNewLeaveTime = repository.CreateLeaveTime(testLeaveTime1);
+            var guidOfNewLeaveTime = repository.CreateLeaveTime(firstLeaveTime);
 
-            Assert.AreEqual(testLeaveTime1.Id, guidOfNewLeaveTime);
-            Assert.NotNull(dbContext.LeaveTimes.Find(testLeaveTime1.Id));
+            Assert.AreEqual(firstLeaveTime.Id, guidOfNewLeaveTime);
+            Assert.That(dbContext.LeaveTimes.Find(firstLeaveTime.Id), Is.EqualTo(firstLeaveTime));
         }
         #endregion
 
         #region GetUserLeaveTimesTests
         [Test]
-        public void CorrectlyReturnsLeaveTime()
+        public void ShouldReturnsLeaveTime()
         {
-            dbContext.Add(testLeaveTime1);
-            dbContext.Add(testLeaveTime2);
+            dbContext.Add(firstLeaveTime);
+            dbContext.Add(secondLeaveTime);
             dbContext.SaveChanges();
 
-            var leaveTimesOfWorker1 = repository.GetUserLeaveTimes(worker1);
-            var leaveTimesOfWorker2 = repository.GetUserLeaveTimes(worker2);
-
-            Assert.AreEqual(leaveTimesOfWorker1.Count, 1);
-            Assert.IsTrue(leaveTimesOfWorker1.Contains(testLeaveTime1));
-
-            Assert.AreEqual(leaveTimesOfWorker2.Count, 1);
-            Assert.IsTrue(leaveTimesOfWorker2.Contains(testLeaveTime2));
+            var leaveTimesOfFirstWorker = repository.GetUserLeaveTimes(firstWorkerId);
+            var leaveTimesOfSecondWorker = repository.GetUserLeaveTimes(secondWorkerId);
+            
+            Assert.That(leaveTimesOfFirstWorker, Is.EquivalentTo(new[] {firstLeaveTime}));
+            Assert.That(leaveTimesOfSecondWorker, Is.EquivalentTo(new[] {secondLeaveTime}));
+            Assert.That(dbContext.LeaveTimes, Is.EquivalentTo(new[] {firstLeaveTime, secondLeaveTime}));
         }
         #endregion
     }

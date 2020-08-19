@@ -16,14 +16,46 @@ namespace LT.DigitalOffice.UserServiceUnitTests.Repositories
     {
         private UserServiceDbContext dbContext;
         private IUserRepository repository;
-        private DbUser dbUser;
+        private DbUser firstUser = new DbUser
+        {
+            Id = Guid.NewGuid(),
+            Email = "Example@gmail.com",
+            FirstName = "Example",
+            LastName = "Example",
+            MiddleName = "Example",
+            Status = "Example",
+            PasswordHash =
+                Encoding.Default.GetString(new SHA512Managed().ComputeHash(Encoding.Default.GetBytes("Example"))),
+            AvatarFileId = null,
+            IsActive = true,
+            IsAdmin = false,
+            CertificatesFilesIds = new Collection<DbUserCertificateFile>(),
+            AchievementsIds = new Collection<DbUserAchievement>()
+        };
 
-        private const string ExceptionMessage = "User with this id not found.";
+        private DbUser secondUser = new DbUser
+        {
+            Id = Guid.NewGuid(),
+            Email = "DifferentEmail@gmail.com",
+            FirstName = "Example",
+            LastName = "Example",
+            MiddleName = "Example",
+            Status = "Example",
+            PasswordHash = Encoding.Default.GetString(new SHA512Managed().ComputeHash(Encoding.Default.GetBytes("Example"))),
+            AvatarFileId = null,
+            IsActive = true,
+            IsAdmin = false,
+            CertificatesFilesIds = new Collection<DbUserCertificateFile>(),
+            AchievementsIds = new Collection<DbUserAchievement>()
+        };
+
+        private const string UserNotFoundExceptionMessage = "User with this id not found.";
+        private const string EmailAlreadyTakenExceptionMessage = "Email is already taken.";
 
         private UserServiceDbContext GetMemoryContext()
         {
             var options = new DbContextOptionsBuilder<UserServiceDbContext>()
-                .UseInMemoryDatabase(databaseName: "InMemoryDatabase")
+                .UseInMemoryDatabase("InMemoryDatabase")
                 .Options;
 
             return new UserServiceDbContext(options);
@@ -35,23 +67,7 @@ namespace LT.DigitalOffice.UserServiceUnitTests.Repositories
             dbContext = GetMemoryContext();
             repository = new UserRepository(dbContext);
 
-            dbUser = new DbUser
-            {
-                Id = Guid.NewGuid(),
-                Email = "Example@gmail.com",
-                FirstName = "Example",
-                LastName = "Example",
-                MiddleName = "Example",
-                Status = "Example",
-                PasswordHash = (new SHA512Managed().ComputeHash(Encoding.Default.GetBytes("Example"))).ToString(),
-                AvatarFileId = null,
-                IsActive = true,
-                IsAdmin = false,
-                CertificatesFilesIds = new Collection<DbUserCertificateFile>(),
-                AchievementsIds = new Collection<DbUserAchievement>()
-            };
-
-            dbContext.Users.Add(dbUser);
+            dbContext.Users.Add(firstUser);
             dbContext.SaveChanges();
         }
 
@@ -65,63 +81,35 @@ namespace LT.DigitalOffice.UserServiceUnitTests.Repositories
         }
 
         [Test]
-        public void ShouldThrowExceptionIfUserWithRequiredIdDoesNotExist()
+        public void ShouldThrowExceptionWhenUserWithRequiredIdDoesNotExist()
         {
-            Assert.Throws<Exception>(() => repository.GetUserInfoById(Guid.Empty), ExceptionMessage);
+            Assert.That(() => repository.GetUserInfoById(Guid.Empty),
+                Throws.TypeOf<Exception>().And.Message.EqualTo(UserNotFoundExceptionMessage));
         }
 
         [Test]
-        public void ShouldReturnUserIfUserWithRequiredIdExists()
+        public void ShouldReturnUserWhenUserWithRequiredIdExists()
         {
-            var resultUser = repository.GetUserInfoById(dbUser.Id);
+            var resultUser = repository.GetUserInfoById(firstUser.Id);
 
-            Assert.IsNotNull(resultUser);
             Assert.IsInstanceOf<DbUser>(resultUser);
-            SerializerAssert.AreEqual(dbUser, resultUser);
+            SerializerAssert.AreEqual(firstUser, resultUser);
+            Assert.That(dbContext.Users, Is.EquivalentTo(new[] {firstUser}));
         }
 
         [Test]
-        public void ShouldCreateUserWhenUserDataIsCorrect()
+        public void ShouldCreateUserWhenUserDataIsValid()
         {
-            var user = new DbUser
-            {
-                Id = Guid.NewGuid(),
-                Email = "Example1@gmail.com",
-                FirstName = "Example",
-                LastName = "Example",
-                MiddleName = "Example",
-                Status = "Example",
-                PasswordHash = (new SHA512Managed().ComputeHash(Encoding.Default.GetBytes("Example"))).ToString(),
-                AvatarFileId = null,
-                IsActive = true,
-                IsAdmin = false,
-                CertificatesFilesIds = new Collection<DbUserCertificateFile>(),
-                AchievementsIds = new Collection<DbUserAchievement>()
-            };
-
-            Assert.True(repository.UserCreate(user));
+            Assert.That(repository.UserCreate(secondUser),Is.EqualTo(secondUser.Id));
+            Assert.That(dbContext.Users, Is.EquivalentTo(new[] {firstUser, secondUser}));
         }
 
         [Test]
         public void ShouldThrowExceptionWhenEmailIsAlreadyTaken()
         {
-            var user = new DbUser
-            {
-                Id = Guid.NewGuid(),
-                Email = "Example@gmail.com",
-                FirstName = "Example",
-                LastName = "Example",
-                MiddleName = "Example",
-                Status = "Example",
-                PasswordHash = (new SHA512Managed().ComputeHash(Encoding.Default.GetBytes("Example"))).ToString(),
-                AvatarFileId = null,
-                IsActive = true,
-                IsAdmin = false,
-                CertificatesFilesIds = new Collection<DbUserCertificateFile>(),
-                AchievementsIds = new Collection<DbUserAchievement>()
-            };
-
-            Assert.Throws<Exception>(() => repository.UserCreate(user), "Email is already taken.");
+            Assert.That(() => repository.UserCreate(firstUser),
+                Throws.Exception.TypeOf<Exception>().And.Message.EqualTo(EmailAlreadyTakenExceptionMessage));
+            Assert.That(dbContext.Users, Is.EquivalentTo(new[] {firstUser}));
         }
     }
 }

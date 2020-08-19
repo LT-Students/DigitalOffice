@@ -7,7 +7,7 @@ using System;
 
 namespace LT.DigitalOffice.CheckRightsServiceUnitTests.Mappers
 {
-    class RightsMapperTests
+    public class RightsMapperTests
     {
         private IMapper<DbRight, Right> mapper;
 
@@ -30,13 +30,13 @@ namespace LT.DigitalOffice.CheckRightsServiceUnitTests.Mappers
         }
 
         [Test]
-        public void ThrowExceptionIfArgumentIsNull()
+        public void ShouldThrowExceptionWhenArgumentIsNull()
         {
-            Assert.Throws<NullReferenceException>(() => mapper.Map(null));
+            Assert.Throws<ArgumentNullException>(() => mapper.Map(null));
         }
 
         [Test]
-        public void ReturnRightModelSuccessfully()
+        public void ShouldReturnRightModel()
         {
             var result = mapper.Map(dbRight);
 

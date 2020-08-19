@@ -49,7 +49,7 @@ namespace LT.DigitalOffice.ProjectServiceUnitTests.Commands
         }
 
         [Test]
-        public void ThrowsExceptionIfRepositoryThrowsIt()
+        public void ShouldThrowExceptionWhenRepositoryThrowsIt()
         {
             repositoryMock.Setup(x => x.GetProjectInfoById(It.IsAny<Guid>())).Throws(new Exception());
 
@@ -57,7 +57,7 @@ namespace LT.DigitalOffice.ProjectServiceUnitTests.Commands
         }
 
         [Test]
-        public void ThrowsExceptionIfMapperThrowsIt()
+        public void ShouldThrowExceptionWhenMapperThrowsIt()
         {
             mapperMock.Setup(x => x.Map(It.IsAny<DbProject>())).Throws(new Exception());
 
@@ -65,7 +65,7 @@ namespace LT.DigitalOffice.ProjectServiceUnitTests.Commands
         }
 
         [Test]
-        public void ReturnsProjectInfoSuccessfully()
+        public void ShouldReturnProjectInfo()
         {
             var expected = new Project
             {

@@ -60,13 +60,13 @@ namespace LT.DigitalOffice.UserServiceUnitTests.Mappers
         }
 
         [Test]
-        public void ShouldThrowArgumentNullExceptionIfArgumentOfMapIsNull()
+        public void ShouldThrowArgumentNullExceptionWhenDbUserIsNull()
         {
             Assert.Throws<ArgumentNullException>(() => mapper.Map(null));
         }
 
         [Test]
-        public void ShouldSuccessfulReturnUserModelAfterMapCorrectDbEntity()
+        public void ShouldReturnUserModelWhenMappingValidDbUser()
         {
             var resultUserModel = mapper.Map(dbUser);
 

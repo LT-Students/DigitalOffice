@@ -21,8 +21,8 @@ namespace LT.DigitalOffice.ProjectServiceUnitTests.Commands
         private DbProject newProject;
         private NewProjectRequest newRequest;
 
-        [OneTimeSetUp]
-        public void OneTimeSetUp()
+        [SetUp]
+        public void SetUp()
         {
             validatorMock = new Mock<IValidator<NewProjectRequest>>();
             repositoryMock = new Mock<IProjectRepository>();
@@ -50,17 +50,20 @@ namespace LT.DigitalOffice.ProjectServiceUnitTests.Commands
         }
 
         [Test]
-        public void FailCreateNewProjectIncorrectProjectDataTests()
+        public void ShouldThrowValidationExceptionWhenCreatingNewProjectWithIncorrectProjectData()
         {
             validatorMock
                 .Setup(x => x.Validate(It.IsAny<IValidationContext>()).IsValid)
                 .Returns(false);
 
             Assert.Throws<ValidationException>(() => command.Execute(newRequest), "Project field validation error");
+            validatorMock.Verify(validator => validator.Validate(It.IsAny<IValidationContext>()), Times.Once);
+            mapperMock.Verify(mapper => mapper.Map(It.IsAny<NewProjectRequest>()), Times.Never);
+            repositoryMock.Verify(repository => repository.CreateNewProject(It.IsAny<DbProject>()), Times.Never);
         }
 
         [Test]
-        public void FailCreateNewProjectMatchOfProjectNameTests()
+        public void ShouldThrowsExceptionWhenRepositoryThrowsException()
         {
             validatorMock
                  .Setup(x => x.Validate(It.IsAny<IValidationContext>()).IsValid)
@@ -68,37 +71,22 @@ namespace LT.DigitalOffice.ProjectServiceUnitTests.Commands
 
             mapperMock
                 .Setup(x => x.Map(It.IsAny<NewProjectRequest>()))
-                .Returns(newProject);
+                .Returns(newProject)
+                .Verifiable();
 
             repositoryMock
                 .Setup(x => x.CreateNewProject(It.IsAny<DbProject>()))
-                .Throws(new Exception());
-
-            Assert.Throws<Exception>(() => command.Execute(newRequest), "Project name is already taken.");
+                .Throws(new Exception())
+                .Verifiable();
+            
+            Assert.Throws<Exception>(() => command.Execute(newRequest));
+            validatorMock.Verify(validator => validator.Validate(It.IsAny<IValidationContext>()), Times.Once);
+            repositoryMock.Verify();
+            mapperMock.Verify();
         }
-
+        
         [Test]
-        public void FailCreateNewProjectRequestIsNullTests()
-        {
-            newRequest = null;
-
-            validatorMock
-                 .Setup(x => x.Validate(It.IsAny<IValidationContext>()).IsValid)
-                 .Returns(true);
-
-            mapperMock
-                .Setup(x => x.Map(It.IsAny<NewProjectRequest>()))
-                .Returns(newProject);
-
-            repositoryMock
-                .Setup(x => x.CreateNewProject(It.IsAny<DbProject>()))
-                .Throws(new ArgumentNullException());
-
-            Assert.Throws<ArgumentNullException>(() => command.Execute(newRequest), "Request is null.");
-        }
-
-        [Test]
-        public void SuccessfulCreateNewProjectTest()
+        public void ShouldReturnIdWhenCreatingNewProject()
         {
             validatorMock
                  .Setup(x => x.Validate(It.IsAny<IValidationContext>()).IsValid)
@@ -106,13 +94,18 @@ namespace LT.DigitalOffice.ProjectServiceUnitTests.Commands
 
             mapperMock
                 .Setup(x => x.Map(It.IsAny<NewProjectRequest>()))
-                .Returns(newProject);
+                .Returns(newProject)
+                .Verifiable();
 
             repositoryMock
                 .Setup(x => x.CreateNewProject(It.IsAny<DbProject>()))
-                .Returns(newProject.Id);
+                .Returns(newProject.Id)
+                .Verifiable();
 
             Assert.AreEqual(newProject.Id, command.Execute(newRequest));
+            mapperMock.Verify();
+            repositoryMock.Verify();
+            validatorMock.Verify(validator => validator.Validate(It.IsAny<IValidationContext>()), Times.Once);
         }
     }
 }

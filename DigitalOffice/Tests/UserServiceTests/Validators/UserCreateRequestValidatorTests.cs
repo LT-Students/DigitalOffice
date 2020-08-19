@@ -1,4 +1,7 @@
-﻿using FluentValidation;
+﻿using System;
+using System.Collections.Generic;
+using System.Linq.Expressions;
+using FluentValidation;
 using FluentValidation.TestHelper;
 using LT.DigitalOffice.UserService.Models;
 using LT.DigitalOffice.UserService.Validators;
@@ -9,48 +12,72 @@ namespace LT.DigitalOffice.UserServiceUnitTests.Validators
     public class UserCreateRequestValidatorTests
     {
         private IValidator<UserCreateRequest> validator;
+        private static IEnumerable<Expression<Func<UserCreateRequest, string>>> NamePropertyCases
+        {
+            get
+            {
+                yield return request => request.FirstName;
+                yield return request => request.MiddleName;
+                yield return request => request.LastName;
+            }
+        }
 
+        private static IEnumerable<string> NamesThatDoesNotMatchPatternCases
+        {
+            get
+            {
+                yield return "X æ A-12";
+                yield return "ExampleW1thNumber!1";
+                yield return "examplelowcase";
+                yield return "EXAMPLCAPITALLETTER";
+            }
+        }
+
+        private static IEnumerable<string> WrongEmailCases
+        {
+            get
+            {
+                yield return "@.";
+                yield return "@gmail.com";
+                yield return "@.com";
+                yield return "Hello!";
+            }
+        }
+        
         [SetUp]
         public void SetUp()
         {
             validator = new UserCreateRequestValidator();
         }
 
-        [Test]
-        public void ShouldThrowValidationExceptionWhenFirstNameIsEmpty()
+        [TestCaseSource(nameof(NamePropertyCases))]
+        public void ShouldThrowValidationExceptionWhenNameIsEmpty(
+            Expression<Func<UserCreateRequest, string>> gettingNamePropertyExpression)
         {
-            validator.ShouldHaveValidationErrorFor(x => x.FirstName, "");
+            validator.ShouldHaveValidationErrorFor(gettingNamePropertyExpression, "");
+        }
+
+        [TestCaseSource(nameof(NamePropertyCases))]
+        public void ShouldHaveValidationErrorWhenNameIsTooShort(
+            Expression<Func<UserCreateRequest, string>> gettingNamePropertyExpression)
+        {
+            validator.ShouldHaveValidationErrorFor(gettingNamePropertyExpression, "a");
+        }
+
+        [TestCaseSource(nameof(NamePropertyCases))]
+        public void ShouldHaveValidationErrorWhenNameIsTooLong(
+            Expression<Func<UserCreateRequest, string>> gettingNamePropertyExpression)
+        {
+            validator.ShouldHaveValidationErrorFor(gettingNamePropertyExpression, new string('a', 100));
         }
 
         [Test]
-        public void ShouldThrowValidationExceptionWhenFirstNameContainsNumbers()
+        public void ShouldThrowValidationExceptionWhenNameDoesNotMatchRegularExpression(
+            [ValueSource(nameof(NamePropertyCases))] Expression<Func<UserCreateRequest, string>> gettingNamePropertyExpression,
+            [ValueSource(nameof(NamesThatDoesNotMatchPatternCases))]
+            string name)
         {
-            validator.ShouldHaveValidationErrorFor(x => x.FirstName, "Example1");
-        }
-
-        [Test]
-        public void ShouldThrowValidationExceptionWhenLastNameFirstLetterIsNotUpperCase()
-        {
-            validator.ShouldHaveValidationErrorFor(x => x.LastName, "example");
-        }
-
-        [Test]
-        public void ShouldThrowValidationExceptionWhenLastNameRestLettersAreNotLowerCase()
-        {
-            validator.ShouldHaveValidationErrorFor(x => x.LastName, "EXAMPLE");
-        }
-
-        [Test]
-        public void ShouldThrowValidationExceptionWhenMiddleNameTooLong()
-        {
-            var middleName = "Example" + new string('a', 30);
-            validator.ShouldHaveValidationErrorFor(x => x.MiddleName, middleName);
-        }
-
-        [Test]
-        public void ShouldThrowValidationExceptionWhenMiddleNameConsistOnlyOneLetter()
-        {
-            validator.ShouldHaveValidationErrorFor(x => x.MiddleName, "E");
+            validator.ShouldHaveValidationErrorFor(gettingNamePropertyExpression, name);
         }
 
         [Test]
@@ -59,16 +86,16 @@ namespace LT.DigitalOffice.UserServiceUnitTests.Validators
             validator.ShouldHaveValidationErrorFor(x => x.Email, "");
         }
 
-        [Test]
-        public void ShouldThrowValidationExceptionWhenEmailIsInvalid()
+        [TestCaseSource(nameof(WrongEmailCases))]
+        public void ShouldThrowValidationExceptionWhenEmailIsInvalid(string wrongEmail)
         {
-            validator.ShouldHaveValidationErrorFor(x => x.Email, "wrongEmail");
+            validator.ShouldHaveValidationErrorFor(x => x.Email, wrongEmail);
         }
 
         [Test]
         public void ShouldThrowValidationExceptionWhenEmailTooLong()
         {
-            var email = new string('a', 50) + "@gmail.com";
+            var email = new string('a', 400) + "@gmail.com";
             validator.ShouldHaveValidationErrorFor(x => x.Email, email);
         }
 
@@ -88,12 +115,13 @@ namespace LT.DigitalOffice.UserServiceUnitTests.Validators
         [Test]
         public void ShouldThrowValidationExceptionWhenAllFieldsAreEmpty()
         {
-            var user = new UserCreateRequest();
-            Assert.Throws<ValidationException>(() => validator.ValidateAndThrow(user));
+            var request = new UserCreateRequest();
+            
+            validator.TestValidate(request).ShouldHaveAnyValidationError();
         }
 
         [Test]
-        public void ShouldThrowValidationExceptionWhenDataIsValid()
+        public void ShouldNotThrowValidationExceptionWhenDataIsValid()
         {
             var request = new UserCreateRequest
             {
@@ -105,7 +133,8 @@ namespace LT.DigitalOffice.UserServiceUnitTests.Validators
                 Password = "Example",
                 IsAdmin = false
             };
-            Assert.DoesNotThrow(() => validator.ValidateAndThrow(request));
+
+            validator.TestValidate(request).ShouldNotHaveAnyValidationErrors();
         }
     }
 }

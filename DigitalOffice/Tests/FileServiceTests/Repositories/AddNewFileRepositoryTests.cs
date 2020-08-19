@@ -19,7 +19,7 @@ namespace LT.DigitalOffice.FileServiceUnitTests.Repositories
         public void SetUp()
         {
             var dbOptionsFileService = new DbContextOptionsBuilder<FileServiceDbContext>()
-                .UseInMemoryDatabase(databaseName: "FileServiceTestDatabase")
+                .UseInMemoryDatabase("FileServiceTestDatabase")
                 .Options;
 
             dbContext = new FileServiceDbContext(dbOptionsFileService);
@@ -36,19 +36,19 @@ namespace LT.DigitalOffice.FileServiceUnitTests.Repositories
         }
 
         [Test]
-        public void SuccessfulAddNewFileToDatabaseTest()
+        public void ShouldAddNewFileToDatabase()
         {
             Assert.AreEqual(newFile.Id, repository.AddNewFile(newFile));
-            Assert.NotNull(dbContext.Files.Find(newFile.Id));
+            Assert.That(dbContext.Files.Find(newFile.Id), Is.EqualTo(newFile));
         }
 
         [Test]
-        public void FailedAddNewFileFileAlreadyExistsTest()
+        public void ShouldThrowArgumentExceptionWhenAddingFileWithRepeatingId()
         {
             repository.AddNewFile(newFile);
 
             Assert.Throws<ArgumentException>(() => repository.AddNewFile(newFile));
-            Assert.NotNull(dbContext.Files.Find(newFile.Id));
+            Assert.That(dbContext.Files.Find(newFile.Id), Is.EqualTo(newFile));
         }
 
         [TearDown]

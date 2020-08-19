@@ -28,7 +28,7 @@ namespace LT.DigitalOffice.ProjectServiceUnitTests.Mappers
         }
 
         [Test]
-        public void FailObjectsOfNewProjectMapsRequestIsNullTests()
+        public void ShouldThrowArgumentNullExceptionWhenNewProjectRequestIsNull()
         {
             newRequest = null;
 
@@ -36,7 +36,7 @@ namespace LT.DigitalOffice.ProjectServiceUnitTests.Mappers
         }
 
         [Test]
-        public void SuccessfulObjectsOfNewProjectMapsTests()
+        public void ShouldReturnDbProjectWhenMappingValidNewProjectRequest()
         {
             var newProject = mapper.Map(newRequest);
 

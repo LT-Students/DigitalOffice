@@ -46,13 +46,13 @@ namespace LT.DigitalOffice.TimeManagementServiceUnitTests.Mappers
         }
 
         [Test]
-        public void ThrowExceptionIfArgumentIsNull()
+        public void ShouldThrowArgumentNullExceptionWhenCreateWorkTimeRequestIsNull()
         {
             Assert.Throws<ArgumentNullException>(() => mapper.Map(null));
         }
 
         [Test]
-        public void ReturnRightModelSuccessfully()
+        public void ShouldReturnDbWorkTimeWhenMappingValidCreateWorkTimeRequest()
         {
             var newWorkTime = mapper.Map(request);
             expectedDbWorkTimeWithoutId.Id = newWorkTime.Id;
@@ -62,7 +62,7 @@ namespace LT.DigitalOffice.TimeManagementServiceUnitTests.Mappers
         }
 
         [Test]
-        public void ReturnRightModelWithNullDescriptionSuccessfully()
+        public void ShouldReturnDbWorkTimeWhenMappingValidCreateWorkTimeRequestWithNullDescription()
         {
             request.Description = null;
             expectedDbWorkTimeWithoutId.Description = null;

@@ -4,6 +4,8 @@ using LT.DigitalOffice.ProjectService.Repositories;
 using Microsoft.EntityFrameworkCore;
 using NUnit.Framework;
 using System;
+using System.Linq;
+using LT.DigitalOffice.ProjectServiceUnitTests.UnitTestLibrary;
 
 namespace LT.DigitalOffice.ProjectServiceUnitTests.Repositories
 {
@@ -18,7 +20,7 @@ namespace LT.DigitalOffice.ProjectServiceUnitTests.Repositories
         public void SetUp()
         {
             var dbOptionsProjectService = new DbContextOptionsBuilder<ProjectServiceDbContext>()
-                .UseInMemoryDatabase(databaseName: "ProjectServiceTest")
+                .UseInMemoryDatabase("ProjectServiceTest")
                 .Options;
 
             dbContext = new ProjectServiceDbContext(dbOptionsProjectService);
@@ -38,20 +40,23 @@ namespace LT.DigitalOffice.ProjectServiceUnitTests.Repositories
         }
 
         [Test]
-        public void FailAddNewProjectInDbMatchOfNameTest()
+        public void ShouldAddNewProjectWhenTheNameWasRepeated()
         {
-            Assert.Throws<Exception>(
-                () => repository.CreateNewProject(newProject),
-                "Project name is already taken.");
+            var newProjectWithRepeatedName = newProject;
+            newProjectWithRepeatedName.Id = Guid.NewGuid();
+            
+            Assert.That(repository.CreateNewProject(newProject), Is.EqualTo(newProjectWithRepeatedName.Id));
+            SerializerAssert.AreEqual(newProjectWithRepeatedName, dbContext.Projects.FirstOrDefault(project => project.Id == newProjectWithRepeatedName.Id));
         }
 
         [Test]
-        public void SuccessfulAddNewProjectInDbTest()
+        public void ShouldAddNewProjectToDb()
         {
             newProject.Name = "Any name";
             newProject.Id = Guid.NewGuid();
 
             Assert.AreEqual(newProject.Id, repository.CreateNewProject(newProject));
+            Assert.That(dbContext.Projects.Find(newProject.Id), Is.EqualTo(newProject));
         }
 
         [TearDown]

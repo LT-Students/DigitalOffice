@@ -50,7 +50,7 @@ namespace LT.DigitalOffice.TimeManagementServiceUnitTests.Validators
         }
 
         [Test]
-        public void SuccessfulWorkTimeValidation()
+        public void ShouldNotHaveAnyValidationErrorsWhenRequestIsValid()
         {
             repositoryMock.Setup(x => x.GetUserLeaveTimes(It.IsAny<Guid>()))
                 .Returns(new List<DbLeaveTime>());
@@ -60,7 +60,7 @@ namespace LT.DigitalOffice.TimeManagementServiceUnitTests.Validators
 
         #region WorkerUserId
         [Test]
-        public void FailValidationEmptyWorkerUserId()
+        public void ShouldHaveValidationErrorWhenWorkerUserIdIsEmpty()
         {
             var workerUserId = Guid.Empty;
             repositoryMock.Setup(x => x.GetUserLeaveTimes(It.IsAny<Guid>()))
@@ -72,9 +72,9 @@ namespace LT.DigitalOffice.TimeManagementServiceUnitTests.Validators
 
         #region StartTime
         [Test]
-        public void FailValidationEmptyStartTime()
+        public void ShouldHaveValidationErrorWhenStartTimeIsEqualToDefaultDateTime()
         {
-            var startTime = new DateTime();
+            var startTime = default(DateTime);
             repositoryMock.Setup(x => x.GetUserLeaveTimes(It.IsAny<Guid>()))
                 .Returns(new List<DbLeaveTime>());
 
@@ -84,9 +84,9 @@ namespace LT.DigitalOffice.TimeManagementServiceUnitTests.Validators
 
         #region EndTime
         [Test]
-        public void FailValidationEmptyEndTime()
+        public void ShouldHaveValidationErrorWhenEndTimeIsEqualToDefaultDateTime()
         {
-            var endTime = new DateTime();
+            var endTime = default(DateTime);
             repositoryMock.Setup(x => x.GetUserLeaveTimes(It.IsAny<Guid>()))
                 .Returns(new List<DbLeaveTime>());
 
@@ -96,7 +96,7 @@ namespace LT.DigitalOffice.TimeManagementServiceUnitTests.Validators
 
         #region Comment
         [Test]
-        public void FailValidationEmptyTitle()
+        public void ShouldHaveValidationErrorWhenCommentIsEmpty()
         {
             var comment = string.Empty;
             repositoryMock.Setup(x => x.GetUserLeaveTimes(It.IsAny<Guid>()))
@@ -106,23 +106,11 @@ namespace LT.DigitalOffice.TimeManagementServiceUnitTests.Validators
         }
         #endregion
 
-        #region ProjectId
-        [Test]
-        public void FailValidationEmptyProjectId()
-        {
-            var leaveType = new LeaveType();
-            repositoryMock.Setup(x => x.GetUserLeaveTimes(It.IsAny<Guid>()))
-                .Returns(new List<DbLeaveTime>());
-
-            validator.ShouldHaveValidationErrorFor(x => x.LeaveType, leaveType);
-        }
-        #endregion
-
         #region LeaveType
         [Test]
-        public void FailValidationEmptyLeaveType()
+        public void ShouldHaveValidationErrorWhenLeaveTypeIsNotInEnum()
         {
-            var leaveType = new LeaveType();
+            const LeaveType leaveType = (LeaveType) 4;
             repositoryMock.Setup(x => x.GetUserLeaveTimes(It.IsAny<Guid>()))
                 .Returns(new List<DbLeaveTime>());
 
@@ -131,7 +119,7 @@ namespace LT.DigitalOffice.TimeManagementServiceUnitTests.Validators
         #endregion
 
         [Test]
-        public void SuccessfulValidationOverlapWithOtherTime()
+        public void ShouldNotHaveAnyValidationErrorsWhenRequestOverlapWithOtherTime()
         {
             var successfulRequest = new CreateLeaveTimeRequest
             {
@@ -146,7 +134,7 @@ namespace LT.DigitalOffice.TimeManagementServiceUnitTests.Validators
         }
 
         [Test]
-        public void FailValidationIntersectionWithTheStartTime()
+        public void ShouldHaveAnyValidationErrorWhenRequestHaveIntersectionWithTheStartTime()
         {
             var failRequest = new CreateLeaveTimeRequest
             {
@@ -161,7 +149,7 @@ namespace LT.DigitalOffice.TimeManagementServiceUnitTests.Validators
         }
 
         [Test]
-        public void FailValidationIntersectionInsideTime()
+        public void ShouldHaveAnyValidationErrorWhenRequestHaveIntersectionInsideTime()
         {
             var failRequest = new CreateLeaveTimeRequest
             {
@@ -176,7 +164,7 @@ namespace LT.DigitalOffice.TimeManagementServiceUnitTests.Validators
         }
 
         [Test]
-        public void FailValidationIntersectionWithTheEndTime()
+        public void ShouldHaveAnyValidationErrorWhenRequestHaveIntersectionWithTheEndTime()
         {
             var failRequest = new CreateLeaveTimeRequest
             {

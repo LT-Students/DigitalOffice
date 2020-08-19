@@ -52,7 +52,7 @@ namespace LT.DigitalOffice.TimeManagementServiceUnitTests.Validators
         }
 
         [Test]
-        public void SuccessfulWorkTimeValidation()
+        public void ShouldNotHaveAnyValidationErrorsWhenRequestIsValid()
         {
             repositoryMock.Setup(x => x.GetUserWorkTimes(It.IsAny<Guid>(), It.IsAny<WorkTimeFilter>()))
                 .Returns(new List<DbWorkTime>());
@@ -62,20 +62,19 @@ namespace LT.DigitalOffice.TimeManagementServiceUnitTests.Validators
 
         #region WorkerUserId
         [Test]
-        public void FailValidationEmptyWorkerUserId()
+        public void ShouldHaveValidationErrorWhenWorkerUserIdIsEmpty()
         {
             request.WorkerUserId = Guid.Empty;
             repositoryMock.Setup(x => x.GetUserWorkTimes(It.IsAny<Guid>(), It.IsAny<WorkTimeFilter>()))
                 .Returns(new List<DbWorkTime>());
 
-            var result = validator.Validate(request);
-            Assert.IsFalse(result.IsValid);
+            validator.TestValidate(request).ShouldHaveValidationErrorFor(r => r.WorkerUserId);
         }
         #endregion
 
         #region StartTime
         [Test]
-        public void FailValidationStartTimeTooEarly()
+        public void ShouldHaveValidationErrorWhenStartTimeTooEarly()
         {
             var startTime = DateTime.Now.AddDays(CreateWorkTimeRequestValidator.ToDay).AddHours(1);
             repositoryMock.Setup(x => x.GetUserWorkTimes(It.IsAny<Guid>(), It.IsAny<WorkTimeFilter>()))
@@ -85,7 +84,7 @@ namespace LT.DigitalOffice.TimeManagementServiceUnitTests.Validators
         }
 
         [Test]
-        public void FailValidationStartTimeTooLate()
+        public void ShouldHaveValidationErrorWhenStartTimeTooLate()
         {
             var startTime = DateTime.Now.AddDays(CreateWorkTimeRequestValidator.FromDay).AddHours(-1);
             repositoryMock.Setup(x => x.GetUserWorkTimes(It.IsAny<Guid>(), It.IsAny<WorkTimeFilter>()))
@@ -97,30 +96,30 @@ namespace LT.DigitalOffice.TimeManagementServiceUnitTests.Validators
 
         #region Title
         [Test]
-        public void FailValidationEmptyTitle()
+        public void ShouldHaveValidationErrorWhenTitleIsEmpty()
         {
             request.Title = string.Empty;
             repositoryMock.Setup(x => x.GetUserWorkTimes(It.IsAny<Guid>(), It.IsAny<WorkTimeFilter>()))
                 .Returns(new List<DbWorkTime>());
 
-            validator.TestValidate(request).ShouldHaveAnyValidationError();
+            validator.TestValidate(request).ShouldHaveValidationErrorFor(r => r.Title);
         }
         #endregion
 
         #region ProjectId
         [Test]
-        public void FailValidationEmptyProjectId()
+        public void ShouldHaveValidationErrorWhenProjectIdIsEmpty()
         {
             request.ProjectId = Guid.Empty;
             repositoryMock.Setup(x => x.GetUserWorkTimes(It.IsAny<Guid>(), It.IsAny<WorkTimeFilter>()))
                 .Returns(new List<DbWorkTime>());
 
-            validator.TestValidate(request).ShouldHaveAnyValidationError();
+            validator.TestValidate(request).ShouldHaveValidationErrorFor(r => r.ProjectId);
         }
         #endregion
 
         [Test]
-        public void FailStartTimeBeforeEndTime()
+        public void ShouldHaveAnyValidationErrorWhenEndTimeEarlierThanStarTime()
         {
             var temp = request.StartTime;
             request.StartTime = request.EndTime;
@@ -130,7 +129,7 @@ namespace LT.DigitalOffice.TimeManagementServiceUnitTests.Validators
         }
 
         [Test]
-        public void FailDueToWorkingLimit()
+        public void ShouldHaveAnyValidationErrorWhenWorkTimeGreaterThanWorkingLimit()
         {
             var tooManyMinutes = CreateWorkTimeRequestValidator.WorkingLimit.TotalMinutes + 1;
             request.EndTime = request.StartTime.AddMinutes(tooManyMinutes);
@@ -139,7 +138,7 @@ namespace LT.DigitalOffice.TimeManagementServiceUnitTests.Validators
         }
 
         [Test]
-        public void SuccessfulValidationOverlapWithOtherTime()
+        public void ShouldNotHaveAnyValidationErrorsWhenRequestOverlapsWithOtherTime()
         {
 
             var successfulRequest = new CreateWorkTimeRequest
@@ -156,7 +155,7 @@ namespace LT.DigitalOffice.TimeManagementServiceUnitTests.Validators
         }
 
         [Test]
-        public void FailValidationIntersectionWithTheStartTime()
+        public void ShouldHaveAnyValidationErrorWhenRequestHaveIntersectionWithTheStartTime()
         {
             var failRequest = new CreateWorkTimeRequest
             {
@@ -172,7 +171,7 @@ namespace LT.DigitalOffice.TimeManagementServiceUnitTests.Validators
         }
 
         [Test]
-        public void FailValidationIntersectionInsideTime()
+        public void ShouldHaveAnyValidationErrorWhenRequestHaveIntersectionInsideTime()
         {
             var failRequest = new CreateWorkTimeRequest
             {
@@ -188,7 +187,7 @@ namespace LT.DigitalOffice.TimeManagementServiceUnitTests.Validators
         }
 
         [Test]
-        public void FailValidationIntersectionWithTheEndTime()
+        public void ShouldHaveAnyValidationErrorWhenRequestHaveIntersectionWithTheEndTime()
         {
             var failRequest = new CreateWorkTimeRequest
             {

@@ -1,3 +1,6 @@
+using System;
+using System.Collections.Generic;
+using System.Linq;
 using LT.DigitalOffice.TimeManagementService.Database;
 using LT.DigitalOffice.TimeManagementService.Database.Entities;
 using LT.DigitalOffice.TimeManagementService.Repositories;
@@ -5,9 +8,6 @@ using LT.DigitalOffice.TimeManagementService.Repositories.Filters;
 using LT.DigitalOffice.TimeManagementService.Repositories.Interfaces;
 using Microsoft.EntityFrameworkCore;
 using NUnit.Framework;
-using System;
-using System.Collections.Generic;
-using System.Linq;
 
 namespace LT.DigitalOffice.TimeManagementServiceUnitTests.Repositories
 {
@@ -16,57 +16,70 @@ namespace LT.DigitalOffice.TimeManagementServiceUnitTests.Repositories
         private TimeManagementDbContext dbContext;
         private IWorkTimeRepository repository;
 
-        private Guid project1;
-        private Guid project2;
-        private Guid worker1;
-        private Guid worker2;
-        private List<DbWorkTime> workTimesOfWorker1;
-        private List<DbWorkTime> workTimesOfWorker2;
+        private Guid firstProject;
+        private Guid secondProject;
+        private Guid firstWorker;
+        private Guid secondWorker;
+        private List<DbWorkTime> workTimesOfFirstWorker;
+        private List<DbWorkTime> workTimesOfSecondWorker;
 
+        private void AddAllWorkTimesToDatabase()
+        {
+            foreach (var workTime in workTimesOfFirstWorker)
+            {
+                dbContext.Add(workTime);
+            }
+            foreach (var workTime in workTimesOfSecondWorker)
+            {
+                dbContext.Add(workTime);
+            }
+            dbContext.SaveChanges();
+        }
+        
         [OneTimeSetUp]
         public void OneTimeSetUp()
         {
             var dbOptions = new DbContextOptionsBuilder<TimeManagementDbContext>()
-                                    .UseInMemoryDatabase(databaseName: "InMemoryDatabase")
+                                    .UseInMemoryDatabase("InMemoryDatabase")
                                     .Options;
             dbContext = new TimeManagementDbContext(dbOptions);
             repository = new WorkTimeRepository(dbContext);
 
-            project1 = Guid.NewGuid();
-            project2 = Guid.NewGuid();
-            worker1 = Guid.NewGuid();
-            worker2 = Guid.NewGuid();
+            firstProject = Guid.NewGuid();
+            secondProject = Guid.NewGuid();
+            firstWorker = Guid.NewGuid();
+            secondWorker = Guid.NewGuid();
 
-            workTimesOfWorker1 = new List<DbWorkTime>
+            workTimesOfFirstWorker = new List<DbWorkTime>
             {
                 new DbWorkTime
                 {
                     Id = Guid.NewGuid(),
-                    Title = $"WorkTime",
-                    WorkerUserId = worker1,
-                    ProjectId = project1,
+                    Title = "WorkTime",
+                    WorkerUserId = firstWorker,
+                    ProjectId = firstProject,
                     StartTime = DateTime.Now.AddDays(-1),
                     EndTime = DateTime.Now.AddDays(-0.75)
                 },
                 new DbWorkTime
                 {
                     Id = Guid.NewGuid(),
-                    Title = $"WorkTime",
-                    WorkerUserId = worker1,
-                    ProjectId = project2,
+                    Title = "WorkTime",
+                    WorkerUserId = firstWorker,
+                    ProjectId = secondProject,
                     StartTime = DateTime.Now.AddDays(-0.7),
                     EndTime = DateTime.Now.AddDays(-0.45)
                 }
             };
 
-            workTimesOfWorker2 = new List<DbWorkTime>
+            workTimesOfSecondWorker = new List<DbWorkTime>
             {
                 new DbWorkTime
                 {
                     Id = Guid.NewGuid(),
-                    Title = $"WorkTime",
-                    WorkerUserId = worker2,
-                    ProjectId = project1,
+                    Title = "WorkTime",
+                    WorkerUserId = secondWorker,
+                    ProjectId = firstProject,
                     StartTime = DateTime.Now.AddDays(-0.9),
                     EndTime = DateTime.Now.AddDays(-0.65)
                 }
@@ -84,61 +97,59 @@ namespace LT.DigitalOffice.TimeManagementServiceUnitTests.Repositories
 
         #region CreateWorkTimeTests
         [Test]
-        public void SuccessfulAddNewWorkTimeInDb()
+        public void ShouldAddNewWorkTimeInDb()
         {
-            var guidOfNewWorkTime = repository.CreateWorkTime(workTimesOfWorker1.First());
+            Assert.That(repository.CreateWorkTime(workTimesOfFirstWorker.First()),
+                Is.EqualTo(workTimesOfFirstWorker.First().Id));
 
-            Assert.AreEqual(workTimesOfWorker1.First().Id, guidOfNewWorkTime);
-            Assert.NotNull(dbContext.WorkTimes.Find(workTimesOfWorker1.First().Id));
+            Assert.That(dbContext.WorkTimes, Is.EquivalentTo(new[] {workTimesOfFirstWorker.First()}));
         }
         #endregion
 
         #region GetUserWorkTimesTests
         [Test]
-        public void CorrectlyReturnsWorkTime()
+        public void ShouldReturnsWorkTimeWhenUsingFilterForGettingNoting()
         {
-            foreach (var wt in workTimesOfWorker1)
-            {
-                dbContext.Add(wt);
-            }
-            foreach (var wt in workTimesOfWorker2)
-            {
-                dbContext.Add(wt);
-            }
-            dbContext.SaveChanges();
-
-            var filterForGetNothing = new WorkTimeFilter
+            AddAllWorkTimesToDatabase();
+            var filterForGettingNothing = new WorkTimeFilter
             {
                 StartTime = DateTime.Now.AddDays(-10),
                 EndTime = DateTime.Now.AddDays(-5)
             };
 
-            var filterForGetEverything = new WorkTimeFilter
+            Assert.That(repository.GetUserWorkTimes(firstWorker, filterForGettingNothing), Is.Empty);
+            Assert.That(repository.GetUserWorkTimes(secondWorker, filterForGettingNothing), Is.Empty);
+        }
+
+        [Test]
+        public void ShouldReturnsWorkTimeWhenUsingFilterForGettingEverything()
+        {
+            AddAllWorkTimesToDatabase();
+            var filterForGettingEverything = new WorkTimeFilter
             {
                 StartTime = DateTime.Now.AddDays(-10),
                 EndTime = DateTime.Now.AddDays(10)
             };
 
-            var filerForGetOnlyWorkTime2 = new WorkTimeFilter
+            Assert.That(repository.GetUserWorkTimes(firstWorker, filterForGettingEverything),
+                Is.EquivalentTo(workTimesOfFirstWorker));
+            Assert.That(repository.GetUserWorkTimes(secondWorker, filterForGettingEverything),
+                Is.EquivalentTo(workTimesOfSecondWorker));
+        }
+
+        [Test]
+        public void ShouldReturnsWorkTimeWhenUsingFilterForGettingOnlyWorkTimesOfSecondWorker()
+        {
+            AddAllWorkTimesToDatabase();
+            var filerForGettingOnlyWorkTimeOfSecondWorker = new WorkTimeFilter
             {
                 StartTime = DateTime.Now.AddDays(-0.95),
                 EndTime = DateTime.Now.AddDays(-0.6)
             };
 
-            Assert.AreEqual(
-                repository.GetUserWorkTimes(worker1, filterForGetEverything).Count,
-                workTimesOfWorker1.Count);
-            Assert.AreEqual(
-                repository.GetUserWorkTimes(worker2, filterForGetEverything).Count,
-                workTimesOfWorker2.Count);
-
-            Assert.AreEqual(repository.GetUserWorkTimes(worker1, filterForGetNothing).Count, 0);
-            Assert.AreEqual(repository.GetUserWorkTimes(worker2, filterForGetNothing).Count, 0);
-
-            Assert.AreEqual(repository.GetUserWorkTimes(worker1, filerForGetOnlyWorkTime2).Count, 0);
-            Assert.AreEqual(
-                repository.GetUserWorkTimes(worker2, filerForGetOnlyWorkTime2).Count,
-                workTimesOfWorker2.Count);
+            Assert.That(repository.GetUserWorkTimes(firstWorker, filerForGettingOnlyWorkTimeOfSecondWorker), Is.Empty);
+            Assert.That(repository.GetUserWorkTimes(secondWorker, filerForGettingOnlyWorkTimeOfSecondWorker),
+                Is.EquivalentTo(workTimesOfSecondWorker));
         }
         #endregion
     }

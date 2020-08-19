@@ -52,7 +52,8 @@ namespace LT.DigitalOffice.UserService.Mappers
                 LastName = request.LastName,
                 MiddleName = request.MiddleName,
                 Status = request.Status,
-                PasswordHash = (new SHA512Managed().ComputeHash(Encoding.Default.GetBytes(request.Password))).ToString(),
+                PasswordHash = Encoding.UTF8.GetString(new SHA512Managed().ComputeHash(
+                    Encoding.UTF8.GetBytes(request.Password))),
                 AvatarFileId = null,
                 IsActive = true,
                 IsAdmin = request.IsAdmin

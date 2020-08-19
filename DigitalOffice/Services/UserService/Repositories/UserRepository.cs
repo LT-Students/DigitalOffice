@@ -23,7 +23,7 @@ namespace LT.DigitalOffice.UserService.Repositories
             this.userServiceDbContext = userServiceDbContext;
         }
 
-        public bool UserCreate(DbUser user)
+        public Guid UserCreate(DbUser user)
         {
             if (userServiceDbContext.Users.Any(users => user.Email == users.Email))
             {
@@ -33,7 +33,7 @@ namespace LT.DigitalOffice.UserService.Repositories
             userServiceDbContext.Users.Add(user);
             userServiceDbContext.SaveChanges();
 
-            return true;
+            return user.Id;
         }
 
         public DbUser GetUserInfoById(Guid userId)
