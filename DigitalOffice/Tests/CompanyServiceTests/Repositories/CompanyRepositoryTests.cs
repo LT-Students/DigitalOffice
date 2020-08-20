@@ -17,7 +17,7 @@ namespace LT.DigitalOffice.CompanyServiceUnitTests.Repositories
 
         private DbCompany dbCompanyInDb;
         private DbCompany dbCompany;
-        private DbPosition dbPositionInDb;
+        private DbPosition dbPosition;
         private DbPosition dbPositionToAdd;
 
         [OneTimeSetUp]
@@ -27,6 +27,7 @@ namespace LT.DigitalOffice.CompanyServiceUnitTests.Repositories
                                     .UseInMemoryDatabase(databaseName: "InMemoryDatabase")
                                     .Options;
             dbContext = new CompanyServiceDbContext(dbOptions);
+
             repository = new CompanyRepository(dbContext);
 
             dbPositionToAdd = new DbPosition
@@ -54,7 +55,7 @@ namespace LT.DigitalOffice.CompanyServiceUnitTests.Repositories
                 IsActive = true
             };
 
-            dbPositionInDb = new DbPosition
+            dbPosition = new DbPosition
             {
                 Id = Guid.NewGuid(),
                 Name = "Position",
@@ -62,7 +63,7 @@ namespace LT.DigitalOffice.CompanyServiceUnitTests.Repositories
             };
 
             dbContext.Companies.Add(dbCompanyInDb);
-            dbContext.Positions.Add(dbPositionInDb);
+            dbContext.Positions.Add(dbPosition);
             dbContext.SaveChanges();
         }
 
@@ -74,6 +75,20 @@ namespace LT.DigitalOffice.CompanyServiceUnitTests.Repositories
                 dbContext.Database.EnsureDeleted();
             }
         }
+
+        #region GetPositionsList
+        [Test]
+        public void GetPositionsListSuccessfully()
+        {
+            var result = repository.GetPositionsList();
+
+            var expected = new List<DbPosition> { dbPosition };
+
+            Assert.DoesNotThrow(() => repository.GetPositionsList());
+            SerializerAssert.AreEqual(expected, result);
+            Assert.That(dbContext.Positions, Is.EqualTo(new List<DbPosition> { dbPosition }));
+        }
+        #endregion
 
         #region GetCompanyById
         [Test]
@@ -108,23 +123,23 @@ namespace LT.DigitalOffice.CompanyServiceUnitTests.Repositories
         public void ShouldThrowExceptionIfPositionDoesNotExist()
         {
             Assert.Throws<Exception>(() => repository.GetPositionById(Guid.NewGuid()));
-            Assert.AreEqual(dbContext.Positions, new List<DbPosition> { dbPositionInDb });
+            Assert.AreEqual(dbContext.Positions, new List<DbPosition> { dbPosition });
         }
 
         [Test]
         public void ShouldReturnSimplePositionInfoSuccessfully()
         {
-            var result = repository.GetPositionById(dbPositionInDb.Id);
+            var result = repository.GetPositionById(dbPosition.Id);
 
             var expected = new DbPosition
             {
-                Id = dbPositionInDb.Id,
-                Name = dbPositionInDb.Name,
-                Description = dbPositionInDb.Description
+                Id = dbPosition.Id,
+                Name = dbPosition.Name,
+                Description = dbPosition.Description
             };
 
             SerializerAssert.AreEqual(expected, result);
-            Assert.AreEqual(dbContext.Positions, new List<DbPosition> { dbPositionInDb });
+            Assert.AreEqual(dbContext.Positions, new List<DbPosition> { dbPosition });
         }
         #endregion
 
