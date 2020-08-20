@@ -34,4 +34,3 @@ namespace LT.DigitalOffice.UserService.Commands
         }
     }
 }
-

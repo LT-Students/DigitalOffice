@@ -1,4 +1,6 @@
 using FluentValidation;
+using GreenPipes;
+using LT.DigitalOffice.UserService.Broker.Consumers;
 using LT.DigitalOffice.UserService.Commands;
 using LT.DigitalOffice.UserService.Commands.Interfaces;
 using LT.DigitalOffice.UserService.Database;
@@ -9,6 +11,7 @@ using LT.DigitalOffice.UserService.Models;
 using LT.DigitalOffice.UserService.Repositories;
 using LT.DigitalOffice.UserService.Repositories.Interfaces;
 using LT.DigitalOffice.UserService.Validators;
+using MassTransit;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.EntityFrameworkCore;
@@ -28,6 +31,14 @@ namespace LT.DigitalOffice.UserService
 
         public void ConfigureServices(IServiceCollection services)
         {
+            services.AddHealthChecks();
+
+            services.AddControllers();
+
+            ConfigRabbitMq(services);
+
+            services.AddMassTransitHostedService();
+
             services.AddDbContext<UserServiceDbContext>(options =>
             {
                 options.UseSqlServer(Configuration.GetConnectionString("SQLConnectionString"));
@@ -41,10 +52,40 @@ namespace LT.DigitalOffice.UserService
             ConfigureMappers(services);
         }
 
+        private void ConfigRabbitMq(IServiceCollection services)
+        {
+            string appSettingSection = "ServiceInfo";
+            string serviceId = Configuration.GetSection(appSettingSection)["ID"];
+            string serviceName = Configuration.GetSection(appSettingSection)["Name"];
+
+            services.AddMassTransit(x =>
+            {
+                x.AddConsumer<UserLoginConsumer>();
+
+                x.UsingRabbitMq((context, cfg) =>
+                {
+                    cfg.Host("localhost", host =>
+                    {
+                        host.Username($"{serviceName}_{serviceId}");
+                        host.Password(serviceName);
+                    });
+
+                    cfg.ReceiveEndpoint($"{serviceName}_AuthenticationService", ep =>
+                    {
+                        ep.PrefetchCount = 16;
+                        ep.UseMessageRetry(r => r.Interval(2, 100));
+
+                        ep.ConfigureConsumer<UserLoginConsumer>(context);
+                    });
+                });
+
+            });
+        }
+
         private void ConfigureCommands(IServiceCollection services)
         {
-            services.AddTransient<IUserCreateCommand, UserCreateCommand>();
             services.AddTransient<IGetUserByIdCommand, GetUserByIdCommand>();
+            services.AddTransient<IUserCreateCommand, UserCreateCommand>();
         }
 
         private void ConfigureRepositories(IServiceCollection services)

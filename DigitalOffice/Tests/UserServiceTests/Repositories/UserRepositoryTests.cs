@@ -16,6 +16,7 @@ namespace LT.DigitalOffice.UserServiceUnitTests.Repositories
     {
         private UserServiceDbContext dbContext;
         private IUserRepository repository;
+
         private DbUser firstUser = new DbUser
         {
             Id = Guid.NewGuid(),
@@ -110,6 +111,23 @@ namespace LT.DigitalOffice.UserServiceUnitTests.Repositories
             Assert.That(() => repository.UserCreate(firstUser),
                 Throws.Exception.TypeOf<Exception>().And.Message.EqualTo(EmailAlreadyTakenExceptionMessage));
             Assert.That(dbContext.Users, Is.EquivalentTo(new[] {firstUser}));
+        }
+
+        [Test]
+        public void ShouldThrowExceptionWhenUserIsNotFound()
+        {
+            var userEmail = "Example1@gmail.com";
+
+            Assert.Throws<Exception>(() => repository.GetUserByEmail(userEmail), "User not found withs this email");
+        }
+
+        [Test]
+        public void SuccessfulShouldGetUserByEmail()
+        {
+            var expectedDbUser = firstUser;
+            var userEmail = "Example@gmail.com";
+
+            SerializerAssert.AreEqual(expectedDbUser, repository.GetUserByEmail(userEmail));
         }
     }
 }

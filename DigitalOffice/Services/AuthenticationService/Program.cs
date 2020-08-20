@@ -1,7 +1,7 @@
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.Hosting;
 
-namespace LT.DigitalOffice.UserService
+namespace LT.DigitalOffice.AuthenticationService
 {
     public class Program
     {

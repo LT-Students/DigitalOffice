@@ -39,5 +39,17 @@ namespace LT.DigitalOffice.UserService.Repositories
         public DbUser GetUserInfoById(Guid userId)
             => userServiceDbContext.Users.FirstOrDefault(dbUser => dbUser.Id == userId) ??
                throw new Exception("User with this id not found.");
+
+        public DbUser GetUserByEmail(string userEmail)
+        {
+            DbUser user = userServiceDbContext.Users.FirstOrDefault(u => u.Email == userEmail);
+
+            if (user == null)
+            {
+                throw new Exception("User not found.");
+            }
+
+            return user;
+        }
     }
 }
