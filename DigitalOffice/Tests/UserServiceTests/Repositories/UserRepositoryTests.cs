@@ -6,6 +6,7 @@ using LT.DigitalOffice.UserServiceUnitTests.UnitTestLibrary;
 using Microsoft.EntityFrameworkCore;
 using NUnit.Framework;
 using System;
+using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Security.Cryptography;
 using System.Text;
@@ -81,6 +82,7 @@ namespace LT.DigitalOffice.UserServiceUnitTests.Repositories
             }
         }
 
+        #region GetUserInfoById
         [Test]
         public void ShouldThrowExceptionWhenUserWithRequiredIdDoesNotExist()
         {
@@ -97,7 +99,27 @@ namespace LT.DigitalOffice.UserServiceUnitTests.Repositories
             SerializerAssert.AreEqual(firstUser, resultUser);
             Assert.That(dbContext.Users, Is.EquivalentTo(new[] {firstUser}));
         }
+        #endregion
 
+        #region GetUserByEmail
+        [Test]
+        public void ShouldThrowExceptionIfUserWithRequiredEmailDoesNotExist()
+        {
+            Assert.Throws<Exception>(() => repository.GetUserByEmail(string.Empty));
+            Assert.That(dbContext.Users, Is.EquivalentTo(new List<DbUser> { firstUser }));
+        }
+
+        [Test]
+        public void ShouldReturnUserSuccessfully()
+        {
+            var resultUser = repository.GetUserByEmail(firstUser.Email);
+
+            SerializerAssert.AreEqual(firstUser, resultUser);
+            Assert.That(dbContext.Users, Is.EquivalentTo(new List<DbUser> { firstUser }));
+        }
+        #endregion
+
+        #region UserCreate
         [Test]
         public void ShouldCreateUserWhenUserDataIsValid()
         {
@@ -112,22 +134,6 @@ namespace LT.DigitalOffice.UserServiceUnitTests.Repositories
                 Throws.Exception.TypeOf<Exception>().And.Message.EqualTo(EmailAlreadyTakenExceptionMessage));
             Assert.That(dbContext.Users, Is.EquivalentTo(new[] {firstUser}));
         }
-
-        [Test]
-        public void ShouldThrowExceptionWhenUserIsNotFound()
-        {
-            var userEmail = "Example1@gmail.com";
-
-            Assert.Throws<Exception>(() => repository.GetUserByEmail(userEmail), "User not found withs this email");
-        }
-
-        [Test]
-        public void SuccessfulShouldGetUserByEmail()
-        {
-            var expectedDbUser = firstUser;
-            var userEmail = "Example@gmail.com";
-
-            SerializerAssert.AreEqual(expectedDbUser, repository.GetUserByEmail(userEmail));
-        }
+        #endregion
     }
 }

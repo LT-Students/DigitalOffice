@@ -85,6 +85,7 @@ namespace LT.DigitalOffice.UserService
         private void ConfigureCommands(IServiceCollection services)
         {
             services.AddTransient<IGetUserByIdCommand, GetUserByIdCommand>();
+            services.AddTransient<IGetUserByEmailCommand, GetUserByEmailCommand>();
             services.AddTransient<IUserCreateCommand, UserCreateCommand>();
         }
 
@@ -96,6 +97,7 @@ namespace LT.DigitalOffice.UserService
         private void ConfigureValidators(IServiceCollection services)
         {
             services.AddTransient<IValidator<UserCreateRequest>, UserCreateRequestValidator>();
+            services.AddTransient<IValidator<string>, GetUserByEmailValidator>();
         }
 
         private void ConfigureMappers(IServiceCollection services)
