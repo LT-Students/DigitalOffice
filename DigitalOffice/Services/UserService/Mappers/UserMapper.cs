@@ -1,14 +1,18 @@
-﻿using LT.DigitalOffice.UserService.Database.Entities;
+﻿using System;
+using System.Linq;
+using LT.DigitalOffice.UserService.Database.Entities;
 using LT.DigitalOffice.UserService.Mappers.Interfaces;
 using LT.DigitalOffice.UserService.Models;
-using System;
-using System.Linq;
 using System.Security.Cryptography;
 using System.Text;
+using LT.DigitalOffice.Broker.Responses;
 
 namespace LT.DigitalOffice.UserService.Mappers
 {
-    public class UserMapper : IMapper<DbUser, User>, IMapper<UserCreateRequest, DbUser>
+    /// <summary>
+    /// Represents mapper. Provides methods for converting an object of <see cref="DbUser"/> type into an object of <see cref="User"/> type according to some rule.
+    /// </summary>
+    public class UserMapper : IMapper<DbUser, User>, IMapper<DbUser, IUserPositionResponse, object>, IMapper<UserCreateRequest, DbUser>
     {
         public User Map(DbUser dbUser)
         {
@@ -34,6 +38,28 @@ namespace LT.DigitalOffice.UserService.Mappers
                 MiddleName = dbUser.MiddleName,
                 Status = dbUser.Status,
                 IsAdmin = dbUser.IsAdmin
+            };
+        }
+
+        public object Map(DbUser user, IUserPositionResponse position)
+        {
+            if (user == null)
+            {
+                throw new ArgumentNullException(nameof(User));
+            }
+
+            if (position == null)
+            {
+                throw new ArgumentNullException(nameof(position));
+            }
+
+            return new
+            {
+                UserId = user.Id,
+                FirstName = user.FirstName,
+                LastName = user.LastName,
+                MiddleName = user.MiddleName,
+                UserPosition = position
             };
         }
 

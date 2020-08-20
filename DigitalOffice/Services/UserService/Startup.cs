@@ -1,5 +1,8 @@
+using System;
 using FluentValidation;
 using GreenPipes;
+using LT.DigitalOffice.Broker.Requests;
+using LT.DigitalOffice.Broker.Responses;
 using LT.DigitalOffice.UserService.Broker.Consumers;
 using LT.DigitalOffice.UserService.Commands;
 using LT.DigitalOffice.UserService.Commands.Interfaces;
@@ -35,10 +38,6 @@ namespace LT.DigitalOffice.UserService
 
             services.AddControllers();
 
-            ConfigRabbitMq(services);
-
-            services.AddMassTransitHostedService();
-
             services.AddDbContext<UserServiceDbContext>(options =>
             {
                 options.UseSqlServer(Configuration.GetConnectionString("SQLConnectionString"));
@@ -50,6 +49,9 @@ namespace LT.DigitalOffice.UserService
             ConfigureRepositories(services);
             ConfigureValidators(services);
             ConfigureMappers(services);
+            ConfigRabbitMq(services);
+
+            services.AddMassTransitHostedService();
         }
 
         private void ConfigRabbitMq(IServiceCollection services)
@@ -61,6 +63,7 @@ namespace LT.DigitalOffice.UserService
             services.AddMassTransit(x =>
             {
                 x.AddConsumer<UserLoginConsumer>();
+                x.AddConsumer<GetUserInfoConsumer>();
 
                 x.UsingRabbitMq((context, cfg) =>
                 {
@@ -77,33 +80,16 @@ namespace LT.DigitalOffice.UserService
 
                         ep.ConfigureConsumer<UserLoginConsumer>(context);
                     });
+
+                    cfg.ReceiveEndpoint($"{serviceName}", ep =>
+                    {
+                        ep.ConfigureConsumer<GetUserInfoConsumer>(context);
+                    });
                 });
 
+                x.AddRequestClient<IGetUserPositionRequest>(
+                    new Uri("rabbitmq://localhost/CompanyService"));
             });
-        }
-
-        private void ConfigureCommands(IServiceCollection services)
-        {
-            services.AddTransient<IGetUserByIdCommand, GetUserByIdCommand>();
-            services.AddTransient<IGetUserByEmailCommand, GetUserByEmailCommand>();
-            services.AddTransient<IUserCreateCommand, UserCreateCommand>();
-        }
-
-        private void ConfigureRepositories(IServiceCollection services)
-        {
-            services.AddTransient<IUserRepository, UserRepository>();
-        }
-
-        private void ConfigureValidators(IServiceCollection services)
-        {
-            services.AddTransient<IValidator<UserCreateRequest>, UserCreateRequestValidator>();
-            services.AddTransient<IValidator<string>, GetUserByEmailValidator>();
-        }
-
-        private void ConfigureMappers(IServiceCollection services)
-        {
-            services.AddTransient<IMapper<UserCreateRequest, DbUser>, UserMapper>();
-            services.AddTransient<IMapper<DbUser, User>, UserMapper>();
         }
 
         public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
@@ -126,6 +112,32 @@ namespace LT.DigitalOffice.UserService
                 .CreateScope();
             using var context = serviceScope.ServiceProvider.GetService<UserServiceDbContext>();
             context.Database.Migrate();
+        }
+
+        private void ConfigureRepositories(IServiceCollection services)
+        {
+            services.AddTransient<IUserRepository, UserRepository>();
+        }
+
+        private void ConfigureMappers(IServiceCollection services)
+        {
+            services.AddTransient<IMapper<DbUser,IUserPositionResponse, object>,
+                UserMapper>();
+            services.AddTransient<IMapper<UserCreateRequest, DbUser>, UserMapper>();
+            services.AddTransient<IMapper<DbUser, User>, UserMapper>();
+        }
+
+        private void ConfigureCommands(IServiceCollection services)
+        {
+            services.AddTransient<IUserCreateCommand, UserCreateCommand>();
+            services.AddTransient<IGetUserByIdCommand, GetUserByIdCommand>();
+            services.AddTransient<IGetUserByEmailCommand, GetUserByEmailCommand>();
+        }
+
+        private void ConfigureValidators(IServiceCollection services)
+        {
+            services.AddTransient<IValidator<UserCreateRequest>, UserCreateRequestValidator>();
+            services.AddTransient<IValidator<string>, GetUserByEmailValidator>();
         }
     }
 }

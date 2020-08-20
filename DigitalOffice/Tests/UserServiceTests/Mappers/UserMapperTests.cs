@@ -1,26 +1,32 @@
 ﻿using LT.DigitalOffice.UserService.Database.Entities;
+﻿using System;
+using System.Collections.Generic;
+using System.Linq;
+using LT.DigitalOffice.Broker.Responses;
 using LT.DigitalOffice.UserService.Mappers;
 using LT.DigitalOffice.UserService.Mappers.Interfaces;
 using LT.DigitalOffice.UserService.Models;
+using LT.DigitalOffice.UserServiceUnitTests.UnitTestLibrary;
+using LT.DigitalOffice.UserServiceUnitTests.Utils;
 using NUnit.Framework;
-using System;
-using System.Collections.Generic;
-using System.Linq;
 
 namespace LT.DigitalOffice.UserServiceUnitTests.Mappers
 {
     public class UserMapperTests
     {
         private IMapper<DbUser, User> mapper;
+        private IMapper<DbUser, IUserPositionResponse, object> mapper2;
 
         private const string Email = "smth@emal.com";
         private const string Message = "smth";
         private const string FirstName = "Ivan";
+        private const string MiddleName = "Ivanovich";
         private const string LastName = "Dudikov";
         private const string PasswordHash = "42";
         private const bool IsActive = true;
         private const string Status = "Hello, world!";
         private const bool IsAdmin = false;
+        private const string UserPositionName = "Software Engineer";
 
         private Guid userId;
         private Guid achievementId;
@@ -32,11 +38,14 @@ namespace LT.DigitalOffice.UserServiceUnitTests.Mappers
         private DbUserAchievement dbUserAchievement;
         private DbUser dbUser;
         private DbUserCertificateFile dbUserCertificateFile;
+        private IUserPositionResponse userPosition;
 
         [SetUp]
         public void SetUp()
         {
             mapper = new UserMapper();
+            mapper2 = new UserMapper();
+
             userId = Guid.NewGuid();
             achievementId = Guid.NewGuid();
             certificateFileId = Guid.NewGuid();
@@ -58,6 +67,8 @@ namespace LT.DigitalOffice.UserServiceUnitTests.Mappers
                 MiddleName = null, PasswordHash = PasswordHash, Status = Status
             };
         }
+
+        #region IMapper<DbUser, User>
 
         [Test]
         public void ShouldThrowArgumentNullExceptionWhenDbUserIsNull()
@@ -87,5 +98,45 @@ namespace LT.DigitalOffice.UserServiceUnitTests.Mappers
             Assert.AreEqual(avatarFileId, resultUserModel.AvatarId);
             Assert.AreEqual(IsAdmin, resultUserModel.IsAdmin);
         }
+
+        #endregion
+
+        #region ITwoModelsMapper<DbUser, IUserPositionResponse, object>
+        [Test]
+        public void ShouldThrowArgumentNullExceptionWhenFirstArgumentIsNull()
+        {
+            Assert.Throws<ArgumentNullException>(() => mapper2.Map(dbUser, null));
+        }
+
+        [Test]
+        public void ShouldThrowArgumentNullExceptionWhenSecondArgumentIsNull()
+        {
+            Assert.Throws<ArgumentNullException>(() => mapper2.Map(dbUser, null));
+        }
+
+        [Test]
+        public void ShouldReturnModel()
+        {
+            userPosition = new InheritedUserPositionResponse
+            {
+                UserPositionName = UserPositionName
+            };
+
+            dbUser.MiddleName = MiddleName;
+
+            var expectedResult = new
+            {
+                UserId = userId,
+                FirstName = FirstName,
+                LastName = LastName,
+                MiddleName = MiddleName,
+                UserPosition = userPosition
+            };
+
+            var result = mapper2.Map(dbUser, userPosition);
+
+            SerializerAssert.AreEqual(expectedResult, result);
+        }
+        #endregion
     }
 }
