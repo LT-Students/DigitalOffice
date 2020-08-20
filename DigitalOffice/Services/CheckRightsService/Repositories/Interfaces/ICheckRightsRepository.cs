@@ -1,5 +1,6 @@
-﻿using LT.DigitalOffice.CheckRightsService.Models;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
+using LT.DigitalOffice.CheckRightsService.Database.Entities;
+using LT.DigitalOffice.CheckRightsService.RestRequests;
 
 namespace LT.DigitalOffice.CheckRightsService.Repositories.Interfaces
 {
@@ -13,7 +14,7 @@ namespace LT.DigitalOffice.CheckRightsService.Repositories.Interfaces
         /// Returns a list of all added rights to the database.
         /// </summary>
         /// <returns>List of all added rights.</returns>
-        List<Right> GetRightsList();
+        List<DbRight> GetRightsList();
 
         /// <summary>
         /// Adds rights for user.

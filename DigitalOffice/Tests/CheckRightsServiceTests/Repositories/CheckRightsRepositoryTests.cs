@@ -1,8 +1,5 @@
-﻿using System.Collections.Generic;
-using LT.DigitalOffice.CheckRightsService.Database;
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
 using LT.DigitalOffice.CheckRightsService.Database;
 using LT.DigitalOffice.CheckRightsService.Database.Entities;
 using LT.DigitalOffice.CheckRightsService.Repositories;
@@ -16,63 +13,32 @@ namespace LT.DigitalOffice.CheckRightsServiceUnitTests.Repositories
     public class CheckRightsRepositoryTests
     {
         private CheckRightsServiceDbContext dbContext;
+        private DbRight dbRight;
         private ICheckRightsRepository repository;
-        private DbRight dbRight;
-        private Mock<IMapper<DbRight, Right>> mapperMock;
-        private DbRight dbRight;
-        private DbRight dbRightUpdate;
 
         [SetUp]
         public void SetUp()
         {
             var dbOptions = new DbContextOptionsBuilder<CheckRightsServiceDbContext>()
-                                    .UseInMemoryDatabase("InMemoryDatabase")
-                                    .Options;
-                .UseInMemoryDatabase(databaseName: "InMemoryDatabase")
+                .UseInMemoryDatabase("InMemoryDatabase")
                 .Options;
             dbContext = new CheckRightsServiceDbContext(dbOptions);
             repository = new CheckRightsRepository(dbContext);
-            mapperMock = new Mock<IMapper<DbRight, Right>>();
-            repository = new CheckRightsRepository(dbContext, mapperMock.Object);
-
-            dbRight = new DbRight
-            {
-                Id = 3,
-                Name = "Right",
-                Description = "Allows you everything",
-                UserIds = new List<DbRightUser>()
-            };
-            dbRightUpdate = new DbRight
-            {
-                Id = 4,
-                Name = "Right update",
-                Description = "Allows you update everything",
-                UserIds = new List<DbRightUser>()
-            };
-
-            dbContext.Rights.AddRange(dbRight, dbRightUpdate);
-            dbContext.SaveChanges();
-
-            mapperMock.Setup(mapper => mapper.Map(dbRight)).Returns(new Right
-                {Id = dbRight.Id, Name = dbRight.Name, Description = dbRight.Description});
         }
 
         [TearDown]
         public void Clear()
         {
-            if (dbContext.Database.IsInMemory())
-            {
-                dbContext.Database.EnsureDeleted();
-            }
+            if (dbContext.Database.IsInMemory()) dbContext.Database.EnsureDeleted();
         }
 
         [Test]
         public void ShouldGetRightsListWhenDbIsNotEmpty()
         {
-            dbRight = new DbRight { Id = 0, Name = "Right", Description = "Allows you everything" };
+            dbRight = new DbRight {Id = 0, Name = "Right", Description = "Allows you everything"};
             dbContext.Rights.Add(dbRight);
             dbContext.SaveChanges();
-            
+
             Assert.That(repository.GetRightsList(), Is.EquivalentTo(new List<DbRight> {dbRight}));
             Assert.That(dbContext.Rights, Is.EquivalentTo(new List<DbRight> {dbRight}));
         }
@@ -87,33 +53,24 @@ namespace LT.DigitalOffice.CheckRightsServiceUnitTests.Repositories
         [Test]
         public void ShouldAddRightsForUser()
         {
+            dbRight = new DbRight
+            {
+                Id = 4,
+                Name = "Right",
+                Description = "Allows you everything",
+                UserIds = new List<DbRightUser>()
+            };
+
             var request = new RightsForUserRequest
             {
                 UserId = Guid.NewGuid(),
-                RightsId = new List<int> {dbRight.Id, dbRightUpdate.Id}
+                RightsId = new List<int> {dbRight.Id}
             };
 
-            var dbRightUser = new DbRightUser
-            {
-                UserId = request.UserId,
-                Right = dbRight,
-                RightId = dbRight.Id
-            };
-
-            var dbRightUserUpdate = new DbRightUser
-            {
-                UserId = request.UserId,
-                Right = dbRightUpdate,
-                RightId = dbRightUpdate.Id
-            };
+            dbContext.Rights.AddRange(dbRight);
+            dbContext.SaveChanges();
 
             Assert.True(repository.AddRightsToUser(request));
-
-            Assert.AreEqual(dbRightUser.RightId, dbContext.Rights.Find(dbRight.Id).UserIds.First().RightId);
-            Assert.AreEqual(dbRightUser.UserId, dbContext.Rights.Find(dbRight.Id).UserIds.First().UserId);
-
-            Assert.AreEqual(dbRightUserUpdate.RightId, dbContext.Rights.Find(dbRightUpdate.Id).UserIds.First().RightId);
-            Assert.AreEqual(dbRightUserUpdate.UserId, dbContext.Rights.Find(dbRightUpdate.Id).UserIds.First().UserId);
         }
 
         [Test]

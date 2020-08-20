@@ -1,8 +1,10 @@
-﻿using LT.DigitalOffice.CheckRightsService.Database;
+﻿using System;
+using LT.DigitalOffice.CheckRightsService.Database;
 using LT.DigitalOffice.CheckRightsService.Repositories.Interfaces;
 using System.Collections.Generic;
 using System.Linq;
 using LT.DigitalOffice.CheckRightsService.Database.Entities;
+using LT.DigitalOffice.CheckRightsService.RestRequests;
 
 namespace LT.DigitalOffice.CheckRightsService.Repositories
 {
@@ -27,7 +29,7 @@ namespace LT.DigitalOffice.CheckRightsService.Repositories
                 var dbRight = dbContext.Rights.FirstOrDefault(right => right.Id == rightId);
                 if (dbRight == null)
                 {
-                    //TODO add custom exception
+                    //TODO change on custom exception
                     throw new Exception("Right doesn't exist.");
                 }
 
