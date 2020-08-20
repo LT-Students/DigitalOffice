@@ -7,6 +7,7 @@ using LT.DigitalOffice.UserService.Repositories.Interfaces;
 using Moq;
 using NUnit.Framework;
 using System;
+using LT.DigitalOffice.UserServiceUnitTests.UnitTestLibrary;
 
 namespace LT.DigitalOffice.UserServiceUnitTests.Commands
 {
@@ -33,17 +34,36 @@ namespace LT.DigitalOffice.UserServiceUnitTests.Commands
         }
 
         [Test]
-        public void ShouldReturnsCorrectModelOfUserIfUserExists()
+        public void ShouldReturnModelOfUser()
         {
-            repositoryMock.Setup(repository => repository.GetUserInfoById(userId)).Returns(dbUser);
+            repositoryMock.Setup(repository => repository.GetUserInfoById(userId)).Returns(dbUser).Verifiable();
+            mapperMock.Setup(mapper => mapper.Map(dbUser)).Returns(user).Verifiable();
+
+            SerializerAssert.AreEqual(user, getUserInfoByIdCommand.Execute(userId));
+            repositoryMock.Verify();
+            mapperMock.Verify();
+        }
+
+        [Test]
+        public void ShouldThrowExceptionWhenMapperThrowsException()
+        {
+            repositoryMock.Setup(repository => repository.GetUserInfoById(It.IsAny<Guid>())).Returns(dbUser).Verifiable();
+            mapperMock.Setup(mapper => mapper.Map(It.IsAny<DbUser>())).Throws<Exception>().Verifiable();
+
+            Assert.Throws<Exception>(() => getUserInfoByIdCommand.Execute(It.IsAny<Guid>()));
+            mapperMock.Verify();
+            repositoryMock.Verify();
+        }
+
+        [Test]
+        public void ShouldThrowExceptionWhenRepositoryThrowsException()
+        {
+            repositoryMock.Setup(repository => repository.GetUserInfoById(userId)).Throws<Exception>().Verifiable();
             mapperMock.Setup(mapper => mapper.Map(dbUser)).Returns(user);
 
-            var result = getUserInfoByIdCommand.Execute(userId);
-
-            Assert.IsNotNull(result);
-            Assert.IsInstanceOf<User>(result);
-            Assert.AreEqual(userId, result.Id);
-            repositoryMock.Verify(repository => repository.GetUserInfoById(userId), Times.Once);
+            Assert.Throws<Exception>(() => getUserInfoByIdCommand.Execute(userId));
+            repositoryMock.Verify();
+            mapperMock.Verify(mapper => mapper.Map(It.IsAny<DbUser>()), Times.Never);
         }
     }
 }

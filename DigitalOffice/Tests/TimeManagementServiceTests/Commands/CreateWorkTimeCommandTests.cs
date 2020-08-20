@@ -57,7 +57,7 @@ namespace LT.DigitalOffice.TimeManagementServiceUnitTests.Commands
         }
 
         [Test]
-        public void FailCreateNewWorkTimeAccordingToValidator()
+        public void ShouldThrowExceptionWhenValidatorThrowsException()
         {
             validatorMock
                 .Setup(x => x.Validate(It.IsAny<IValidationContext>()).IsValid)
@@ -68,7 +68,7 @@ namespace LT.DigitalOffice.TimeManagementServiceUnitTests.Commands
         }
 
         [Test]
-        public void FailCreateNewWorkTimeAccordingToRepository()
+        public void ShouldThrowExceptionWhenRepositoryThrowsException()
         {
             validatorMock
                  .Setup(x => x.Validate(It.IsAny<IValidationContext>()).IsValid)
@@ -86,7 +86,7 @@ namespace LT.DigitalOffice.TimeManagementServiceUnitTests.Commands
         }
 
         [Test]
-        public void SuccessfulCreateNewWorkTime()
+        public void ShouldCreateNewWorkTime()
         {
             validatorMock
                  .Setup(x => x.Validate(It.IsAny<IValidationContext>()).IsValid)

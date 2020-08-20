@@ -1,7 +1,6 @@
 ﻿using LT.DigitalOffice.CompanyService.Database;
 using LT.DigitalOffice.CompanyService.Database.Entities;
 using LT.DigitalOffice.CompanyService.Repositories.Interfaces;
-using Microsoft.AspNetCore.Mvc;
 using System;
 using System.Linq;
 
@@ -16,6 +15,25 @@ namespace LT.DigitalOffice.CompanyService.Repositories
             this.dbContext = dbContext;
         }
 
+        public DbCompany GetCompanyById(Guid companyId)
+        {
+            var dbCompany = dbContext.Companies.FirstOrDefault(x => x.Id == companyId);
+            if (dbCompany == null)
+            {
+                throw new Exception("Company was not found.");
+            }
+
+            return dbCompany;
+        }
+
+        public Guid AddCompany(DbCompany company)
+        {
+            dbContext.Companies.Add(company);
+            dbContext.SaveChanges();
+
+            return company.Id;
+        }
+
         public DbPosition GetPositionById(Guid positionId)
         {
             var dbPosition = dbContext.Positions.FirstOrDefault(position => position.Id == positionId);
@@ -28,12 +46,12 @@ namespace LT.DigitalOffice.CompanyService.Repositories
             return dbPosition;
         }
 
-        public Guid AddCompany(DbCompany company)
+        public Guid AddPosition(DbPosition newPosition)
         {
-            dbContext.Companies.Add(company);
+            dbContext.Positions.Add(newPosition);
             dbContext.SaveChanges();
 
-            return company.Id;
+            return newPosition.Id;
         }
     }
 }

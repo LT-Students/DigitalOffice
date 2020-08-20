@@ -3,6 +3,7 @@ using LT.DigitalOffice.TimeManagementService.Models;
 using LT.DigitalOffice.TimeManagementService.Repositories.Interfaces;
 using Microsoft.AspNetCore.Mvc;
 using System;
+using System.Linq;
 
 namespace LT.DigitalOffice.TimeManagementService.Validators
 {
@@ -14,7 +15,7 @@ namespace LT.DigitalOffice.TimeManagementService.Validators
                 .NotEmpty();
 
             RuleFor(lt => lt.LeaveType)
-                .NotEmpty();
+                .IsInEnum();
 
             RuleFor(lt => lt.Comment)
                 .NotEmpty();
@@ -26,26 +27,14 @@ namespace LT.DigitalOffice.TimeManagementService.Validators
                 .NotEqual(new DateTime());
 
             RuleFor(lt => lt)
-                .Must(lt => lt.StartTime < lt.EndTime)
-                .WithMessage("Start time must be before end time")
+                .Must(lt => lt.StartTime < lt.EndTime).WithMessage("Start time must be before end time")
                 .Must(lt =>
                 {
                     var workTimes = repository.GetUserLeaveTimes(lt.WorkerUserId);
-
-                    foreach (var oldWT in workTimes)
-                    {
-                        var firstNewLeaveTime = lt.EndTime <= oldWT.StartTime;
-                        var firstOldLeaveTime = oldWT.EndTime <= lt.StartTime;
-
-                        if (!(firstNewLeaveTime || firstOldLeaveTime))
-                        {
-                            return false;
-                        }
-                    }
-
-                    return true;
-                })
-                .WithMessage("New LeaveTime should not overlap with old ones.");
+                    
+                    return workTimes.All(oldWorkTime =>
+                        lt.EndTime <= oldWorkTime.StartTime || oldWorkTime.EndTime <= lt.StartTime);
+                }).WithMessage("New LeaveTime should not overlap with old ones.");
         }
     }
 }

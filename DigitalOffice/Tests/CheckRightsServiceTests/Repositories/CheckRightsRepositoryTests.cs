@@ -1,23 +1,23 @@
+﻿using System.Collections.Generic;
+using LT.DigitalOffice.CheckRightsService.Database;
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
 using LT.DigitalOffice.CheckRightsService.Database;
 using LT.DigitalOffice.CheckRightsService.Database.Entities;
-using LT.DigitalOffice.CheckRightsService.Mappers.Interfaces;
-using LT.DigitalOffice.CheckRightsService.Models;
 using LT.DigitalOffice.CheckRightsService.Repositories;
 using LT.DigitalOffice.CheckRightsService.Repositories.Interfaces;
 using LT.DigitalOffice.CheckRightsService.RestRequests;
 using Microsoft.EntityFrameworkCore;
-using Moq;
 using NUnit.Framework;
 
 namespace LT.DigitalOffice.CheckRightsServiceUnitTests.Repositories
 {
-    class CheckRightsRepositoryTests
+    public class CheckRightsRepositoryTests
     {
         private CheckRightsServiceDbContext dbContext;
         private ICheckRightsRepository repository;
+        private DbRight dbRight;
         private Mock<IMapper<DbRight, Right>> mapperMock;
         private DbRight dbRight;
         private DbRight dbRightUpdate;
@@ -26,9 +26,12 @@ namespace LT.DigitalOffice.CheckRightsServiceUnitTests.Repositories
         public void SetUp()
         {
             var dbOptions = new DbContextOptionsBuilder<CheckRightsServiceDbContext>()
+                                    .UseInMemoryDatabase("InMemoryDatabase")
+                                    .Options;
                 .UseInMemoryDatabase(databaseName: "InMemoryDatabase")
                 .Options;
             dbContext = new CheckRightsServiceDbContext(dbOptions);
+            repository = new CheckRightsRepository(dbContext);
             mapperMock = new Mock<IMapper<DbRight, Right>>();
             repository = new CheckRightsRepository(dbContext, mapperMock.Object);
 
@@ -64,12 +67,21 @@ namespace LT.DigitalOffice.CheckRightsServiceUnitTests.Repositories
         }
 
         [Test]
-        public void GetRightsListSuccessfully()
+        public void ShouldGetRightsListWhenDbIsNotEmpty()
         {
-            var resultRightsList = repository.GetRightsList();
+            dbRight = new DbRight { Id = 0, Name = "Right", Description = "Allows you everything" };
+            dbContext.Rights.Add(dbRight);
+            dbContext.SaveChanges();
+            
+            Assert.That(repository.GetRightsList(), Is.EquivalentTo(new List<DbRight> {dbRight}));
+            Assert.That(dbContext.Rights, Is.EquivalentTo(new List<DbRight> {dbRight}));
+        }
 
-            Assert.DoesNotThrow(() => repository.GetRightsList());
-            Assert.IsNotNull(resultRightsList);
+        [Test]
+        public void ShouldGetRightListWhenDbIsEmpty()
+        {
+            Assert.That(repository.GetRightsList(), Is.Not.Null);
+            Assert.That(dbContext.Rights, Is.Empty);
         }
 
         [Test]

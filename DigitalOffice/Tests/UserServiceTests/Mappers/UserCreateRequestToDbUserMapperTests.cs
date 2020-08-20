@@ -22,7 +22,7 @@ namespace LT.DigitalOffice.UserServiceUnitTests.Mappers
         [Test]
         public void ShouldReturnNewDbUserWhenDataCorrect()
         {
-            var request = new UserCreateRequest()
+            var request = new UserCreateRequest
             {
                 FirstName = "Example",
                 LastName = "Example",
@@ -35,14 +35,15 @@ namespace LT.DigitalOffice.UserServiceUnitTests.Mappers
 
             var result = mapper.Map(request);
 
-            var user = new DbUser()
+            var user = new DbUser
             {
                 Email = "Example@gmail.com",
                 FirstName = "Example",
                 LastName = "Example",
                 MiddleName = "Example",
                 Status = "Example",
-                PasswordHash = (new SHA512Managed().ComputeHash(Encoding.Default.GetBytes("Example"))).ToString(),
+                PasswordHash = Encoding.UTF8.GetString(new SHA512Managed().ComputeHash(
+                    Encoding.UTF8.GetBytes(request.Password))),
                 AvatarFileId = null,
                 IsActive = true,
                 IsAdmin = false
@@ -60,7 +61,7 @@ namespace LT.DigitalOffice.UserServiceUnitTests.Mappers
         }
 
         [Test]
-        public void ShouldThrowExceptionWhenRequestIsNull()
+        public void ShouldThrowArgumentNullExceptionWhenRequestIsNull()
         {
             Assert.Throws<ArgumentNullException>(() => mapper.Map(null));
         }

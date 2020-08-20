@@ -20,7 +20,7 @@ namespace LT.DigitalOffice.FileServiceUnitTests.Repositories
         public void Setup()
         {
             var dbOptions = new DbContextOptionsBuilder<FileServiceDbContext>()
-                                    .UseInMemoryDatabase(databaseName: "InMemoryDatabase")
+                                    .UseInMemoryDatabase("InMemoryDatabase")
                                     .Options;
             dbContext = new FileServiceDbContext(dbOptions);
             repository = new FileRepository(dbContext);
@@ -48,13 +48,13 @@ namespace LT.DigitalOffice.FileServiceUnitTests.Repositories
         }
 
         [Test]
-        public void ThrowsExceptionIfFileDoesNotExist()
+        public void ShouldThrowExceptionWhenThereNoFileInDatabaseWithSuchId()
         {
             Assert.Throws<Exception>(() => repository.GetFileById(Guid.NewGuid()));
         }
 
         [Test]
-        public void ReturnsSimpleFileInfoSuccessfully()
+        public void ShouldReturnFileInfoWhenGettingFileById()
         {
             var result = repository.GetFileById(dbFile.Id);
 

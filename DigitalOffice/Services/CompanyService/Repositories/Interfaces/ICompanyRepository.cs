@@ -10,11 +10,11 @@ namespace LT.DigitalOffice.CompanyService.Repositories.Interfaces
     public interface ICompanyRepository
     {
         /// <summary>
-        /// Returns the position with the specified id from database.
+        /// Returns the company with the specified id from database.
         /// </summary>
-        /// <param name="positionId">Specified id of position.</param>
-        /// <returns>Position with specified id.</returns>
-        DbPosition GetPositionById(Guid positionId);
+        /// <param name="companyId">Specified id of company.</param>
+        /// <returns>Company with specified id.</returns>
+        DbCompany GetCompanyById(Guid companyId);
 
         /// <summary>
         /// Adds new company to the database. Returns the id of the added company.
@@ -22,5 +22,19 @@ namespace LT.DigitalOffice.CompanyService.Repositories.Interfaces
         /// <param name="company">Company to add.</param>
         /// <returns>Id of the added company.</returns>
         Guid AddCompany(DbCompany company);
+
+        /// <summary>
+        /// Returns the position with the specified id from database.
+        /// </summary>
+        /// <param name="positionId">Specified id of position.</param>
+        /// <returns>Position with specified id.</returns>
+        DbPosition GetPositionById(Guid positionId);
+
+        /// <summary>
+        /// Adds new position to the database. Returns its Id.
+        /// </summary>
+        /// <param name="position">Position to add.</param>
+        /// <returns>New position Id.</returns>
+        Guid AddPosition(DbPosition position);
     }
 }

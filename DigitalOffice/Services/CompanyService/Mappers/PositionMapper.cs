@@ -6,8 +6,22 @@ using System.Linq;
 
 namespace LT.DigitalOffice.CompanyService.Mappers
 {
-    public class PositionMapper : IMapper<DbPosition, Position>
+    public class PositionMapper : IMapper<AddPositionRequest, DbPosition>, IMapper<DbPosition, Position>
     {
+        public DbPosition Map(AddPositionRequest value)
+        {
+            if (value == null)
+            {
+                throw new ArgumentNullException(nameof(value));
+            }
+            return new DbPosition
+            {
+                Id = Guid.NewGuid(),
+                Name = value.Name,
+                Description = value.Description
+            };
+        }
+
         public Position Map(DbPosition value)
         {
             if (value == null)

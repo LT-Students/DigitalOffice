@@ -1,12 +1,27 @@
-﻿using LT.DigitalOffice.CompanyService.Database.Entities;
+using LT.DigitalOffice.CompanyService.Database.Entities;
 using LT.DigitalOffice.CompanyService.Mappers.Interfaces;
 using LT.DigitalOffice.CompanyService.Models;
 using System;
 
 namespace LT.DigitalOffice.CompanyService.Mappers
 {
-    public class CompanyMapper : IMapper<AddCompanyRequest, DbCompany>
+    public class CompanyMapper : IMapper<DbCompany, Company>, IMapper<AddCompanyRequest, DbCompany>
     {
+        public Company Map(DbCompany company)
+        {
+            if (company == null)
+            {
+                throw new ArgumentNullException(nameof(company));
+            }
+
+            return new Company
+            {
+                Id = company.Id,
+                Name = company.Name,
+                IsActive = company.IsActive
+            };
+        }
+
         public DbCompany Map(AddCompanyRequest request)
         {
             if (request == null)

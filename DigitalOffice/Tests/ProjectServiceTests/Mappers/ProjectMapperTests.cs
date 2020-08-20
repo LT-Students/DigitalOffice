@@ -43,13 +43,13 @@ namespace LT.DigitalOffice.ProjectServiceUnitTests.Mappers
         }
 
         [Test]
-        public void ThrowsExceptionIfArgumentIsNull()
+        public void ShouldThrowExceptionWhenDbProjectIsNull()
         {
             Assert.Throws<ArgumentNullException>(() => mapper.Map(null));
         }
 
         [Test]
-        public void ReturnsProjectModelSuccessfully()
+        public void ShouldReturnProjectModelWhenMappingDbProject()
         {
             var result = mapper.Map(dbProject);
 

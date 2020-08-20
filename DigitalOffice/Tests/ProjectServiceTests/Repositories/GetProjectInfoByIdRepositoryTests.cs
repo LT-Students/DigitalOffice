@@ -6,6 +6,7 @@ using LT.DigitalOffice.ProjectServiceUnitTests.UnitTestLibrary;
 using Microsoft.EntityFrameworkCore;
 using NUnit.Framework;
 using System;
+using System.Collections.Generic;
 
 namespace LT.DigitalOffice.ProjectServiceUnitTests.Repositories
 {
@@ -20,7 +21,7 @@ namespace LT.DigitalOffice.ProjectServiceUnitTests.Repositories
         public void SetUp()
         {
             var dbOptions = new DbContextOptionsBuilder<ProjectServiceDbContext>()
-                                    .UseInMemoryDatabase(databaseName: "InMemoryDatabase")
+                                    .UseInMemoryDatabase("InMemoryDatabase")
                                     .Options;
             dbContext = new ProjectServiceDbContext(dbOptions);
             repository = new ProjectRepository(dbContext);
@@ -45,13 +46,14 @@ namespace LT.DigitalOffice.ProjectServiceUnitTests.Repositories
         }
 
         [Test]
-        public void ThrowsExceptionIfProjectDoesNotExist()
+        public void ShouldThrowExceptionWhenProjectDoesNotExist()
         {
             Assert.Throws<Exception>(() => repository.GetProjectInfoById(Guid.NewGuid()));
+            Assert.That(dbContext.Projects, Is.EquivalentTo(new List<DbProject> {dbProject}));
         }
 
         [Test]
-        public void ReturnsSimpleProjectInfoSuccessfully()
+        public void ShouldReturnProjectInfo()
         {
             var result = repository.GetProjectInfoById(dbProject.Id);
 
@@ -62,6 +64,7 @@ namespace LT.DigitalOffice.ProjectServiceUnitTests.Repositories
             };
 
             SerializerAssert.AreEqual(expected, result);
+            Assert.That(dbContext.Projects, Is.EquivalentTo(new List<DbProject> {dbProject}));
         }
     }
 }

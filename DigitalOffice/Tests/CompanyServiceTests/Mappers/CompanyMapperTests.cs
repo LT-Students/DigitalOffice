@@ -1,4 +1,4 @@
-﻿using LT.DigitalOffice.CompanyService.Database.Entities;
+using LT.DigitalOffice.CompanyService.Database.Entities;
 using LT.DigitalOffice.CompanyService.Mappers;
 using LT.DigitalOffice.CompanyService.Mappers.Interfaces;
 using LT.DigitalOffice.CompanyService.Models;
@@ -10,47 +10,75 @@ namespace LT.DigitalOffice.CompanyServiceUnitTests.Mappers
 {
     public class CompanyMapperTests
     {
-        private IMapper<AddCompanyRequest, DbCompany> mapper;
+        private IMapper<DbCompany, Company> dbCompanyMapper;
+        private DbCompany dbCompany;
+        private Company expectedCompany;
 
-        private AddCompanyRequest request;
+        private IMapper<AddCompanyRequest, DbCompany> addCompanyRequestMapper;
+        private AddCompanyRequest addCompanyRequest;
         private DbCompany expectedDbCompanyWithoutId;
 
         [OneTimeSetUp]
         public void OneTimeSetUp()
         {
-            mapper = new CompanyMapper();
-        }
+            const string name = "Lanit-Tercom";
 
-        [SetUp]
-        public void SetUp()
-        {
-            request = new AddCompanyRequest
+            dbCompanyMapper = new CompanyMapper();
+            dbCompany = new DbCompany
             {
-                Name = "Lanit-Tercom"
+                Id = Guid.NewGuid(),
+                Name = name,
+                IsActive = true
+            };
+            expectedCompany = new Company
+            {
+                Id = dbCompany.Id,
+                Name = name,
+                IsActive = dbCompany.IsActive
             };
 
+            addCompanyRequestMapper = new CompanyMapper();
+            addCompanyRequest = new AddCompanyRequest
+            {
+                Name = name
+            };
             expectedDbCompanyWithoutId = new DbCompany
             {
-                Name = request.Name,
+                Name = name,
                 IsActive = true
             };
         }
+
+        #region DbCompany to Company
+        [Test]
+        public void ShouldThrowArgumentNullExceptionWhenDbCompanyIsNull()
+        {
+            Assert.Throws<ArgumentNullException>(() => dbCompanyMapper.Map(null));
+        }
+
+        [Test]
+        public void ShouldReturnRightModelWhenDbCompanyMapped()
+        {
+            var company = dbCompanyMapper.Map(dbCompany);
+            SerializerAssert.AreEqual(expectedCompany, company);
+        }
+        #endregion
 
         #region AddCompanyRequest to DbCompany
         [Test]
         public void ShouldThrowArgumentNullExceptionWhenAddCompanyRequestIsNull()
         {
-            Assert.Throws<ArgumentNullException>(() => mapper.Map(null));
+            Assert.Throws<ArgumentNullException>(() => addCompanyRequestMapper.Map(null));
         }
 
         [Test]
         public void ShouldReturnRightModelWhenAddCompanyRequestIsMapped()
         {
-            var dbCompany = mapper.Map(request);
-            expectedDbCompanyWithoutId.Id = dbCompany.Id;
+            var addedDbCompany = addCompanyRequestMapper.Map(addCompanyRequest);
+            expectedDbCompanyWithoutId.Id = addedDbCompany.Id;
 
-            Assert.IsInstanceOf<Guid>(dbCompany.Id);
-            SerializerAssert.AreEqual(expectedDbCompanyWithoutId, dbCompany);
+            Assert.IsInstanceOf<Guid>(addedDbCompany.Id);
+            SerializerAssert.AreEqual(expectedDbCompanyWithoutId, addedDbCompany);
         }
         #endregion
     }
