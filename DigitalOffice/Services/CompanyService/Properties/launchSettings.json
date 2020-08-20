@@ -17,7 +17,7 @@
     },
     "CompanyService": {
       "commandName": "Project",
-      "launchBrowser": true,
+      "launchBrowser": false,
       "applicationUrl": "https://localhost:9815;http://localhost:9816",
       "environmentVariables": {
         "ASPNETCORE_ENVIRONMENT": "Development"
