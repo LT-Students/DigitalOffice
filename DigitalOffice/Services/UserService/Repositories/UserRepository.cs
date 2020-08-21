@@ -40,6 +40,19 @@ namespace LT.DigitalOffice.UserService.Repositories
             => userServiceDbContext.Users.FirstOrDefault(dbUser => dbUser.Id == userId) ??
                throw new Exception("User with this id not found.");
 
+        public bool EditUser(DbUser user)
+        {
+            if (!userServiceDbContext.Users.Any(users => user.Id == users.Id))
+            {
+                throw new Exception("User was not found.");
+            }
+
+            userServiceDbContext.Users.Update(user);
+            userServiceDbContext.SaveChanges();
+
+            return true;
+        }
+
         public DbUser GetUserByEmail(string userEmail)
         {
             DbUser user = userServiceDbContext.Users.FirstOrDefault(u => u.Email == userEmail);

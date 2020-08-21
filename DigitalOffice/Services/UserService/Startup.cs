@@ -125,17 +125,20 @@ namespace LT.DigitalOffice.UserService
                 UserMapper>();
             services.AddTransient<IMapper<UserCreateRequest, DbUser>, UserMapper>();
             services.AddTransient<IMapper<DbUser, User>, UserMapper>();
+            services.AddTransient<IMapper<EditUserRequest, DbUser>, UserMapper>();
         }
 
         private void ConfigureCommands(IServiceCollection services)
-        {
+        {   
             services.AddTransient<IUserCreateCommand, UserCreateCommand>();
-            services.AddTransient<IGetUserByIdCommand, GetUserByIdCommand>();
+            services.AddTransient<IEditUserCommand, EditUserCommand>();
             services.AddTransient<IGetUserByEmailCommand, GetUserByEmailCommand>();
+            services.AddTransient<IGetUserByIdCommand, GetUserByIdCommand>();
         }
 
         private void ConfigureValidators(IServiceCollection services)
         {
+            services.AddTransient<IValidator<EditUserRequest>, EditUserRequestValidator>();
             services.AddTransient<IValidator<UserCreateRequest>, UserCreateRequestValidator>();
             services.AddTransient<IValidator<string>, GetUserByEmailValidator>();
         }

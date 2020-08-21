@@ -29,7 +29,7 @@ namespace LT.DigitalOffice.UserServiceUnitTests.Mappers
                 MiddleName = "Example",
                 Email = "Example@gmail.com",
                 Status = "Example",
-                Password = "Example",
+                Password = "Password",
                 IsAdmin = false
             };
 

@@ -19,6 +19,12 @@ namespace LT.DigitalOffice.UserService.Controllers
             return command.Execute(request);
         }
 
+        [HttpPost("editUser")]
+        public bool EditUser([FromServices] IEditUserCommand command, [FromBody] EditUserRequest request)
+        {
+            return command.Execute(request);
+        }
+        
         [HttpGet("getUserByEmail")]
         public User GetUserByEmail([FromServices] IGetUserByEmailCommand command, [FromQuery] string userEmail)
         {

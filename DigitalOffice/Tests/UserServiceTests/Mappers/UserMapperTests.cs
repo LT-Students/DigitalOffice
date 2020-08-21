@@ -1,20 +1,23 @@
-﻿using LT.DigitalOffice.UserService.Database.Entities;
-﻿using System;
+using NUnit.Framework;
+using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Security.Cryptography;
+using System.Text;
 using LT.DigitalOffice.Broker.Responses;
+using LT.DigitalOffice.UserService.Database.Entities;
 using LT.DigitalOffice.UserService.Mappers;
 using LT.DigitalOffice.UserService.Mappers.Interfaces;
 using LT.DigitalOffice.UserService.Models;
 using LT.DigitalOffice.UserServiceUnitTests.UnitTestLibrary;
 using LT.DigitalOffice.UserServiceUnitTests.Utils;
-using NUnit.Framework;
 
 namespace LT.DigitalOffice.UserServiceUnitTests.Mappers
 {
     public class UserMapperTests
     {
         private IMapper<DbUser, User> mapper;
+        private IMapper<EditUserRequest, DbUser> mapperEditUserRequest;
         private IMapper<DbUser, IUserPositionResponse, object> mapper2;
 
         private const string Email = "smth@emal.com";
@@ -44,6 +47,7 @@ namespace LT.DigitalOffice.UserServiceUnitTests.Mappers
         public void SetUp()
         {
             mapper = new UserMapper();
+            mapperEditUserRequest = new UserMapper();
             mapper2 = new UserMapper();
 
             userId = Guid.NewGuid();
@@ -98,7 +102,52 @@ namespace LT.DigitalOffice.UserServiceUnitTests.Mappers
             Assert.AreEqual(avatarFileId, resultUserModel.AvatarId);
             Assert.AreEqual(IsAdmin, resultUserModel.IsAdmin);
         }
+        #endregion
+        
+        #region EditUserRequest to DbUser
+        [Test]
+        public void ShouldReturnNewDbUserWhenDataCorrect()
+        {
+            var request = new EditUserRequest()
+            {
+                Id = Guid.NewGuid(),
+                Email = "Example@gmail.com",
+                FirstName = "Example",
+                LastName = "Example",
+                MiddleName = "Example",
+                Status = "Example",
+                Password = "Example",
+                IsAdmin = false,
+                IsActive = true,
+                AvatarFileId = Guid.NewGuid()
+            };
 
+            var result = mapperEditUserRequest.Map(request);
+
+            var user = new DbUser()
+            {
+                Id = request.Id,
+                Email = "Example@gmail.com",
+                FirstName = "Example",
+                LastName = "Example",
+                MiddleName = "Example",
+                Status = "Example",
+                PasswordHash = Encoding.UTF8.GetString(new SHA512Managed().ComputeHash(
+                    Encoding.UTF8.GetBytes(request.Password))),
+                IsAdmin = false,
+                IsActive = true,
+                AvatarFileId = request.AvatarFileId
+            };
+
+            SerializerAssert.AreEqual(user, result);
+        }
+
+        [Test]
+        public void ShouldThrowExceptionWhenRequestIsNull()
+        {
+            var request = new EditUserRequest();
+            Assert.Throws<ArgumentNullException>(() => mapperEditUserRequest.Map(request));
+        }
         #endregion
 
         #region ITwoModelsMapper<DbUser, IUserPositionResponse, object>
