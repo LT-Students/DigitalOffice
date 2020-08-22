@@ -1,3 +1,8 @@
+using Microsoft.AspNetCore.Builder;
+using Microsoft.AspNetCore.Hosting;
+using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Configuration;
+using Microsoft.Extensions.DependencyInjection;
 using FluentValidation;
 using LT.DigitalOffice.Kernel;
 using Microsoft.AspNetCore.Builder;
@@ -46,6 +51,7 @@ namespace LT.DigitalOffice.ProjectService
         {
             services.AddTransient<IGetProjectInfoByIdCommand, GetProjectInfoByIdCommand>();
             services.AddTransient<ICreateNewProjectCommand, CreateNewProjectCommand>();
+            services.AddTransient<IEditProjectByIdCommand, EditProjectByIdCommand>();
         }
 
         private void ConfigRepositories(IServiceCollection services)
@@ -57,11 +63,13 @@ namespace LT.DigitalOffice.ProjectService
         {
             services.AddTransient<IMapper<DbProject, Project>, ProjectMapper>();
             services.AddTransient<IMapper<NewProjectRequest, DbProject>, ProjectMapper>();
+            services.AddTransient<IMapper<EditProjectRequest, DbProject>, ProjectMapper>();
         }
 
         private void ConfigValidators(IServiceCollection services)
         {
             services.AddTransient<IValidator<NewProjectRequest>, NewProjectValidator>();
+            services.AddTransient<IValidator<EditProjectRequest>, EditProjectValidator>();
         }
 
         public void Configure(IApplicationBuilder app, IWebHostEnvironment env)

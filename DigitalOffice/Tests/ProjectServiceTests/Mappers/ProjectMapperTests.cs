@@ -1,32 +1,44 @@
-﻿using LT.DigitalOffice.ProjectService.Database.Entities;
-using LT.DigitalOffice.ProjectService.Mappers;
-using LT.DigitalOffice.ProjectService.Mappers.Interfaces;
-using LT.DigitalOffice.ProjectService.Models;
-using LT.DigitalOffice.ProjectServiceUnitTests.UnitTestLibrary;
-using NUnit.Framework;
-using System;
-using System.Collections.Generic;
+﻿using System;
 using System.Linq;
+using System.Collections.Generic;
+using NUnit.Framework;
+using LT.DigitalOffice.ProjectService.Models;
+using LT.DigitalOffice.ProjectService.Mappers;
+using LT.DigitalOffice.ProjectService.Database.Entities;
+using LT.DigitalOffice.ProjectService.Mappers.Interfaces;
+using LT.DigitalOffice.Kernel.UnitTestLibrary;
 
 namespace LT.DigitalOffice.ProjectServiceUnitTests.Mappers
 {
-    public class GetProjectInfoByIdMappersTests
+    public class ProjectMapperTests
     {
-        private IMapper<DbProject, Project> mapper;
+        private IMapper<DbProject, Project> dbToDtoMapper;
+        private IMapper<EditProjectRequest, DbProject> editRequestToDbMapper;
+        private IMapper<NewProjectRequest, DbProject> newRequestToDbMapper;
+
+        private const string NAME = "Project";
+        private const string DESCRIPTION = "DigitalOffice project. The students do the work. Sometimes.";
 
         private Guid projectId;
         private Guid workerId;
+        private Guid departmentId;
 
         private DbProjectWorkerUser dbWorkersIds;
 
         private DbProject dbProject;
+        private NewProjectRequest newRequest;
+        private EditProjectRequest editRequest;
 
         [SetUp]
         public void SetUp()
         {
-            mapper = new ProjectMapper();
+            dbToDtoMapper = new ProjectMapper();
+            editRequestToDbMapper = new ProjectMapper();
+            newRequestToDbMapper = new ProjectMapper();
+
             projectId = Guid.NewGuid();
             workerId = Guid.NewGuid();
+            departmentId = Guid.NewGuid();
 
             dbWorkersIds = new DbProjectWorkerUser
             {
@@ -34,24 +46,53 @@ namespace LT.DigitalOffice.ProjectServiceUnitTests.Mappers
                 Project = dbProject,
                 WorkerUserId = workerId
             };
+
             dbProject = new DbProject
             {
                 Id = projectId,
-                Name = "Project",
+                Name = NAME,
                 WorkersUsersIds = new List<DbProjectWorkerUser> { dbWorkersIds }
+            };
+
+            newRequest = new NewProjectRequest
+            {
+                Name = NAME,
+                DepartmentId = departmentId,
+                Description = DESCRIPTION,
+                IsActive = true
+            };
+
+            editRequest = new EditProjectRequest
+            {
+                Name = NAME + "SomeNewText",
+                Description = DESCRIPTION + "SomeNewText",
+                DepartmentId = Guid.NewGuid(),
+                IsActive = false
             };
         }
 
         [Test]
-        public void ShouldThrowExceptionWhenDbProjectIsNull()
+        public void ShouldThrowArgumentNullExceptionWhenDbProjectIsNull()
         {
-            Assert.Throws<ArgumentNullException>(() => mapper.Map(null));
+            Assert.Throws<ArgumentNullException>(() => dbToDtoMapper.Map(null));
         }
 
         [Test]
-        public void ShouldReturnProjectModelWhenMappingDbProject()
+        public void ShouldThrowArgumentNullExceptionWhenNewProjectRequestIsNull()
         {
-            var result = mapper.Map(dbProject);
+            Assert.Throws<ArgumentNullException>(() => newRequestToDbMapper.Map(null));
+        }
+
+        [Test]
+        public void ShouldThrowArgumentNullExceptionWhenEditProjectRequestIsNull()
+        {
+            Assert.Throws<ArgumentNullException>(() => editRequestToDbMapper.Map(null));
+        }
+
+        [Test]
+        public void ShouldReturnProjectModelWhenDbProjectIsMapped()
+        {
+            var result = dbToDtoMapper.Map(dbProject);
 
             var expected = new Project
             {
@@ -60,6 +101,42 @@ namespace LT.DigitalOffice.ProjectServiceUnitTests.Mappers
             };
 
             SerializerAssert.AreEqual(expected, result);
+        }
+
+        [Test]
+        public void ShouldReturnDbProjectModelWhenNewProjectRequestIsMapped()
+        {
+            var newProject = newRequestToDbMapper.Map(newRequest);
+
+            var expectedDbProject = new DbProject
+            {
+                Id = newProject.Id,
+                Name = newRequest.Name,
+                DepartmentId = newRequest.DepartmentId,
+                Description = newRequest.Description,
+                Deferred = false,
+                IsActive = newRequest.IsActive
+            };
+
+            Assert.IsInstanceOf<Guid>(newProject.Id);
+            SerializerAssert.AreEqual(expectedDbProject, newProject);
+        }
+
+        [Test]
+        public void ShouldReturnDbProjectModelWhenEditProjectRequestIsMapped()
+        {
+            var editProject = editRequestToDbMapper.Map(editRequest);
+
+            var expectedDbProject = new DbProject
+            {
+                Name = editRequest.Name,
+                DepartmentId = editRequest.DepartmentId,
+                Description = editRequest.Description,
+                IsActive = editRequest.IsActive,
+            };
+
+            Assert.AreEqual(editProject.Id, Guid.Empty);
+            SerializerAssert.AreEqual(expectedDbProject, editProject);
         }
     }
 }

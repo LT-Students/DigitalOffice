@@ -2,10 +2,10 @@ using LT.DigitalOffice.ProjectService.Database;
 using LT.DigitalOffice.ProjectService.Database.Entities;
 using LT.DigitalOffice.ProjectService.Repositories;
 using LT.DigitalOffice.ProjectService.Repositories.Interfaces;
-using LT.DigitalOffice.ProjectServiceUnitTests.UnitTestLibrary;
 using Microsoft.EntityFrameworkCore;
 using NUnit.Framework;
 using System;
+using LT.DigitalOffice.Kernel.UnitTestLibrary;
 using System.Collections.Generic;
 
 namespace LT.DigitalOffice.ProjectServiceUnitTests.Repositories
