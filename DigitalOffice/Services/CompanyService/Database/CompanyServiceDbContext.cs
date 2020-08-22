@@ -17,6 +17,7 @@ namespace LT.DigitalOffice.CompanyService.Database
         public DbSet<DbPosition> Positions { get; set; }
         public DbSet<DbCompany> Companies { get; set; }
         public DbSet<DbDepartment> Departments { get; set; }
+        public DbSet<DbCompanyUser> CompaniesUsers { get; set; }
 
         // Fluent API is written here.
         protected override void OnModelCreating(ModelBuilder modelBuilder)

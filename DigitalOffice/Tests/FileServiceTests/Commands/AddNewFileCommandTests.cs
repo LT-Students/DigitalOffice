@@ -52,7 +52,7 @@ namespace LT.DigitalOffice.FileServiceUnitTests.Commands
         }
 
         [Test]
-        public void SuccessfulAddNewFileTest()
+        public void ShouldAddNewFile()
         {
             var fileId = Guid.NewGuid();
 
@@ -71,7 +71,7 @@ namespace LT.DigitalOffice.FileServiceUnitTests.Commands
         }
 
         [Test]
-        public void FailedAddNewFileInvalidEncodingTest()
+        public void ShouldThrowExceptionWhenValidatorThrowsException()
         {
             validatorMock
                  .Setup(x => x.Validate(It.IsAny<IValidationContext>()).IsValid)
@@ -84,7 +84,7 @@ namespace LT.DigitalOffice.FileServiceUnitTests.Commands
         }
 
         [Test]
-        public void FailedAddNewFileDuplicateGuidTest()
+        public void ShouldThrowExceptionWhenRepositoryThrowsException()
         {
             validatorMock
                  .Setup(x => x.Validate(It.IsAny<IValidationContext>()).IsValid)
@@ -101,7 +101,7 @@ namespace LT.DigitalOffice.FileServiceUnitTests.Commands
         }
 
         [Test]
-        public void FailedAddNewFileNullRequestTest()
+        public void ShouldThrowNullReferenceExceptionWhenFileRequestIsNull()
         {
             fileRequest = null;
             Assert.Throws<NullReferenceException>(() => command.Execute(fileRequest), "Request is null");

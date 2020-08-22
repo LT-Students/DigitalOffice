@@ -12,6 +12,7 @@ using LT.DigitalOffice.TimeManagementService.Models;
 using LT.DigitalOffice.TimeManagementService.Repositories;
 using LT.DigitalOffice.TimeManagementService.Repositories.Interfaces;
 using LT.DigitalOffice.TimeManagementService.Validators;
+using LT.DigitalOffice.Kernel;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.EntityFrameworkCore;
@@ -71,26 +72,32 @@ namespace LT.DigitalOffice.TimeManagementService
 
         private void ConfigureCommands(IServiceCollection services)
         {
+            services.AddTransient<ICreateLeaveTimeCommand, CreateLeaveTimeCommand>();
             services.AddTransient<ICreateWorkTimeCommand, CreateWorkTimeCommand>();
         }
 
         private void ConfigureValidators(IServiceCollection services)
         {
+            services.AddTransient<IValidator<CreateLeaveTimeRequest>, CreateLeaveTimeRequestValidator>();
             services.AddTransient<IValidator<CreateWorkTimeRequest>, CreateWorkTimeRequestValidator>();
         }
 
         private void ConfigureMappers(IServiceCollection services)
         {
+            services.AddTransient<IMapper<CreateLeaveTimeRequest, DbLeaveTime>, LeaveTimeMapper>();
             services.AddTransient<IMapper<CreateWorkTimeRequest, DbWorkTime>, WorkTimeMapper>();
         }
 
         private void ConfigureRepositories(IServiceCollection services)
         {
+            services.AddTransient<ILeaveTimeRepository, LeaveTimeRepository>();
             services.AddTransient<IWorkTimeRepository, WorkTimeRepository>();
         }
 
         public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
         {
+            app.UseExceptionHandler(tempApp => tempApp.Run(CustomExceptionHandler.HandleCustomException));
+
             UpdateDatabase(app);
 
             app.UseHttpsRedirection();

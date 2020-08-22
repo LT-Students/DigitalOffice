@@ -22,29 +22,57 @@ namespace LT.DigitalOffice.FileServiceUnitTests.Validators
                 Name = "DigitalOfficeTestFile"
             };
 
-            validator = new NewFileValidator();
+            validator = new AddNewFileValidator();
         }
 
         [Test]
-        public void SuccessfulFileValidationTest()
+        public void ShouldNotHaveAnyValidationErrorsWhenFileIsValid()
         {
             validator.TestValidate(fileRequest).ShouldNotHaveAnyValidationErrors();
         }
 
         [Test]
-        public void FailedFileEncodingValidationTest()
+        public void ShouldHaveValidationErrorWhenContentIsInWrongEncoding()
         {
             fileRequest.Content = "T 1 ! * & ? Z :C ; _____";
+
             var fileValidationResult = validator.TestValidate(fileRequest);
+
             fileValidationResult.ShouldHaveValidationErrorFor(f => f.Content);
         }
 
         [Test]
-        public void FailedFileNameLengthValidationTest()
+        public void ShouldHaveValidationErrorWhenNameIsTooLong()
         {
             fileRequest.Name += fileRequest.Name.PadLeft(244);
+
             var fileValidationResult = validator.TestValidate(fileRequest);
+
             fileValidationResult.ShouldHaveValidationErrorFor(f => f.Name);
+        }
+
+        [Test]
+        public void ShouldHaveValidationErrorWhenNameIsEmpty()
+        {
+            fileRequest.Name = "";
+
+            validator.TestValidate(fileRequest).ShouldHaveValidationErrorFor(request => request.Name);
+        }
+
+        [Test]
+        public void ShouldHaveValidationErrorWhenContentIsNull()
+        {
+            fileRequest.Content = null;
+
+            validator.TestValidate(fileRequest).ShouldHaveValidationErrorFor(request => request.Content);
+        }
+
+        [Test]
+        public void ShouldHaveValidationErrorWhenNameDoesNotMatchRegularExpression()
+        {
+            fileRequest.Name = "???'";
+
+            validator.TestValidate(fileRequest).ShouldHaveValidationErrorFor(request => request.Name);
         }
     }
 }

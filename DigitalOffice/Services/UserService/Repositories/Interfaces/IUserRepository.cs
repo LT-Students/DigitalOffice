@@ -20,7 +20,21 @@ namespace LT.DigitalOffice.UserService.Repositories.Interfaces
         /// Adds new user to the database. Returns whether it was successful to add.
         /// </summary>
         /// <param name="user">User to add.</param>
-        /// <returns>Whether it was successful to add</returns>
-        bool UserCreate(DbUser user);
+        /// <returns>Guid of added user.</returns>
+        Guid UserCreate(DbUser user);
+      
+        /// <summary>
+        /// Edit existing user. Returns whether it was successful to edit.
+        /// </summary>
+        /// <param name="user">User to edit.</param>
+        /// <returns>Whether it was successful to edit</returns>
+        bool EditUser(DbUser user);
+
+        /// <summary>
+        /// Returns the user with the specified email from database.
+        /// </summary>
+        /// <param name="userEmail">Specified email of user.</param>
+        /// <returns>User model.</returns>
+        DbUser GetUserByEmail(string userEmail);
     }
 }

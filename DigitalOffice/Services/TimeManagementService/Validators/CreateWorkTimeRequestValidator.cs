@@ -5,6 +5,7 @@ using LT.DigitalOffice.TimeManagementService.Repositories.Interfaces;
 using Microsoft.AspNetCore.Mvc;
 using System;
 using System.Globalization;
+using System.Linq;
 
 namespace LT.DigitalOffice.TimeManagementService.Validators
 {
@@ -34,8 +35,8 @@ namespace LT.DigitalOffice.TimeManagementService.Validators
 
             RuleFor(wt => wt.StartTime)
                 .NotEqual(new DateTime())
-                .Must(st => st > fromDateTime)
-                .WithMessage(date => $"WorkTime had to be filled no later than {fromDateTime.ToString(culture)}.")
+                .Must(st => st > fromDateTime).WithMessage(date =>
+                    $"WorkTime had to be filled no later than {fromDateTime.ToString(culture)}.")
                 .Must(st => st < toDateTime)
                 .WithMessage(date => $"WorkTime cannot be filled until {toDateTime.ToString(culture)}.");
 
@@ -51,10 +52,8 @@ namespace LT.DigitalOffice.TimeManagementService.Validators
             RuleFor(wt => wt)
                 .Must(wt => wt.StartTime < wt.EndTime)
                 .WithMessage("You cannot indicate that you worked zero hours or a negative amount.")
-                .Must(wt => wt.EndTime - wt.StartTime <= WorkingLimit)
-                .WithMessage(time => string.Format(
-                    "You cannot indicate that you worked more than {0} hours and {1} minutes.",
-                    WorkingLimit.Hours, WorkingLimit.Minutes))
+                .Must(wt => wt.EndTime - wt.StartTime <= WorkingLimit).WithMessage(time =>
+                    $"You cannot indicate that you worked more than {WorkingLimit.Hours} hours and {WorkingLimit.Minutes} minutes.")
                 .Must(wt =>
                 {
                     var oldWorkTimes = repository.GetUserWorkTimes(
@@ -65,19 +64,9 @@ namespace LT.DigitalOffice.TimeManagementService.Validators
                             EndTime = wt.EndTime
                         });
 
-                    foreach (var oldWorkTime in oldWorkTimes)
-                    {
-                        var firstNewWorkTime = wt.EndTime <= oldWorkTime.StartTime;
-                        var firstOldWorkTime = oldWorkTime.EndTime <= wt.StartTime;
-                        if (!(firstNewWorkTime || firstOldWorkTime))
-                        {
-                            return false;
-                        }
-                    }
-
-                    return true;
-                })
-                .WithMessage("New WorkTime should not overlap with old ones.");
+                    return oldWorkTimes.All(oldWorkTime =>
+                        wt.EndTime <= oldWorkTime.StartTime || oldWorkTime.EndTime <= wt.StartTime);
+                }).WithMessage("New WorkTime should not overlap with old ones.");
         }
     }
 }

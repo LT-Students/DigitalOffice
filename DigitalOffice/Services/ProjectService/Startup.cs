@@ -4,6 +4,7 @@ using Microsoft.AspNetCore.Hosting;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
+using LT.DigitalOffice.Kernel;
 using LT.DigitalOffice.ProjectService.Commands;
 using LT.DigitalOffice.ProjectService.Commands.Interfaces;
 using LT.DigitalOffice.ProjectService.Database;
@@ -93,6 +94,8 @@ namespace LT.DigitalOffice.ProjectService
 
         public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
         {
+            app.UseExceptionHandler(tempApp => tempApp.Run(CustomExceptionHandler.HandleCustomException));
+
             UpdateDatabase(app);
 
             app.UseHttpsRedirection();

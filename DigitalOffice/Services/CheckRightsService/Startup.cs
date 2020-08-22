@@ -10,6 +10,7 @@ using LT.DigitalOffice.CheckRightsService.Mappers.Interfaces;
 using LT.DigitalOffice.CheckRightsService.Models;
 using LT.DigitalOffice.CheckRightsService.Repositories;
 using LT.DigitalOffice.CheckRightsService.Repositories.Interfaces;
+using LT.DigitalOffice.Kernel;
 using LT.DigitalOffice.CheckRightsService.Validators;
 using MassTransit;
 using Microsoft.AspNetCore.Builder;
@@ -49,6 +50,8 @@ namespace LT.DigitalOffice.CheckRightsService
 
         public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
         {
+            app.UseExceptionHandler(tempApp => tempApp.Run(CustomExceptionHandler.HandleCustomException));
+            
             UpdateDatabase(app);
 
             app.UseHttpsRedirection();

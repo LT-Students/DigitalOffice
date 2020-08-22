@@ -30,11 +30,6 @@ namespace LT.DigitalOffice.ProjectService.Repositories
 
         public Guid CreateNewProject(DbProject newProject)
         {
-            if (dbContext.Projects.Any(projects => projects.Name == newProject.Name))
-            {
-                throw new Exception("Project name is already taken.");
-            }
-
             dbContext.Projects.Add(newProject);
             dbContext.SaveChanges();
 

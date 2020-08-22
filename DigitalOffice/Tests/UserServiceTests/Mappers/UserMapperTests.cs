@@ -1,26 +1,35 @@
-﻿using LT.DigitalOffice.UserService.Database.Entities;
-using LT.DigitalOffice.UserService.Mappers;
-using LT.DigitalOffice.UserService.Mappers.Interfaces;
-using LT.DigitalOffice.UserService.Models;
 using NUnit.Framework;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Security.Cryptography;
+using System.Text;
+using LT.DigitalOffice.Broker.Responses;
+using LT.DigitalOffice.UserService.Database.Entities;
+using LT.DigitalOffice.UserService.Mappers;
+using LT.DigitalOffice.UserService.Mappers.Interfaces;
+using LT.DigitalOffice.UserService.Models;
+using LT.DigitalOffice.UserServiceUnitTests.UnitTestLibrary;
+using LT.DigitalOffice.UserServiceUnitTests.Utils;
 
 namespace LT.DigitalOffice.UserServiceUnitTests.Mappers
 {
     public class UserMapperTests
     {
         private IMapper<DbUser, User> mapper;
+        private IMapper<EditUserRequest, DbUser> mapperEditUserRequest;
+        private IMapper<DbUser, IUserPositionResponse, object> mapper2;
 
         private const string Email = "smth@emal.com";
         private const string Message = "smth";
         private const string FirstName = "Ivan";
+        private const string MiddleName = "Ivanovich";
         private const string LastName = "Dudikov";
         private const string PasswordHash = "42";
         private const bool IsActive = true;
         private const string Status = "Hello, world!";
         private const bool IsAdmin = false;
+        private const string UserPositionName = "Software Engineer";
 
         private Guid userId;
         private Guid achievementId;
@@ -32,11 +41,15 @@ namespace LT.DigitalOffice.UserServiceUnitTests.Mappers
         private DbUserAchievement dbUserAchievement;
         private DbUser dbUser;
         private DbUserCertificateFile dbUserCertificateFile;
+        private IUserPositionResponse userPosition;
 
         [SetUp]
         public void SetUp()
         {
             mapper = new UserMapper();
+            mapperEditUserRequest = new UserMapper();
+            mapper2 = new UserMapper();
+
             userId = Guid.NewGuid();
             achievementId = Guid.NewGuid();
             certificateFileId = Guid.NewGuid();
@@ -59,14 +72,16 @@ namespace LT.DigitalOffice.UserServiceUnitTests.Mappers
             };
         }
 
+        #region IMapper<DbUser, User>
+
         [Test]
-        public void ShouldThrowArgumentNullExceptionIfArgumentOfMapIsNull()
+        public void ShouldThrowArgumentNullExceptionWhenDbUserIsNull()
         {
             Assert.Throws<ArgumentNullException>(() => mapper.Map(null));
         }
 
         [Test]
-        public void ShouldSuccessfulReturnUserModelAfterMapCorrectDbEntity()
+        public void ShouldReturnUserModelWhenMappingValidDbUser()
         {
             var resultUserModel = mapper.Map(dbUser);
 
@@ -87,5 +102,90 @@ namespace LT.DigitalOffice.UserServiceUnitTests.Mappers
             Assert.AreEqual(avatarFileId, resultUserModel.AvatarId);
             Assert.AreEqual(IsAdmin, resultUserModel.IsAdmin);
         }
+        #endregion
+        
+        #region EditUserRequest to DbUser
+        [Test]
+        public void ShouldReturnNewDbUserWhenDataCorrect()
+        {
+            var request = new EditUserRequest()
+            {
+                Id = Guid.NewGuid(),
+                Email = "Example@gmail.com",
+                FirstName = "Example",
+                LastName = "Example",
+                MiddleName = "Example",
+                Status = "Example",
+                Password = "Example",
+                IsAdmin = false,
+                IsActive = true,
+                AvatarFileId = Guid.NewGuid()
+            };
+
+            var result = mapperEditUserRequest.Map(request);
+
+            var user = new DbUser()
+            {
+                Id = request.Id,
+                Email = "Example@gmail.com",
+                FirstName = "Example",
+                LastName = "Example",
+                MiddleName = "Example",
+                Status = "Example",
+                PasswordHash = Encoding.UTF8.GetString(new SHA512Managed().ComputeHash(
+                    Encoding.UTF8.GetBytes(request.Password))),
+                IsAdmin = false,
+                IsActive = true,
+                AvatarFileId = request.AvatarFileId
+            };
+
+            SerializerAssert.AreEqual(user, result);
+        }
+
+        [Test]
+        public void ShouldThrowExceptionWhenRequestIsNull()
+        {
+            var request = new EditUserRequest();
+            Assert.Throws<ArgumentNullException>(() => mapperEditUserRequest.Map(request));
+        }
+        #endregion
+
+        #region ITwoModelsMapper<DbUser, IUserPositionResponse, object>
+        [Test]
+        public void ShouldThrowArgumentNullExceptionWhenFirstArgumentIsNull()
+        {
+            Assert.Throws<ArgumentNullException>(() => mapper2.Map(dbUser, null));
+        }
+
+        [Test]
+        public void ShouldThrowArgumentNullExceptionWhenSecondArgumentIsNull()
+        {
+            Assert.Throws<ArgumentNullException>(() => mapper2.Map(dbUser, null));
+        }
+
+        [Test]
+        public void ShouldReturnModel()
+        {
+            userPosition = new InheritedUserPositionResponse
+            {
+                UserPositionName = UserPositionName
+            };
+
+            dbUser.MiddleName = MiddleName;
+
+            var expectedResult = new
+            {
+                UserId = userId,
+                FirstName = FirstName,
+                LastName = LastName,
+                MiddleName = MiddleName,
+                UserPosition = userPosition
+            };
+
+            var result = mapper2.Map(dbUser, userPosition);
+
+            SerializerAssert.AreEqual(expectedResult, result);
+        }
+        #endregion
     }
 }

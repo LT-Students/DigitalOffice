@@ -1,0 +1,27 @@
+﻿<Project Sdk="Microsoft.NET.Sdk.Web">
+
+  <PropertyGroup>
+    <TargetFramework>netcoreapp3.1</TargetFramework>
+    <AssemblyName>LT.DigitalOffice.AuthenticationService</AssemblyName>
+    <RootNamespace>LT.DigitalOffice.AuthenticationService</RootNamespace>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <PackageReference Include="FluentValidation" Version="9.0.1" />
+    <PackageReference Include="GreenPipes" Version="4.0.0" />
+    <PackageReference Include="MassTransit" Version="7.0.2" />
+    <PackageReference Include="MassTransit.AspNetCore" Version="7.0.2" />
+    <PackageReference Include="MassTransit.Extensions.DependencyInjection" Version="7.0.2" />
+    <PackageReference Include="MassTransit.RabbitMQ" Version="7.0.2" />
+    <PackageReference Include="Microsoft.AspNetCore.Authentication.JwtBearer" Version="3.1.6" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\..\Shared\Kernel\Kernel.csproj" />
+  </ItemGroup>
+
+  <PropertyGroup>
+    <LangVersion>preview</LangVersion>
+  </PropertyGroup>
+
+</Project>

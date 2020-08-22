@@ -38,7 +38,7 @@ namespace LT.DigitalOffice.FileServiceUnitTests.Commands
         }
 
         [Test]
-        public void ThrowsExceptionIfRepositoryThrowsIt()
+        public void ShouldThrowExceptionWhenRepositoryThrowsIt()
         {
             repositoryMock.Setup(x => x.GetFileById(It.IsAny<Guid>())).Throws(new Exception());
 
@@ -46,7 +46,7 @@ namespace LT.DigitalOffice.FileServiceUnitTests.Commands
         }
 
         [Test]
-        public void ThrowsExceptionIfMapperThrowsIt()
+        public void ShouldThrowExceptionWhenMapperThrowsIt()
         {
             mapperMock.Setup(x => x.Map(It.IsAny<DbFile>())).Throws(new Exception());
 
@@ -54,7 +54,7 @@ namespace LT.DigitalOffice.FileServiceUnitTests.Commands
         }
 
         [Test]
-        public void ReturnsFileInfoSuccessfully()
+        public void ShouldReturnFileInfo()
         {
             var expected = new File
             {

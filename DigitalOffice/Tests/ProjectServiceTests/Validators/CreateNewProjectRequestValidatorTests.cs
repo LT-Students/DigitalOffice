@@ -10,31 +10,50 @@ namespace LT.DigitalOffice.ProjectServiceUnitTests.Validators
     public class CreateNewProjectRequestValidatorTests
     {
         private IValidator<NewProjectRequest> validator;
-
+        private NewProjectRequest projectRequest;
         [SetUp]
         public void SetUp()
         {
             validator = new NewProjectValidator();
+            projectRequest = new NewProjectRequest
+            {
+                DepartmentId = Guid.NewGuid(),
+                Description = "New project for Lanit-Tercom",
+                IsActive = true,
+                Name = "12DigitalOffice24322525"
+            };
         }
 
         [Test]
-        public void ValidationFailEmptyNameProjectTest()
+        public void ShouldHaveValidationErrorWhenProjectNameIsEmpty()
         {
             validator.ShouldHaveValidationErrorFor(x => x.Name, "");
-
-            validator.ShouldNotHaveValidationErrorFor(x => x.DepartmentId, Guid.NewGuid());
-            validator.ShouldNotHaveValidationErrorFor(x => x.Description, "New project for Lanit-Tercom");
-            validator.ShouldNotHaveValidationErrorFor(x => x.IsActive, true);
         }
 
         [Test]
-        public void ValidationSuccesfullyNumberInNameProjectTest()
+        public void ShouldHaveValidationErrorForWhenProjectNameIsTooLong()
         {
-            validator.ShouldNotHaveValidationErrorFor(x => x.Name, "12DigitalOffice24322525");
+            projectRequest.Name += projectRequest.Name.PadLeft(81);
 
-            validator.ShouldNotHaveValidationErrorFor(x => x.DepartmentId, Guid.NewGuid());
-            validator.ShouldNotHaveValidationErrorFor(x => x.Description, "New project for Lanit-Tercom");
-            validator.ShouldNotHaveValidationErrorFor(x => x.IsActive, true);
+            validator.TestValidate(projectRequest).ShouldHaveValidationErrorFor(request => request.Name)
+                .WithErrorMessage("Project name too long.");
+        }
+
+        [TestCase("12-")]
+        [TestCase("&&")]
+        [TestCase("Hello!")]
+        public void ShouldHaveValidationErrorForWhenProjectNameDoesNotMatchRegularExpression(string wrongName)
+        {
+            projectRequest.Name = wrongName;
+
+            validator.TestValidate(projectRequest).ShouldHaveValidationErrorFor(request => request.Name)
+                .WithErrorMessage("Incorrect project name.");
+        }
+
+        [Test]
+        public void ShouldShouldNotHaveAnyValidationErrorsWhenRequestIsValid()
+        {
+            validator.TestValidate(projectRequest).ShouldNotHaveAnyValidationErrors();
         }
     }
 }

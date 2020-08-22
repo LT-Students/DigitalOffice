@@ -40,7 +40,7 @@ namespace LT.DigitalOffice.FileServiceUnitTests.Mappers
         }
 
         [Test]
-        public void FailedDbMappingObjectIsNullTest()
+        public void ShouldThrowArgumentNullExceptionWhenDbMappingObjectIsNull()
         {
             dbFile = null;
 
@@ -48,7 +48,7 @@ namespace LT.DigitalOffice.FileServiceUnitTests.Mappers
         }
 
         [Test]
-        public void FailedRequestMappingObjectIsNullTest()
+        public void ShouldThrowArgumentNullExceptionWhenRequestMappingObjectIsNull()
         {
             fileRequest = null;
 
@@ -56,7 +56,7 @@ namespace LT.DigitalOffice.FileServiceUnitTests.Mappers
         }
 
         [Test]
-        public void SuccessfulRequestMappingTest()
+        public void ShouldReturnDbFileWhenMappingFileRequest()
         {
             var newFile = requestToDbMapper.Map(fileRequest);
 
@@ -74,7 +74,7 @@ namespace LT.DigitalOffice.FileServiceUnitTests.Mappers
         }
 
         [Test]
-        public void SuccessfulDbFileMappingTest()
+        public void ShouldReturnFileResponseWhenMappingDbFile()
         {
             var newFileDto = dbToDtoMapper.Map(dbFile);
 

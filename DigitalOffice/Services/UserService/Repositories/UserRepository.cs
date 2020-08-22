@@ -1,9 +1,9 @@
 ﻿using LT.DigitalOffice.UserService.Database;
 using LT.DigitalOffice.UserService.Database.Entities;
+using LT.DigitalOffice.UserService.Mappers.Interfaces;
 using LT.DigitalOffice.UserService.Repositories.Interfaces;
 using System;
 using System.Linq;
-using LT.DigitalOffice.UserService.Mappers.Interfaces;
 
 namespace LT.DigitalOffice.UserService.Repositories
 {
@@ -23,7 +23,7 @@ namespace LT.DigitalOffice.UserService.Repositories
             this.userServiceDbContext = userServiceDbContext;
         }
 
-        public bool UserCreate(DbUser user)
+        public Guid UserCreate(DbUser user)
         {
             if (userServiceDbContext.Users.Any(users => user.Email == users.Email))
             {
@@ -33,11 +33,36 @@ namespace LT.DigitalOffice.UserService.Repositories
             userServiceDbContext.Users.Add(user);
             userServiceDbContext.SaveChanges();
 
-            return true;
+            return user.Id;
         }
 
         public DbUser GetUserInfoById(Guid userId)
             => userServiceDbContext.Users.FirstOrDefault(dbUser => dbUser.Id == userId) ??
                throw new Exception("User with this id not found.");
+
+        public bool EditUser(DbUser user)
+        {
+            if (!userServiceDbContext.Users.Any(users => user.Id == users.Id))
+            {
+                throw new Exception("User was not found.");
+            }
+
+            userServiceDbContext.Users.Update(user);
+            userServiceDbContext.SaveChanges();
+
+            return true;
+        }
+
+        public DbUser GetUserByEmail(string userEmail)
+        {
+            DbUser user = userServiceDbContext.Users.FirstOrDefault(u => u.Email == userEmail);
+
+            if (user == null)
+            {
+                throw new Exception("User not found.");
+            }
+
+            return user;
+        }
     }
 }

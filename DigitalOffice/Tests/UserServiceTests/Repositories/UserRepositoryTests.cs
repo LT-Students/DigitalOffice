@@ -6,7 +6,9 @@ using LT.DigitalOffice.UserServiceUnitTests.UnitTestLibrary;
 using Microsoft.EntityFrameworkCore;
 using NUnit.Framework;
 using System;
+using System.Collections.Generic;
 using System.Collections.ObjectModel;
+using System.Linq;
 using System.Security.Cryptography;
 using System.Text;
 
@@ -16,14 +18,17 @@ namespace LT.DigitalOffice.UserServiceUnitTests.Repositories
     {
         private UserServiceDbContext dbContext;
         private IUserRepository repository;
-        private DbUser dbUser;
 
-        private const string ExceptionMessage = "User with this id not found.";
+        private DbUser firstUser;
+        private DbUser secondUser;
+
+        private const string UserNotFoundExceptionMessage = "User with this id not found.";
+        private const string EmailAlreadyTakenExceptionMessage = "Email is already taken.";
 
         private UserServiceDbContext GetMemoryContext()
         {
             var options = new DbContextOptionsBuilder<UserServiceDbContext>()
-                .UseInMemoryDatabase(databaseName: "InMemoryDatabase")
+                .UseInMemoryDatabase("InMemoryDatabase")
                 .Options;
 
             return new UserServiceDbContext(options);
@@ -35,23 +40,39 @@ namespace LT.DigitalOffice.UserServiceUnitTests.Repositories
             dbContext = GetMemoryContext();
             repository = new UserRepository(dbContext);
 
-            dbUser = new DbUser
+            firstUser = new DbUser
             {
-                Id = Guid.NewGuid(),
-                Email = "Example@gmail.com",
-                FirstName = "Example",
-                LastName = "Example",
-                MiddleName = "Example",
-                Status = "Example",
-                PasswordHash = (new SHA512Managed().ComputeHash(Encoding.Default.GetBytes("Example"))).ToString(),
-                AvatarFileId = null,
-                IsActive = true,
-                IsAdmin = false,
-                CertificatesFilesIds = new Collection<DbUserCertificateFile>(),
-                AchievementsIds = new Collection<DbUserAchievement>()
+              Id = Guid.NewGuid(),
+              Email = "Example@gmail.com",
+              FirstName = "Example",
+              LastName = "Example",
+              MiddleName = "Example",
+              Status = "Example",
+              PasswordHash =
+                  Encoding.Default.GetString(new SHA512Managed().ComputeHash(Encoding.Default.GetBytes("Example"))),
+              AvatarFileId = null,
+              IsActive = true,
+              IsAdmin = false,
+              CertificatesFilesIds = new Collection<DbUserCertificateFile>(),
+              AchievementsIds = new Collection<DbUserAchievement>()
             };
 
-            dbContext.Users.Add(dbUser);
+            secondUser = new DbUser
+            {
+              Id = Guid.NewGuid(),
+              Email = "DifferentEmail@gmail.com",
+              FirstName = "Example",
+              LastName = "Example",
+              MiddleName = "Example",
+              Status = "Example",
+              PasswordHash = Encoding.Default.GetString(new SHA512Managed().ComputeHash(Encoding.Default.GetBytes("Example"))),
+              AvatarFileId = null,
+              IsActive = true,
+              IsAdmin = false,
+              CertificatesFilesIds = new Collection<DbUserCertificateFile>(),
+              AchievementsIds = new Collection<DbUserAchievement>()
+            };
+            dbContext.Users.Add(firstUser);
             dbContext.SaveChanges();
         }
 
@@ -64,24 +85,64 @@ namespace LT.DigitalOffice.UserServiceUnitTests.Repositories
             }
         }
 
+        #region GetUserInfoById
         [Test]
-        public void ShouldThrowExceptionIfUserWithRequiredIdDoesNotExist()
+        public void ShouldThrowExceptionWhenUserWithRequiredIdDoesNotExist()
         {
-            Assert.Throws<Exception>(() => repository.GetUserInfoById(Guid.Empty), ExceptionMessage);
+            Assert.That(() => repository.GetUserInfoById(Guid.Empty),
+                Throws.TypeOf<Exception>().And.Message.EqualTo(UserNotFoundExceptionMessage));
         }
 
         [Test]
-        public void ShouldReturnUserIfUserWithRequiredIdExists()
+        public void ShouldReturnUserWhenUserWithRequiredIdExists()
         {
-            var resultUser = repository.GetUserInfoById(dbUser.Id);
+            var resultUser = repository.GetUserInfoById(firstUser.Id);
 
-            Assert.IsNotNull(resultUser);
             Assert.IsInstanceOf<DbUser>(resultUser);
-            SerializerAssert.AreEqual(dbUser, resultUser);
+            SerializerAssert.AreEqual(firstUser, resultUser);
+            Assert.That(dbContext.Users, Is.EquivalentTo(new[] {firstUser}));
+        }
+        #endregion
+
+        #region UserCreate
+        [Test]
+        public void ShouldThrowExceptionIfUserWithRequiredEmailDoesNotExist()
+        {
+            Assert.Throws<Exception>(() => repository.GetUserByEmail(string.Empty));
+            Assert.That(dbContext.Users, Is.EquivalentTo(new List<DbUser> { firstUser }));
         }
 
         [Test]
-        public void ShouldCreateUserWhenUserDataIsCorrect()
+        public void ShouldReturnUserSuccessfully()
+        {
+            var resultUser = repository.GetUserByEmail(firstUser.Email);
+
+            SerializerAssert.AreEqual(firstUser, resultUser);
+            Assert.That(dbContext.Users, Is.EquivalentTo(new List<DbUser> { firstUser }));
+        }
+        #endregion
+
+        #region GetUserByEmail
+        [Test]
+        public void ShouldThrowExceptionIfUserWithRequiredEmailDoesNotExistWhileGettingUserByEmail()
+        {
+            Assert.Throws<Exception>(() => repository.GetUserByEmail(string.Empty));
+            Assert.That(dbContext.Users, Is.EquivalentTo(new List<DbUser> { firstUser }));
+        }
+
+        [Test]
+        public void ShouldReturnUserByEmailSuccessfully()
+        {
+            var resultUser = repository.GetUserByEmail(firstUser.Email);
+
+            SerializerAssert.AreEqual(firstUser, resultUser);
+            Assert.That(dbContext.Users, Is.EquivalentTo(new List<DbUser> { firstUser }));
+        }
+        #endregion
+
+        #region EditUser
+        [Test]
+        public void ShouldThrowExceptionIfUserWithRequiredIdDoesNotExistWhileEditingUser()
         {
             var user = new DbUser
             {
@@ -91,7 +152,8 @@ namespace LT.DigitalOffice.UserServiceUnitTests.Repositories
                 LastName = "Example",
                 MiddleName = "Example",
                 Status = "Example",
-                PasswordHash = (new SHA512Managed().ComputeHash(Encoding.Default.GetBytes("Example"))).ToString(),
+                PasswordHash = Encoding.UTF8.GetString(new SHA512Managed().ComputeHash(
+                    Encoding.UTF8.GetBytes("Password"))),
                 AvatarFileId = null,
                 IsActive = true,
                 IsAdmin = false,
@@ -99,29 +161,58 @@ namespace LT.DigitalOffice.UserServiceUnitTests.Repositories
                 AchievementsIds = new Collection<DbUserAchievement>()
             };
 
-            Assert.True(repository.UserCreate(user));
+            Assert.Throws<Exception>(() => repository.EditUser(user));
+            Assert.That(dbContext.Users.Find(firstUser.Id).Equals(firstUser));
+            Assert.That(dbContext.Users, Is.EquivalentTo(new List<DbUser> { firstUser }));
+        }
+
+        [Test]
+        public void ShouldEditUserWhenUserDataIsCorrect()
+        {
+            var local = dbContext.Users
+                .Local
+                .FirstOrDefault(entry => entry.Id.Equals(firstUser.Id));
+            dbContext.Entry(local).State = EntityState.Detached;
+
+            var user = new DbUser
+            {
+                Id = firstUser.Id,
+                Email = "Example1@gmail.com",
+                FirstName = "Example",
+                LastName = "Example",
+                MiddleName = "Example",
+                Status = "Example",
+                PasswordHash = Encoding.UTF8.GetString(new SHA512Managed().ComputeHash(
+                    Encoding.UTF8.GetBytes("Password"))),
+                AvatarFileId = null,
+                IsActive = true,
+                IsAdmin = false,
+                CertificatesFilesIds = new Collection<DbUserCertificateFile>(),
+                AchievementsIds = new Collection<DbUserAchievement>()
+            };
+            dbContext.Entry(user).State = EntityState.Modified;
+
+            Assert.True(repository.EditUser(user));
+            Assert.That(dbContext.Users.Find(firstUser.Id).Equals(user));
+            Assert.That(dbContext.Users, Is.EquivalentTo(new List<DbUser> { user }));
+        }
+        #endregion
+
+        #region UserCreate
+        [Test]
+        public void ShouldCreateUserWhenUserDataIsValid()
+        {
+            Assert.That(repository.UserCreate(secondUser),Is.EqualTo(secondUser.Id));
+            Assert.That(dbContext.Users, Is.EquivalentTo(new[] {firstUser, secondUser}));
         }
 
         [Test]
         public void ShouldThrowExceptionWhenEmailIsAlreadyTaken()
         {
-            var user = new DbUser
-            {
-                Id = Guid.NewGuid(),
-                Email = "Example@gmail.com",
-                FirstName = "Example",
-                LastName = "Example",
-                MiddleName = "Example",
-                Status = "Example",
-                PasswordHash = (new SHA512Managed().ComputeHash(Encoding.Default.GetBytes("Example"))).ToString(),
-                AvatarFileId = null,
-                IsActive = true,
-                IsAdmin = false,
-                CertificatesFilesIds = new Collection<DbUserCertificateFile>(),
-                AchievementsIds = new Collection<DbUserAchievement>()
-            };
-
-            Assert.Throws<Exception>(() => repository.UserCreate(user), "Email is already taken.");
+            Assert.That(() => repository.UserCreate(firstUser),
+                Throws.Exception.TypeOf<Exception>().And.Message.EqualTo(EmailAlreadyTakenExceptionMessage));
+            Assert.That(dbContext.Users, Is.EquivalentTo(new[] {firstUser}));
         }
+        #endregion
     }
 }
