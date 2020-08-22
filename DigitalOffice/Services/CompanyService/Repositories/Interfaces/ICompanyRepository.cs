@@ -12,6 +12,13 @@ namespace LT.DigitalOffice.CompanyService.Repositories.Interfaces
     public interface ICompanyRepository
     {
         /// <summary>
+        /// Edits an existing position in the database. Returns whether it was successful to edit.
+        /// </summary>
+        /// <param name="position">Position to edit.</param>
+        /// <returns>Whether it was successful to edit.</returns>
+        bool EditPosition(DbPosition position);
+      
+        /// <summary>
         /// Returns a list of all added positions to the database.
         /// </summary>
         /// <returns>List of all added positions.</returns>

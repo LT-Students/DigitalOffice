@@ -39,5 +39,11 @@ namespace LT.DigitalOffice.CompanyService.Controllers
         {
             return command.Execute(request);
         }
+
+        [HttpPost("editPosition")]
+        public bool EditPosition([FromServices] IEditPositionCommand command, [FromBody] EditPositionRequest request)
+        {
+            return command.Execute(request);
+        }
     }
 }

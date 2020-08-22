@@ -100,6 +100,7 @@ namespace LT.DigitalOffice.CompanyService
 
         private void ConfigureMappers(IServiceCollection services)
         {
+            services.AddTransient<IMapper<EditPositionRequest, DbPosition>, PositionMapper>();
             services.AddTransient<IMapper<DbCompany, Company>, CompanyMapper>();
             services.AddTransient<IMapper<AddCompanyRequest, DbCompany>, CompanyMapper>();
             services.AddTransient<IMapper<DbPosition, Position>, PositionMapper>();
@@ -110,10 +111,12 @@ namespace LT.DigitalOffice.CompanyService
         {
             services.AddTransient<IValidator<AddCompanyRequest>, AddCompanyValidator>();
             services.AddTransient<IValidator<AddPositionRequest>, AddPositionRequestValidator>();
+            services.AddTransient<IValidator<EditPositionRequest>, EditPositionRequestValidator>();
         }
 
         private void ConfigureCommands(IServiceCollection services)
         {
+            services.AddTransient<IEditPositionCommand, EditPositionCommand>();
             services.AddTransient<IAddCompanyCommand, AddCompanyCommand>();
             services.AddTransient<IAddPositionCommand, AddPositionCommand>();
             services.AddTransient<IGetPositionByIdCommand, GetPositionByIdCommand>();

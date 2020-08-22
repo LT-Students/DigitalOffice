@@ -7,6 +7,7 @@ using Microsoft.EntityFrameworkCore;
 using NUnit.Framework;
 using System;
 using System.Collections.Generic;
+using System.Linq;
 
 namespace LT.DigitalOffice.CompanyServiceUnitTests.Repositories
 {
@@ -15,10 +16,12 @@ namespace LT.DigitalOffice.CompanyServiceUnitTests.Repositories
         private CompanyServiceDbContext dbContext;
         private ICompanyRepository repository;
 
+        private DbPosition dbPosition;
+        private DbPosition newPosition;
+        private Guid positionId;
+        private DbPosition dbPositionToAdd;
         private DbCompany dbCompanyInDb;
         private DbCompany dbCompany;
-        private DbPosition dbPosition;
-        private DbPosition dbPositionToAdd;
 
         [OneTimeSetUp]
         public void OneTimeSetUp()
@@ -29,6 +32,20 @@ namespace LT.DigitalOffice.CompanyServiceUnitTests.Repositories
             dbContext = new CompanyServiceDbContext(dbOptions);
 
             repository = new CompanyRepository(dbContext);
+        }
+
+        [SetUp]
+        public void SetUp()
+        {
+            positionId = Guid.NewGuid();
+            dbPosition = new DbPosition
+            {
+                Id = positionId,
+                Name = "Name",
+                Description = "Description"
+            };
+            dbContext.Positions.Add(dbPosition);
+            dbContext.SaveChanges();
 
             dbPositionToAdd = new DbPosition
             {
@@ -43,11 +60,7 @@ namespace LT.DigitalOffice.CompanyServiceUnitTests.Repositories
                 Name = "Lanit-Tercom",
                 IsActive = true
             };
-        }
 
-        [SetUp]
-        public void SetUp()
-        {
             dbCompanyInDb = new DbCompany
             {
                 Id = Guid.NewGuid(),
@@ -55,15 +68,7 @@ namespace LT.DigitalOffice.CompanyServiceUnitTests.Repositories
                 IsActive = true
             };
 
-            dbPosition = new DbPosition
-            {
-                Id = Guid.NewGuid(),
-                Name = "Position",
-                Description = "Description"
-            };
-
             dbContext.Companies.Add(dbCompanyInDb);
-            dbContext.Positions.Add(dbPosition);
             dbContext.SaveChanges();
         }
 
@@ -75,6 +80,26 @@ namespace LT.DigitalOffice.CompanyServiceUnitTests.Repositories
                 dbContext.Database.EnsureDeleted();
             }
         }
+
+        #region EditPosition
+        [Test]
+        public void ShouldEditPositionSuccessfully()
+        {
+            newPosition = new DbPosition
+            {
+                Id = positionId,
+                Name = "abracadabra",
+                Description = "bluhbluh"
+            };
+
+            var result = repository.EditPosition(newPosition);
+            DbPosition updatedPosition = dbContext.Positions.FirstOrDefault(dbPosition => dbPosition.Id == positionId);
+
+            Assert.IsTrue(result);
+            SerializerAssert.AreEqual(newPosition, updatedPosition);
+            Assert.That(dbContext.Positions, Is.EquivalentTo(new List<DbPosition> { updatedPosition }));
+		    }
+        #endregion
 
         #region GetPositionsList
         [Test]
