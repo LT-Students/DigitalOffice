@@ -7,7 +7,6 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <PackageReference Include="GreenPipes" Version="4.0.0" />
     <PackageReference Include="MassTransit" Version="7.0.3" />
     <PackageReference Include="MassTransit.AspNetCore" Version="7.0.3" />
     <PackageReference Include="MassTransit.Extensions.DependencyInjection" Version="7.0.3" />
