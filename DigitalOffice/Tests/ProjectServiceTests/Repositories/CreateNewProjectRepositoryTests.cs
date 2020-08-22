@@ -1,11 +1,11 @@
-﻿using LT.DigitalOffice.ProjectService.Database;
-using LT.DigitalOffice.ProjectService.Database.Entities;
-using LT.DigitalOffice.ProjectService.Repositories;
-using Microsoft.EntityFrameworkCore;
+﻿using System;
 using NUnit.Framework;
-using System;
+using Microsoft.EntityFrameworkCore;
+using LT.DigitalOffice.ProjectService.Database;
+using LT.DigitalOffice.ProjectService.Repositories;
+using LT.DigitalOffice.ProjectService.Database.Entities;
 using System.Linq;
-using LT.DigitalOffice.ProjectServiceUnitTests.UnitTestLibrary;
+using LT.DigitalOffice.Kernel.UnitTestLibrary;
 
 namespace LT.DigitalOffice.ProjectServiceUnitTests.Repositories
 {
@@ -44,7 +44,7 @@ namespace LT.DigitalOffice.ProjectServiceUnitTests.Repositories
         {
             var newProjectWithRepeatedName = newProject;
             newProjectWithRepeatedName.Id = Guid.NewGuid();
-            
+
             Assert.That(repository.CreateNewProject(newProject), Is.EqualTo(newProjectWithRepeatedName.Id));
             SerializerAssert.AreEqual(newProjectWithRepeatedName, dbContext.Projects.FirstOrDefault(project => project.Id == newProjectWithRepeatedName.Id));
         }

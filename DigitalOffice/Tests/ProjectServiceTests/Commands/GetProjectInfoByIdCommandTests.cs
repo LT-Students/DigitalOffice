@@ -1,15 +1,15 @@
-using LT.DigitalOffice.ProjectService.Commands;
-using LT.DigitalOffice.ProjectService.Commands.Interfaces;
-using LT.DigitalOffice.ProjectService.Database.Entities;
-using LT.DigitalOffice.ProjectService.Mappers.Interfaces;
-using LT.DigitalOffice.ProjectService.Models;
-using LT.DigitalOffice.ProjectService.Repositories.Interfaces;
-using LT.DigitalOffice.ProjectServiceUnitTests.UnitTestLibrary;
 using Moq;
 using NUnit.Framework;
 using System;
-using System.Collections.Generic;
 using System.Linq;
+using System.Collections.Generic;
+using LT.DigitalOffice.Kernel.UnitTestLibrary;
+using LT.DigitalOffice.ProjectService.Models;
+using LT.DigitalOffice.ProjectService.Commands;
+using LT.DigitalOffice.ProjectService.Database.Entities;
+using LT.DigitalOffice.ProjectService.Mappers.Interfaces;
+using LT.DigitalOffice.ProjectService.Commands.Interfaces;
+using LT.DigitalOffice.ProjectService.Repositories.Interfaces;
 
 namespace LT.DigitalOffice.ProjectServiceUnitTests.Commands
 {
@@ -24,7 +24,9 @@ namespace LT.DigitalOffice.ProjectServiceUnitTests.Commands
 
         private Guid projectId;
         private Guid workerId;
-
+		
+        private const string NAME = "Project";
+		
         [SetUp]
         public void SetUp()
         {
@@ -42,8 +44,7 @@ namespace LT.DigitalOffice.ProjectServiceUnitTests.Commands
             };
             project = new DbProject
             {
-                Id = projectId,
-                Name = "Project",
+                Name = NAME,
                 WorkersUsersIds = new List<DbProjectWorkerUser> { dbWorkersIds }
             };
         }

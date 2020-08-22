@@ -36,18 +36,7 @@ namespace LT.DigitalOffice.ProjectServiceUnitTests.Validators
             projectRequest.Name += projectRequest.Name.PadLeft(81);
 
             validator.TestValidate(projectRequest).ShouldHaveValidationErrorFor(request => request.Name)
-                .WithErrorMessage("Project name too long.");
-        }
-
-        [TestCase("12-")]
-        [TestCase("&&")]
-        [TestCase("Hello!")]
-        public void ShouldHaveValidationErrorForWhenProjectNameDoesNotMatchRegularExpression(string wrongName)
-        {
-            projectRequest.Name = wrongName;
-
-            validator.TestValidate(projectRequest).ShouldHaveValidationErrorFor(request => request.Name)
-                .WithErrorMessage("Incorrect project name.");
+                .WithErrorMessage("Project name is too long.");
         }
 
         [Test]
