@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using LT.DigitalOffice.Broker.Requests;
 using LT.DigitalOffice.CheckRightsService.Database.Entities;
 
 namespace LT.DigitalOffice.CheckRightsService.Repositories.Interfaces
