@@ -10,6 +10,7 @@ using LT.DigitalOffice.CompanyService.Models;
 using LT.DigitalOffice.CompanyService.Repositories;
 using LT.DigitalOffice.CompanyService.Repositories.Interfaces;
 using LT.DigitalOffice.CompanyService.Validators;
+using LT.DigitalOffice.Kernel;
 using MassTransit;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
@@ -71,6 +72,8 @@ namespace LT.DigitalOffice.CompanyService
 
         public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
         {
+            app.UseExceptionHandler(tempApp => tempApp.Run(CustomExceptionHandler.HandleCustomException));
+
             UpdateDatabase(app);
 
             app.UseHttpsRedirection();
