@@ -14,8 +14,8 @@ namespace LT.DigitalOffice.CheckRightsServiceUnitTests.Repositories
     public class CheckRightsRepositoryTests
     {
         private CheckRightsServiceDbContext dbContext;
-        private DbRight dbRight;
         private ICheckRightsRepository repository;
+        private DbRight dbRight;
 
         [SetUp]
         public void SetUp()

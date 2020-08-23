@@ -13,7 +13,7 @@ namespace LT.DigitalOffice.CheckRightsServiceUnitTests.Validators
         private IValidator<RightsForUserRequest> validator;
 
         [SetUp]
-        public void Initialize()
+        public void SetUp()
         {
             validator = new AddRightsForUserValidator();
         }
