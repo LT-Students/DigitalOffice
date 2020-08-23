@@ -44,8 +44,8 @@ namespace LT.DigitalOffice.CheckRightsServiceUnitTests.Repositories
             dbContext.Rights.Add(dbRight);
             dbContext.SaveChanges();
 
-            Assert.That(repository.GetRightsList(), Is.EquivalentTo(new List<DbRight> {dbRight}));
-            Assert.That(dbContext.Rights, Is.EquivalentTo(new List<DbRight> {dbRight}));
+            Assert.That(repository.GetRightsList(), Is.EquivalentTo(new List<DbRight> { dbRight }));
+            Assert.That(dbContext.Rights, Is.EquivalentTo(new List<DbRight> { dbRight }));
         }
 
         [Test]
@@ -71,7 +71,7 @@ namespace LT.DigitalOffice.CheckRightsServiceUnitTests.Repositories
             var request = new RightsForUserRequest
             {
                 UserId = Guid.NewGuid(),
-                RightsIds = new List<int> {dbRight.Id}
+                RightsIds = new List<int> { dbRight.Id }
             };
 
             dbContext.Rights.Add(dbRight);
@@ -88,7 +88,7 @@ namespace LT.DigitalOffice.CheckRightsServiceUnitTests.Repositories
             var request = new RightsForUserRequest
             {
                 UserId = Guid.NewGuid(),
-                RightsIds = new List<int> {int.MaxValue, 0}
+                RightsIds = new List<int> { int.MaxValue, 0 }
             };
 
             Assert.Throws<BadRequestException>(() => repository.AddRightsToUser(request));
