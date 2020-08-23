@@ -1,9 +1,9 @@
 ﻿using LT.DigitalOffice.UserService.Database;
 using LT.DigitalOffice.UserService.Database.Entities;
+using LT.DigitalOffice.UserService.Mappers.Interfaces;
 using LT.DigitalOffice.UserService.Repositories.Interfaces;
 using System;
 using System.Linq;
-using LT.DigitalOffice.UserService.Mappers.Interfaces;
 
 namespace LT.DigitalOffice.UserService.Repositories
 {
@@ -39,6 +39,19 @@ namespace LT.DigitalOffice.UserService.Repositories
         public DbUser GetUserInfoById(Guid userId)
             => userServiceDbContext.Users.FirstOrDefault(dbUser => dbUser.Id == userId) ??
                throw new Exception("User with this id not found.");
+
+        public bool EditUser(DbUser user)
+        {
+            if (!userServiceDbContext.Users.Any(users => user.Id == users.Id))
+            {
+                throw new Exception("User was not found.");
+            }
+
+            userServiceDbContext.Users.Update(user);
+            userServiceDbContext.SaveChanges();
+
+            return true;
+        }
 
         public DbUser GetUserByEmail(string userEmail)
         {

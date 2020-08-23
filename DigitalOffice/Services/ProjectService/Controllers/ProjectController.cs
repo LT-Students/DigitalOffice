@@ -1,7 +1,7 @@
-﻿using LT.DigitalOffice.ProjectService.Commands.Interfaces;
-using LT.DigitalOffice.ProjectService.Models;
+﻿using System;
 using Microsoft.AspNetCore.Mvc;
-using System;
+using LT.DigitalOffice.ProjectService.Models;
+using LT.DigitalOffice.ProjectService.Commands.Interfaces;
 
 namespace LT.DigitalOffice.ProjectService.Controllers
 {
@@ -10,7 +10,9 @@ namespace LT.DigitalOffice.ProjectService.Controllers
     public class ProjectController : ControllerBase
     {
         [HttpGet("getProjectInfoById")]
-        public Project GetProjectInfoById([FromServices] IGetProjectInfoByIdCommand command, [FromQuery] Guid projectId)
+        public Project GetProjectInfoById(
+            [FromServices] IGetProjectInfoByIdCommand command,
+            [FromQuery] Guid projectId)
         {
             return command.Execute(projectId);
         }
@@ -19,5 +21,14 @@ namespace LT.DigitalOffice.ProjectService.Controllers
         public Guid CreateNewProject(
             [FromServices] ICreateNewProjectCommand command,
             [FromBody] NewProjectRequest request) => command.Execute(request);
+
+        [HttpPut("editProjectById")]
+        public Guid EditProjectById(
+            [FromServices] IEditProjectByIdCommand command,
+            [FromQuery] Guid projectId,
+            [FromBody] EditProjectRequest request)
+        {
+            return command.Execute(projectId, request);
+        }
     }
 }

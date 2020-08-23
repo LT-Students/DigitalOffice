@@ -1,5 +1,7 @@
+﻿using LT.DigitalOffice.CompanyService.Models;
 ﻿using LT.DigitalOffice.CompanyService.Database.Entities;
 using System;
+using System.Collections.Generic;
 
 namespace LT.DigitalOffice.CompanyService.Repositories.Interfaces
 {
@@ -9,6 +11,19 @@ namespace LT.DigitalOffice.CompanyService.Repositories.Interfaces
     /// </summary>
     public interface ICompanyRepository
     {
+        /// <summary>
+        /// Edits an existing position in the database. Returns whether it was successful to edit.
+        /// </summary>
+        /// <param name="position">Position to edit.</param>
+        /// <returns>Whether it was successful to edit.</returns>
+        bool EditPosition(DbPosition position);
+      
+        /// <summary>
+        /// Returns a list of all added positions to the database.
+        /// </summary>
+        /// <returns>List of all added positions.</returns>
+        List<DbPosition> GetPositionsList();
+
         /// <summary>
         /// Returns the company with the specified id from database.
         /// </summary>

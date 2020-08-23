@@ -22,6 +22,13 @@ namespace LT.DigitalOffice.UserService.Repositories.Interfaces
         /// <param name="user">User to add.</param>
         /// <returns>Guid of added user.</returns>
         Guid UserCreate(DbUser user);
+      
+        /// <summary>
+        /// Edit existing user. Returns whether it was successful to edit.
+        /// </summary>
+        /// <param name="user">User to edit.</param>
+        /// <returns>Whether it was successful to edit</returns>
+        bool EditUser(DbUser user);
 
         /// <summary>
         /// Returns the user with the specified email from database.

@@ -9,6 +9,7 @@ using LT.DigitalOffice.TimeManagementService.Models;
 using LT.DigitalOffice.TimeManagementService.Repositories;
 using LT.DigitalOffice.TimeManagementService.Repositories.Interfaces;
 using LT.DigitalOffice.TimeManagementService.Validators;
+using LT.DigitalOffice.Kernel;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.EntityFrameworkCore;
@@ -67,6 +68,8 @@ namespace LT.DigitalOffice.TimeManagementService
 
         public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
         {
+            app.UseExceptionHandler(tempApp => tempApp.Run(CustomExceptionHandler.HandleCustomException));
+
             UpdateDatabase(app);
 
             app.UseHttpsRedirection();

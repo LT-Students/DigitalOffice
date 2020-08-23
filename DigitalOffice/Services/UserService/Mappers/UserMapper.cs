@@ -1,14 +1,18 @@
-﻿using LT.DigitalOffice.UserService.Database.Entities;
+﻿using System;
+using System.Linq;
+using LT.DigitalOffice.UserService.Database.Entities;
 using LT.DigitalOffice.UserService.Mappers.Interfaces;
 using LT.DigitalOffice.UserService.Models;
-using System;
-using System.Linq;
 using System.Security.Cryptography;
 using System.Text;
+using LT.DigitalOffice.Broker.Responses;
 
 namespace LT.DigitalOffice.UserService.Mappers
 {
-    public class UserMapper : IMapper<DbUser, User>, IMapper<UserCreateRequest, DbUser>
+    /// <summary>
+    /// Represents mapper. Provides methods for converting an object of <see cref="DbUser"/> type into an object of <see cref="User"/> type according to some rule.
+    /// </summary>
+    public class UserMapper : IMapper<DbUser, User>, IMapper<DbUser, IUserPositionResponse, object>, IMapper<UserCreateRequest, DbUser>, IMapper<EditUserRequest, DbUser>
     {
         public User Map(DbUser dbUser)
         {
@@ -34,6 +38,51 @@ namespace LT.DigitalOffice.UserService.Mappers
                 MiddleName = dbUser.MiddleName,
                 Status = dbUser.Status,
                 IsAdmin = dbUser.IsAdmin
+            };
+        }
+
+        public DbUser Map(EditUserRequest request)
+        {
+            if (request == null)
+            {
+                throw new ArgumentNullException(nameof(request));
+            }
+
+            return new DbUser
+            {
+                Id = request.Id,
+                Email = request.Email,
+                FirstName = request.FirstName,
+                LastName = request.LastName,
+                MiddleName = request.MiddleName,
+                Status = request.Status,
+                PasswordHash = Encoding.UTF8.GetString(new SHA512Managed().ComputeHash(
+                    Encoding.UTF8.GetBytes(request.Password))),
+                AvatarFileId = request.AvatarFileId,
+                IsActive = request.IsActive,
+                IsAdmin = request.IsAdmin
+            };
+        }
+
+        public object Map(DbUser user, IUserPositionResponse position)
+        {
+            if (user == null)
+            {
+                throw new ArgumentNullException(nameof(User));
+            }
+
+            if (position == null)
+            {
+                throw new ArgumentNullException(nameof(position));
+            }
+
+            return new
+            {
+                UserId = user.Id,
+                FirstName = user.FirstName,
+                LastName = user.LastName,
+                MiddleName = user.MiddleName,
+                UserPosition = position
             };
         }
 

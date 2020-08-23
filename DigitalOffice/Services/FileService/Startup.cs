@@ -9,6 +9,7 @@ using LT.DigitalOffice.FileService.Models;
 using LT.DigitalOffice.FileService.Repositories;
 using LT.DigitalOffice.FileService.Repositories.Interfaces;
 using LT.DigitalOffice.FileService.Validators;
+using LT.DigitalOffice.Kernel;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.EntityFrameworkCore;
@@ -63,6 +64,8 @@ namespace LT.DigitalOffice.FileService
 
         public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
         {
+            app.UseExceptionHandler(tempApp => tempApp.Run(CustomExceptionHandler.HandleCustomException));
+
             UpdateDatabase(app);
 
             app.UseHttpsRedirection();

@@ -1,9 +1,10 @@
-﻿using LT.DigitalOffice.ProjectService.Database;
+﻿using System;
+using System.Linq;
+using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
+using LT.DigitalOffice.ProjectService.Database;
 using LT.DigitalOffice.ProjectService.Database.Entities;
 using LT.DigitalOffice.ProjectService.Repositories.Interfaces;
-using Microsoft.AspNetCore.Mvc;
-using System;
-using System.Linq;
 
 namespace LT.DigitalOffice.ProjectService.Repositories
 {
@@ -34,6 +35,23 @@ namespace LT.DigitalOffice.ProjectService.Repositories
             dbContext.SaveChanges();
 
             return newProject.Id;
+        }
+
+        public Guid EditProjectById(DbProject dbProject)
+        {
+            var projectToEdit = dbContext.Projects
+                .AsNoTracking()
+                .FirstOrDefault(p => p.Id == dbProject.Id);
+
+            if (projectToEdit == null)
+            {
+                throw new NullReferenceException("Project with this Id does not exist");
+            }
+
+            dbContext.Projects.Update(dbProject);
+            dbContext.SaveChanges();
+
+            return dbProject.Id;
         }
     }
 }

@@ -1,7 +1,7 @@
 ﻿﻿using NUnit.Framework;
 using System.Text.Json;
 
-namespace LT.DigitalOffice.ProjectServiceUnitTests.UnitTestLibrary
+namespace LT.DigitalOffice.Kernel.UnitTestLibrary
 {
     public static class SerializerAssert
     {
@@ -11,6 +11,14 @@ namespace LT.DigitalOffice.ProjectServiceUnitTests.UnitTestLibrary
             var resultJson = JsonSerializer.Serialize(result);
 
             Assert.AreEqual(expectedJson, resultJson);
+        }
+
+        public static void AreNotEqual(object expected, object result)
+        {
+            string expectedJson = JsonSerializer.Serialize(expected);
+            string resultJson = JsonSerializer.Serialize(result);
+
+            Assert.AreNotEqual(expectedJson, resultJson);
         }
     }
 }

@@ -10,36 +10,46 @@ using System.Linq;
 
 namespace LT.DigitalOffice.CompanyServiceUnitTests.Mappers
 {
-    class PositionMappersTests
+    public class PositionMappersTests
     {
         private IMapper<AddPositionRequest, DbPosition> mapperAddPositionRequest;
-        private IMapper<DbPosition, Position> mapper;
+        private IMapper<DbPosition, Position> mapperDbPositionToPosition;
+        private IMapper<EditPositionRequest, DbPosition> mapperEditPositionRequestToDbPosition;
 
         private DbCompanyUser dbUserIds;
         private DbPosition dbPosition;
 
-        private AddPositionRequest request;
+        private EditPositionRequest editPositionRequest;
+        private AddPositionRequest addPositionRequest;
         private DbPosition expectedDbPosition;
 
         [OneTimeSetUp]
         public void OneTimeSetUp()
         {
-            mapper = new PositionMapper();
+            mapperDbPositionToPosition = new PositionMapper();
+            mapperEditPositionRequestToDbPosition = new PositionMapper();
             mapperAddPositionRequest = new PositionMapper();
         }
 
         [SetUp]
         public void SetUp()
         {
-            request = new AddPositionRequest
+            editPositionRequest = new EditPositionRequest
+            {
+                Id = Guid.NewGuid(),
+                Name = "Position",
+                Description = "Description"
+            };
+
+            addPositionRequest = new AddPositionRequest
             {
                 Name = "Name",
                 Description = "Description"
             };
             expectedDbPosition = new DbPosition
             {
-                Name = request.Name,
-                Description = request.Description
+                Name = addPositionRequest.Name,
+                Description = addPositionRequest.Description
             };
 
             dbUserIds = new DbCompanyUser
@@ -68,7 +78,7 @@ namespace LT.DigitalOffice.CompanyServiceUnitTests.Mappers
 
         public void ShouldMapAddPositionRequestToDbPositionSuccessfully()
         {
-            var resultDbPosition = mapperAddPositionRequest.Map(request);
+            var resultDbPosition = mapperAddPositionRequest.Map(addPositionRequest);
 
             expectedDbPosition.Id = resultDbPosition.Id;
 
@@ -81,19 +91,42 @@ namespace LT.DigitalOffice.CompanyServiceUnitTests.Mappers
         [Test]
         public void ShouldThrowExceptionIfArgumentIsNullDbPositionToPosition()
         {
-            Assert.Throws<ArgumentNullException>(() => mapper.Map(null));
+            Assert.Throws<ArgumentNullException>(() => mapperDbPositionToPosition.Map(null));
         }
 
         [Test]
         public void ShouldReturnPositionModelSuccessfully()
         {
-            var result = mapper.Map(dbPosition);
+            var result = mapperDbPositionToPosition.Map(dbPosition);
 
             var expected = new Position
             {
                 Name = dbPosition.Name,
                 Description = dbPosition.Description,
                 UserIds = dbPosition.UserIds?.Select(x => x.UserId).ToList()
+            };
+
+            SerializerAssert.AreEqual(expected, result);
+        }
+        #endregion
+
+        #region EditPositionRequest to DbPosition
+        [Test]
+        public void ShouldThrowExceptionIfArgumentIsNullEditPositionRequestToDbPosition()
+        {
+            Assert.Throws<ArgumentNullException>(() => mapperEditPositionRequestToDbPosition.Map(null));
+        }
+
+        [Test]
+        public void ShouldReturnPositionModelSuccessfullyEditPositionRequestToDbPosition()
+        {
+            var result = mapperEditPositionRequestToDbPosition.Map(editPositionRequest);
+
+            var expected = new DbPosition
+            {
+                Id = result.Id,
+                Name = editPositionRequest.Name,
+                Description = editPositionRequest.Description
             };
 
             SerializerAssert.AreEqual(expected, result);

@@ -14,6 +14,7 @@ namespace LT.DigitalOffice.ProjectServiceUnitTests.Commands
     class CreateNewProjectCommandTests
     {
         private ICreateNewProjectCommand command;
+
         private Mock<IProjectRepository> repositoryMock;
         private Mock<IValidator<NewProjectRequest>> validatorMock;
         private Mock<IMapper<NewProjectRequest, DbProject>> mapperMock;
@@ -84,7 +85,6 @@ namespace LT.DigitalOffice.ProjectServiceUnitTests.Commands
             repositoryMock.Verify();
             mapperMock.Verify();
         }
-        
         [Test]
         public void ShouldReturnIdWhenCreatingNewProject()
         {

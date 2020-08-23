@@ -2,7 +2,9 @@
 using LT.DigitalOffice.CompanyService.Database.Entities;
 using LT.DigitalOffice.CompanyService.Repositories.Interfaces;
 using System;
+using System.Collections.Generic;
 using System.Linq;
+using Microsoft.AspNetCore.Mvc;
 
 namespace LT.DigitalOffice.CompanyService.Repositories
 {
@@ -13,6 +15,27 @@ namespace LT.DigitalOffice.CompanyService.Repositories
         public CompanyRepository(CompanyServiceDbContext dbContext)
         {
             this.dbContext = dbContext;
+        }
+
+        public bool EditPosition(DbPosition newPosition)
+        {
+            var dbPosition = dbContext.Positions.FirstOrDefault(position => position.Id == newPosition.Id);
+        	  if (dbPosition == null)
+            {
+                throw new Exception("Position with this id was not found.");
+            }
+
+            dbPosition.Name = newPosition.Name;
+            dbPosition.Description = newPosition.Description;
+            dbContext.Positions.Update(dbPosition);
+            dbContext.SaveChanges();
+
+            return true;
+        }
+        
+        public List<DbPosition> GetPositionsList()
+        {
+            return dbContext.Positions.ToList();
         }
 
         public DbCompany GetCompanyById(Guid companyId)

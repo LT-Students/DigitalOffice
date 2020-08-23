@@ -7,6 +7,7 @@ using Microsoft.EntityFrameworkCore;
 using NUnit.Framework;
 using System;
 using System.Collections.Generic;
+using System.Linq;
 
 namespace LT.DigitalOffice.CompanyServiceUnitTests.Repositories
 {
@@ -15,10 +16,12 @@ namespace LT.DigitalOffice.CompanyServiceUnitTests.Repositories
         private CompanyServiceDbContext dbContext;
         private ICompanyRepository repository;
 
+        private DbPosition dbPosition;
+        private DbPosition newPosition;
+        private Guid positionId;
+        private DbPosition dbPositionToAdd;
         private DbCompany dbCompanyInDb;
         private DbCompany dbCompany;
-        private DbPosition dbPositionInDb;
-        private DbPosition dbPositionToAdd;
 
         [OneTimeSetUp]
         public void OneTimeSetUp()
@@ -27,7 +30,22 @@ namespace LT.DigitalOffice.CompanyServiceUnitTests.Repositories
                                     .UseInMemoryDatabase(databaseName: "InMemoryDatabase")
                                     .Options;
             dbContext = new CompanyServiceDbContext(dbOptions);
+
             repository = new CompanyRepository(dbContext);
+        }
+
+        [SetUp]
+        public void SetUp()
+        {
+            positionId = Guid.NewGuid();
+            dbPosition = new DbPosition
+            {
+                Id = positionId,
+                Name = "Name",
+                Description = "Description"
+            };
+            dbContext.Positions.Add(dbPosition);
+            dbContext.SaveChanges();
 
             dbPositionToAdd = new DbPosition
             {
@@ -42,11 +60,7 @@ namespace LT.DigitalOffice.CompanyServiceUnitTests.Repositories
                 Name = "Lanit-Tercom",
                 IsActive = true
             };
-        }
 
-        [SetUp]
-        public void SetUp()
-        {
             dbCompanyInDb = new DbCompany
             {
                 Id = Guid.NewGuid(),
@@ -54,15 +68,7 @@ namespace LT.DigitalOffice.CompanyServiceUnitTests.Repositories
                 IsActive = true
             };
 
-            dbPositionInDb = new DbPosition
-            {
-                Id = Guid.NewGuid(),
-                Name = "Position",
-                Description = "Description"
-            };
-
             dbContext.Companies.Add(dbCompanyInDb);
-            dbContext.Positions.Add(dbPositionInDb);
             dbContext.SaveChanges();
         }
 
@@ -74,6 +80,40 @@ namespace LT.DigitalOffice.CompanyServiceUnitTests.Repositories
                 dbContext.Database.EnsureDeleted();
             }
         }
+
+        #region EditPosition
+        [Test]
+        public void ShouldEditPositionSuccessfully()
+        {
+            newPosition = new DbPosition
+            {
+                Id = positionId,
+                Name = "abracadabra",
+                Description = "bluhbluh"
+            };
+
+            var result = repository.EditPosition(newPosition);
+            DbPosition updatedPosition = dbContext.Positions.FirstOrDefault(dbPosition => dbPosition.Id == positionId);
+
+            Assert.IsTrue(result);
+            SerializerAssert.AreEqual(newPosition, updatedPosition);
+            Assert.That(dbContext.Positions, Is.EquivalentTo(new List<DbPosition> { updatedPosition }));
+		    }
+        #endregion
+
+        #region GetPositionsList
+        [Test]
+        public void GetPositionsListSuccessfully()
+        {
+            var result = repository.GetPositionsList();
+
+            var expected = new List<DbPosition> { dbPosition };
+
+            Assert.DoesNotThrow(() => repository.GetPositionsList());
+            SerializerAssert.AreEqual(expected, result);
+            Assert.That(dbContext.Positions, Is.EqualTo(new List<DbPosition> { dbPosition }));
+        }
+        #endregion
 
         #region GetCompanyById
         [Test]
@@ -108,23 +148,23 @@ namespace LT.DigitalOffice.CompanyServiceUnitTests.Repositories
         public void ShouldThrowExceptionIfPositionDoesNotExist()
         {
             Assert.Throws<Exception>(() => repository.GetPositionById(Guid.NewGuid()));
-            Assert.AreEqual(dbContext.Positions, new List<DbPosition> { dbPositionInDb });
+            Assert.AreEqual(dbContext.Positions, new List<DbPosition> { dbPosition });
         }
 
         [Test]
         public void ShouldReturnSimplePositionInfoSuccessfully()
         {
-            var result = repository.GetPositionById(dbPositionInDb.Id);
+            var result = repository.GetPositionById(dbPosition.Id);
 
             var expected = new DbPosition
             {
-                Id = dbPositionInDb.Id,
-                Name = dbPositionInDb.Name,
-                Description = dbPositionInDb.Description
+                Id = dbPosition.Id,
+                Name = dbPosition.Name,
+                Description = dbPosition.Description
             };
 
             SerializerAssert.AreEqual(expected, result);
-            Assert.AreEqual(dbContext.Positions, new List<DbPosition> { dbPositionInDb });
+            Assert.AreEqual(dbContext.Positions, new List<DbPosition> { dbPosition });
         }
         #endregion
 
