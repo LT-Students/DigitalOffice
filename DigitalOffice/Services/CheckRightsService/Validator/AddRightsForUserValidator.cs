@@ -11,7 +11,7 @@ namespace LT.DigitalOffice.CheckRightsService.Validator
                 .NotEmpty()
                 .WithName("User Id");
 
-            RuleFor(rights => rights.RightsId)
+            RuleFor(rights => rights.RightsIds)
                 .NotEmpty()
                 .WithName("Right Id");
         }

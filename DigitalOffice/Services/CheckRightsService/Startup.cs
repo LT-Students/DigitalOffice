@@ -48,7 +48,7 @@ namespace LT.DigitalOffice.CheckRightsService
         public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
         {
             app.UseExceptionHandler(tempApp => tempApp.Run(CustomExceptionHandler.HandleCustomException));
-            
+
             UpdateDatabase(app);
 
             app.UseHttpsRedirection();

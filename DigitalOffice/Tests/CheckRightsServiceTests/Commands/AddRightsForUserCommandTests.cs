@@ -5,6 +5,7 @@ using LT.DigitalOffice.CheckRightsService.Commands;
 using LT.DigitalOffice.CheckRightsService.Commands.Interfaces;
 using LT.DigitalOffice.CheckRightsService.Repositories.Interfaces;
 using LT.DigitalOffice.CheckRightsService.RestRequests;
+using LT.DigitalOffice.Kernel.Exceptions;
 using Moq;
 using NUnit.Framework;
 
@@ -30,7 +31,7 @@ namespace LT.DigitalOffice.CheckRightsServiceUnitTests.Commands
             var request = new RightsForUserRequest
             {
                 UserId = Guid.NewGuid(),
-                RightsId = new List<int>() {0, 1}
+                RightsIds = new List<int>() {0, 1}
             };
 
             validatorMock
@@ -49,7 +50,7 @@ namespace LT.DigitalOffice.CheckRightsServiceUnitTests.Commands
         {
             var request = new RightsForUserRequest
             {
-                RightsId = new List<int>() {0, 1}
+                RightsIds = new List<int>() {0, 1}
             };
 
             validatorMock
@@ -57,6 +58,25 @@ namespace LT.DigitalOffice.CheckRightsServiceUnitTests.Commands
                 .Returns(false);
 
             Assert.Throws<ValidationException>(() => command.Execute(request));
+        }
+
+        [Test]
+        public void ShouldThrowBadRequestExceptionIfRightsDoesNotExist()
+        {
+            var request = new RightsForUserRequest
+            {
+                RightsIds = new List<int>() { 1 }
+            };
+
+            validatorMock
+                .Setup(x => x.Validate(It.IsAny<IValidationContext>()).IsValid)
+                .Returns(true);
+
+            repositoryMock
+                .Setup(x => x.AddRightsToUser(It.IsAny<RightsForUserRequest>()))
+                .Throws(new BadRequestException());
+
+            Assert.Throws<BadRequestException>(() => command.Execute(request));
         }
     }
 }

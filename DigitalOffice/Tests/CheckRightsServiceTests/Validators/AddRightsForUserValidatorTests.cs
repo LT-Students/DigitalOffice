@@ -27,7 +27,7 @@ namespace LT.DigitalOffice.CheckRightsServiceUnitTests.Validators
         [Test]
         public void ShouldThrowValidationExceptionWhenRightsIdIsNull()
         {
-            validator.ShouldHaveValidationErrorFor(x => x.RightsId, null as List<int>);
+            validator.ShouldHaveValidationErrorFor(x => x.RightsIds, null as List<int>);
         }
     }
 }
