@@ -7,14 +7,13 @@ namespace LT.DigitalOffice.AuthenticationService.Token.Interfaces
     /// </summary>
     public interface IJwtSigningEncodingKey
     {
-        ///<value>Type of algorithm encoding(HS256).</value>>
+        ///<value>Type of algorithm encoding(HS256).</value>
         string SigningAlgorithm { get; }
 
         /// <summary>
-        ///Method for getting encoding key jwt.
+        /// Method for getting encoding key jwt.
         /// </summary>
         /// <returns>Return key to create the signature(private key).</returns>
-
         SecurityKey GetKey();
     }
 }

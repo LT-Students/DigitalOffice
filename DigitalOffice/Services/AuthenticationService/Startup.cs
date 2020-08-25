@@ -1,4 +1,6 @@
 using FluentValidation;
+using GreenPipes;
+using LT.DigitalOffice.AuthenticationService.Broker.Consumers;
 using LT.DigitalOffice.AuthenticationService.Commands;
 using LT.DigitalOffice.AuthenticationService.Commands.Interfaces;
 using LT.DigitalOffice.AuthenticationService.Models;
@@ -50,22 +52,26 @@ namespace LT.DigitalOffice.AuthenticationService
             services.AddSingleton<IJwtSigningEncodingKey>(signingKey);
             services.AddTransient<INewToken, NewToken>();
 
+            var validationParametersnew = new TokenValidationParameters
+            {
+                ValidateIssuer = true,
+                ValidIssuer = Configuration.GetSection("TokenSettings:TokenIssuer").Value,
+                ValidateAudience = true,
+                ValidAudience = Configuration.GetSection("TokenSettings:TokenAudience").Value,
+                ValidateLifetime = true,
+                IssuerSigningKey = signingDecodingKey.GetKey(),
+                ValidateIssuerSigningKey = true
+            };
+
+            services.AddTransient<IJwtValidator, JwtValidator>(service => new JwtValidator(validationParametersnew));
+
             services.Configure<TokenOptions>(Configuration.GetSection("TokenSettings"));
 
             services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
             .AddJwtBearer(options =>
             {
                 options.RequireHttpsMetadata = true;
-                options.TokenValidationParameters = new TokenValidationParameters
-                {
-                    ValidateIssuer = true,
-                    ValidIssuer = Configuration.GetSection("TokenSettings:TokenIssuer").Value,
-                    ValidateAudience = true,
-                    ValidAudience = Configuration.GetSection("TokenSettings:TokenAudience").Value,
-                    ValidateLifetime = true,
-                    IssuerSigningKey = signingDecodingKey.GetKey(),
-                    ValidateIssuerSigningKey = true
-                };
+                options.TokenValidationParameters = validationParametersnew;
             });
         }
 
@@ -79,12 +85,22 @@ namespace LT.DigitalOffice.AuthenticationService
 
             services.AddMassTransit(x =>
             {
+                x.AddConsumer<UserJwtConsumer>();
+
                 x.UsingRabbitMq((context, cfg) =>
                 {
                     cfg.Host("localhost", "/", host =>
                     {
                         host.Username($"{serviceName}_{serviceId}");
                         host.Password(serviceId);
+                    });
+
+                    cfg.ReceiveEndpoint($"{serviceName}_ValidationJwt", ep =>
+                    {
+                        ep.PrefetchCount = 16;
+                        ep.UseMessageRetry(r => r.Interval(2, 100));
+
+                        ep.ConfigureConsumer<UserJwtConsumer>(context);
                     });
                 });
 
