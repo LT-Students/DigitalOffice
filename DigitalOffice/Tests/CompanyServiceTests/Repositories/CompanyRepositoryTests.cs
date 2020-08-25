@@ -21,7 +21,9 @@ namespace LT.DigitalOffice.CompanyServiceUnitTests.Repositories
         private Guid positionId;
         private DbPosition dbPositionToAdd;
         private DbCompany dbCompanyInDb;
-        private DbCompany dbCompany;
+        private DbCompany dbCompanyToAdd;
+        private DbCompany dbCompanyToUpdate;
+        private DbCompany expectedDbCompanyAfterUpdate;
 
         [OneTimeSetUp]
         public void OneTimeSetUp()
@@ -54,7 +56,7 @@ namespace LT.DigitalOffice.CompanyServiceUnitTests.Repositories
                 Description = "Description"
             };
 
-            dbCompany = new DbCompany
+            dbCompanyToAdd = new DbCompany
             {
                 Id = Guid.NewGuid(),
                 Name = "Lanit-Tercom",
@@ -70,6 +72,28 @@ namespace LT.DigitalOffice.CompanyServiceUnitTests.Repositories
 
             dbContext.Companies.Add(dbCompanyInDb);
             dbContext.SaveChanges();
+
+            UpdateCompanySetUp();
+        }
+
+        private void UpdateCompanySetUp()
+        {
+            var name = dbCompanyInDb.Name + "abracadabra";
+            var changedIsActive = !dbCompanyInDb.IsActive;
+
+            dbCompanyToUpdate = new DbCompany
+            {
+                Id = dbCompanyInDb.Id,
+                Name = name,
+                IsActive = changedIsActive
+            };
+
+            expectedDbCompanyAfterUpdate = new DbCompany
+            {
+                Id = dbCompanyInDb.Id,
+                Name = name,
+                IsActive = changedIsActive
+            };
         }
 
         [TearDown]
@@ -136,10 +160,32 @@ namespace LT.DigitalOffice.CompanyServiceUnitTests.Repositories
         [Test]
         public void ShouldReturnMatchingIdAndRightAddCompanyInDb()
         {
-            var guidOfNewCompany = repository.AddCompany(dbCompany);
+            var guidOfNewCompany = repository.AddCompany(dbCompanyToAdd);
 
-            Assert.AreEqual(dbCompany.Id, guidOfNewCompany);
-            Assert.NotNull(dbContext.Companies.Find(dbCompany.Id));
+            Assert.AreEqual(dbCompanyToAdd.Id, guidOfNewCompany);
+            Assert.NotNull(dbContext.Companies.Find(dbCompanyToAdd.Id));
+        }
+        #endregion
+
+        #region UpdateCompany
+        [Test]
+        public void ShouldThrowExceptionWhenCompanyForUpdateDoesNotExist()
+        {
+            Assert.Throws<Exception>(() => repository.UpdateCompany(
+                new DbCompany() { Id = Guid.Empty }));
+        }
+
+        [Test]
+        public void ShouldUpdateCompany()
+        {
+            dbContext.Entry(dbCompanyInDb).State = EntityState.Detached;
+            var result = repository.UpdateCompany(dbCompanyToUpdate);
+            var resultCompany = dbContext.Companies
+                .FirstOrDefaultAsync(x => x.Id == dbCompanyToUpdate.Id)
+                .Result;
+
+            Assert.IsTrue(result);
+            SerializerAssert.AreEqual(expectedDbCompanyAfterUpdate, resultCompany);
         }
         #endregion
 

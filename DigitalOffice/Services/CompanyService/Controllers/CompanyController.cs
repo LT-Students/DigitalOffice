@@ -28,6 +28,12 @@ namespace LT.DigitalOffice.CompanyService.Controllers
             return command.Execute(request);
         }
 
+        [HttpPost("changeCompany")]
+        public bool ChangeCompany([FromServices] IEditCompanyCommand command, [FromBody] EditCompanyRequest request)
+        {
+            return command.Execute(request);
+        }
+
         [HttpGet("getPositionById")]
         public Position GetPositionById([FromServices] IGetPositionByIdCommand command, [FromQuery] Guid positionId)
         {

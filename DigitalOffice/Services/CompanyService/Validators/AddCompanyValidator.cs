@@ -9,7 +9,8 @@ namespace LT.DigitalOffice.CompanyService.Validators
         {
             RuleFor(c => c.Name)
                 .NotEmpty()
-                .MaximumLength(100);
+                .MaximumLength(100)
+                .WithMessage("Company name is too long");
         }
     }
 }

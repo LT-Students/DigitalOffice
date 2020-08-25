@@ -5,7 +5,7 @@ using System;
 
 namespace LT.DigitalOffice.CompanyService.Mappers
 {
-    public class CompanyMapper : IMapper<DbCompany, Company>, IMapper<AddCompanyRequest, DbCompany>
+    public class CompanyMapper : IMapper<DbCompany, Company>, IMapper<AddCompanyRequest, DbCompany>, IMapper<EditCompanyRequest, DbCompany>
     {
         public Company Map(DbCompany company)
         {
@@ -34,6 +34,21 @@ namespace LT.DigitalOffice.CompanyService.Mappers
                 Id = Guid.NewGuid(),
                 Name = request.Name,
                 IsActive = true
+            };
+        }
+
+        public DbCompany Map(EditCompanyRequest request)
+        {
+            if (request == null)
+            {
+                throw new ArgumentNullException(nameof(request));
+            }
+
+            return new DbCompany
+            {
+                Id = request.CompanyId,
+                Name = request.Name,
+                IsActive = request.IsActive
             };
         }
     }
