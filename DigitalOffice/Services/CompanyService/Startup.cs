@@ -63,7 +63,6 @@ namespace LT.DigitalOffice.CompanyService
                 });
             });
 
-
             ConfigureCommands(services);
             ConfigureRepositories(services);
             ConfigureValidators(services);
@@ -98,8 +97,8 @@ namespace LT.DigitalOffice.CompanyService
         private void ConfigureCommands(IServiceCollection services)
         {
             services.AddTransient<IGetCompanyByIdCommand, GetCompanyByIdCommand>();
+            services.AddTransient<IGetCompaniesListCommand, GetCompaniesListCommand>();
             services.AddTransient<IAddCompanyCommand, AddCompanyCommand>();
-            services.AddTransient<IEditCompanyCommand, EditCompanyCommand>();
 
             services.AddTransient<IGetPositionByIdCommand, GetPositionByIdCommand>();
             services.AddTransient<IGetPositionsListCommand, GetPositionsListCommand>();
@@ -107,15 +106,10 @@ namespace LT.DigitalOffice.CompanyService
             services.AddTransient<IEditPositionCommand, EditPositionCommand>();
         }
 
-        private void ConfigureMappers(IServiceCollection services)
+        private void ConfigureRepositories(IServiceCollection services)
         {
-            services.AddTransient<IMapper<DbCompany, Company>, CompanyMapper>();
-            services.AddTransient<IMapper<AddCompanyRequest, DbCompany>, CompanyMapper>();
-            services.AddTransient<IMapper<EditCompanyRequest, DbCompany>, CompanyMapper>();
-
-            services.AddTransient<IMapper<DbPosition, Position>, PositionMapper>();
-            services.AddTransient<IMapper<AddPositionRequest, DbPosition>, PositionMapper>();
-            services.AddTransient<IMapper<EditPositionRequest, DbPosition>, PositionMapper>();
+            services.AddTransient<ICompanyRepository, CompanyRepository>();
+            services.AddTransient<IPositionRepository, PositionRepository>();
         }
 
         private void ConfigureValidators(IServiceCollection services)
@@ -127,10 +121,15 @@ namespace LT.DigitalOffice.CompanyService
             services.AddTransient<IValidator<EditPositionRequest>, EditPositionRequestValidator>();
         }
 
-        private void ConfigureRepositories(IServiceCollection services)
+        private void ConfigureMappers(IServiceCollection services)
         {
-            services.AddTransient<IPositionRepository, PositionRepository>();
-            services.AddTransient<ICompanyRepository, CompanyRepository>();
+            services.AddTransient<IMapper<DbCompany, Company>, CompanyMapper>();
+            services.AddTransient<IMapper<AddCompanyRequest, DbCompany>, CompanyMapper>();
+            services.AddTransient<IMapper<EditCompanyRequest, DbCompany>, CompanyMapper>();
+
+            services.AddTransient<IMapper<DbPosition, Position>, PositionMapper>();
+            services.AddTransient<IMapper<AddPositionRequest, DbPosition>, PositionMapper>();
+            services.AddTransient<IMapper<EditPositionRequest, DbPosition>, PositionMapper>();
         }
     }
 }

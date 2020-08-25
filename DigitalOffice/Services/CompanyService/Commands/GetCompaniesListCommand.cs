@@ -9,22 +9,25 @@ using System.Linq;
 
 namespace LT.DigitalOffice.CompanyService.Commands
 {
-    public class GetPositionsListCommand : IGetPositionsListCommand
+    public class GetCompaniesListCommand : IGetCompaniesListCommand
     {
-        private readonly IPositionRepository repository;
-        private readonly IMapper<DbPosition, Position> mapper;
+        private readonly ICompanyRepository repository;
+        private readonly IMapper<DbCompany, Company> mapper;
 
-        public GetPositionsListCommand(
-            [FromServices] IPositionRepository repository,
-            [FromServices] IMapper<DbPosition, Position> mapper)
+        public GetCompaniesListCommand(
+            [FromServices] ICompanyRepository repository,
+            [FromServices] IMapper<DbCompany, Company> mapper)
         {
             this.repository = repository;
             this.mapper = mapper;
         }
 
-        public List<Position> Execute()
+        public List<Company> Execute()
         {
-            return repository.GetPositionsList().Select(position => mapper.Map(position)).ToList();
+            var dbCompanies = repository.GetCompaniesList();
+
+            return dbCompanies.Select(dbCompany => mapper.Map(dbCompany)).ToList();
         }
     }
 }
+

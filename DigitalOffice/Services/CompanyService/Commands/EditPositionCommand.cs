@@ -11,12 +11,12 @@ namespace LT.DigitalOffice.CompanyService.Commands
     public class EditPositionCommand : IEditPositionCommand
     {
         private readonly IValidator<EditPositionRequest> validator;
-        private readonly ICompanyRepository repository;
+        private readonly IPositionRepository repository;
         private readonly IMapper<EditPositionRequest, DbPosition> mapper;
 
         public EditPositionCommand(
             [FromServices] IValidator<EditPositionRequest> validator,
-            [FromServices] ICompanyRepository repository,
+            [FromServices] IPositionRepository repository,
             [FromServices] IMapper<EditPositionRequest, DbPosition> mapper)
         {
             this.validator = validator;

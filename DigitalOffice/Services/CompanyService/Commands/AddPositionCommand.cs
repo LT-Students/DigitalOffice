@@ -12,12 +12,12 @@ namespace LT.DigitalOffice.CompanyService.Commands
     public class AddPositionCommand : IAddPositionCommand
     {
         private readonly IValidator<AddPositionRequest> validator;
-        private readonly ICompanyRepository repository;
+        private readonly IPositionRepository repository;
         private readonly IMapper<AddPositionRequest, DbPosition> mapper;
 
         public AddPositionCommand(
             [FromServices] IValidator<AddPositionRequest> validator,
-            [FromServices] ICompanyRepository repository,
+            [FromServices] IPositionRepository repository,
             [FromServices] IMapper<AddPositionRequest, DbPosition> mapper)
         {
             this.validator = validator;

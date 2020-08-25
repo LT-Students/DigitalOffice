@@ -10,11 +10,11 @@ namespace LT.DigitalOffice.CompanyService.Commands
 {
     public class GetPositionByIdCommand : IGetPositionByIdCommand
     {
-        private readonly ICompanyRepository repository;
+        private readonly IPositionRepository repository;
         private readonly IMapper<DbPosition, Position> mapper;
 
         public GetPositionByIdCommand(
-            [FromServices] ICompanyRepository repository,
+            [FromServices] IPositionRepository repository,
             [FromServices] IMapper<DbPosition, Position> mapper)
         {
             this.repository = repository;

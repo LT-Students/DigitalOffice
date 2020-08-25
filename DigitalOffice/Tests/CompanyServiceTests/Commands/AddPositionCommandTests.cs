@@ -13,7 +13,7 @@ namespace LT.DigitalOffice.CompanyServiceUnitTests.Commands
 {
     class AddPositionCommandTests
     {
-        private Mock<ICompanyRepository> repositoryMock;
+        private Mock<IPositionRepository> repositoryMock;
         private Mock<IMapper<AddPositionRequest, DbPosition>> mapperMock;
         private Mock<IValidator<AddPositionRequest>> validatorMock;
 
@@ -42,7 +42,7 @@ namespace LT.DigitalOffice.CompanyServiceUnitTests.Commands
         public void SetUp()
         {
             validatorMock = new Mock<IValidator<AddPositionRequest>>();
-            repositoryMock = new Mock<ICompanyRepository>();
+            repositoryMock = new Mock<IPositionRepository>();
             mapperMock = new Mock<IMapper<AddPositionRequest, DbPosition>>();
 
             command = new AddPositionCommand(validatorMock.Object, repositoryMock.Object, mapperMock.Object);

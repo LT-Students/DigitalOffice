@@ -1,8 +1,8 @@
 using LT.DigitalOffice.CompanyService.Commands.Interfaces;
 using LT.DigitalOffice.CompanyService.Models;
 using Microsoft.AspNetCore.Mvc;
-using System.Collections.Generic;
 using System;
+using System.Collections.Generic;
 
 namespace LT.DigitalOffice.CompanyService.Controllers
 {
@@ -10,16 +10,16 @@ namespace LT.DigitalOffice.CompanyService.Controllers
     [ApiController]
     public class CompanyController : ControllerBase
     {
-        [HttpGet("getPositionsList")]
-        public List<Position> GetPositionsList([FromServices] IGetPositionsListCommand command)
-        {
-            return command.Execute();
-        }
-
         [HttpPost("getCompanyById")]
         public Company GetCompanyById([FromServices] IGetCompanyByIdCommand command, [FromQuery] Guid companyId)
         {
             return command.Execute(companyId);
+        }
+
+        [HttpPost("getCompaniesList")]
+        public List<Company> GetCompaniesList([FromServices] IGetCompaniesListCommand command)
+        {
+            return command.Execute();
         }
 
         [HttpPost("addCompany")]
@@ -38,6 +38,12 @@ namespace LT.DigitalOffice.CompanyService.Controllers
         public Position GetPositionById([FromServices] IGetPositionByIdCommand command, [FromQuery] Guid positionId)
         {
             return command.Execute(positionId);
+        }
+
+        [HttpGet("getPositionsList")]
+        public List<Position> GetPositionsList([FromServices] IGetPositionsListCommand command)
+        {
+            return command.Execute();
         }
 
         [HttpPost("addPosition")]

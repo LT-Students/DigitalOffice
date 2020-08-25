@@ -15,7 +15,7 @@ namespace LT.DigitalOffice.CompanyServiceUnitTests.Commands
 {
     class GetPositionByIdCommandTests
     {
-        private Mock<ICompanyRepository> repositoryMock;
+        private Mock<IPositionRepository> repositoryMock;
         private Mock<IMapper<DbPosition, Position>> mapperMock;
         private IGetPositionByIdCommand command;
 
@@ -29,7 +29,7 @@ namespace LT.DigitalOffice.CompanyServiceUnitTests.Commands
         [SetUp]
         public void SetUp()
         {
-            repositoryMock = new Mock<ICompanyRepository>();
+            repositoryMock = new Mock<IPositionRepository>();
             mapperMock = new Mock<IMapper<DbPosition, Position>>();
             command = new GetPositionByIdCommand(repositoryMock.Object, mapperMock.Object);
 

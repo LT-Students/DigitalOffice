@@ -1,40 +1,55 @@
-﻿using System;
-using System.Collections.Generic;
-using LT.DigitalOffice.CompanyService.Database;
+﻿using LT.DigitalOffice.CompanyService.Database;
 using LT.DigitalOffice.CompanyService.Database.Entities;
 using LT.DigitalOffice.CompanyService.Repositories;
 using LT.DigitalOffice.CompanyService.Repositories.Interfaces;
+using LT.DigitalOffice.Kernel.UnitTestLibrary;
 using Microsoft.EntityFrameworkCore;
 using NUnit.Framework;
+using System;
+using System.Collections.Generic;
+using System.Linq;
 
 namespace LT.DigitalOffice.CompanyServiceUnitTests.Repositories
 {
     internal class PositionRepositoryTests
     {
-        private const string PositionName = "Software Engineer";
-        private const string Description = "some description";
-
-        private Guid dbPositionGuid = Guid.NewGuid();
-
-        private DbCompanyUser dbCompanyUser;
         private CompanyServiceDbContext dbContext;
         private DbPosition dbPosition;
         private IPositionRepository repository;
+        private DbPosition newPosition;
+        private Guid positionId;
+        private DbPosition dbPositionToAdd;
 
-        private CompanyServiceDbContext GetMemoryContext()
+        [OneTimeSetUp]
+        public void OneTimeSetUp()
         {
-            var options = new DbContextOptionsBuilder<CompanyServiceDbContext>()
+            var dbOptions = new DbContextOptionsBuilder<CompanyServiceDbContext>()
                 .UseInMemoryDatabase("InMemoryDatabase")
                 .Options;
+            dbContext = new CompanyServiceDbContext(dbOptions);
 
-            return new CompanyServiceDbContext(options);
+            repository = new PositionRepository(dbContext);
         }
 
         [SetUp]
         public void SetUp()
         {
-            dbContext = GetMemoryContext();
-            repository = new PositionRepository(dbContext);
+            positionId = Guid.NewGuid();
+            dbPosition = new DbPosition
+            {
+                Id = positionId,
+                Name = "Name",
+                Description = "Description",
+            };
+            dbContext.Positions.Add(dbPosition);
+            dbContext.SaveChanges();
+
+            dbPositionToAdd = new DbPosition
+            {
+                Id = Guid.NewGuid(),
+                Name = "Position",
+                Description = "Description"
+            };
         }
 
         [TearDown]
@@ -46,8 +61,46 @@ namespace LT.DigitalOffice.CompanyServiceUnitTests.Repositories
             }
         }
 
-        #region GetUserPosition definition
+        #region GetPositionById
+        [Test]
+        public void ShouldThrowExceptionIfPositionDoesNotExist()
+        {
+            Assert.Throws<Exception>(() => repository.GetPositionById(Guid.NewGuid()));
+            Assert.AreEqual(dbContext.Positions, new List<DbPosition> { dbPosition });
+        }
 
+        [Test]
+        public void ShouldReturnSimplePositionInfoSuccessfully()
+        {
+            var result = repository.GetPositionById(dbPosition.Id);
+
+            var expected = new DbPosition
+            {
+                Id = dbPosition.Id,
+                Name = dbPosition.Name,
+                Description = dbPosition.Description
+            };
+
+            SerializerAssert.AreEqual(expected, result);
+            Assert.AreEqual(dbContext.Positions, new List<DbPosition> { dbPosition });
+        }
+        #endregion
+
+        #region GetPositionsList
+        [Test]
+        public void GetPositionsListSuccessfully()
+        {
+            var result = repository.GetPositionsList();
+
+            var expected = new List<DbPosition> { dbPosition };
+
+            Assert.DoesNotThrow(() => repository.GetPositionsList());
+            SerializerAssert.AreEqual(expected, result);
+            Assert.That(dbContext.Positions, Is.EqualTo(new List<DbPosition> { dbPosition }));
+        }
+        #endregion
+
+        #region GetUserPosition
         [Test]
         public void ShouldThrowExceptionWhenUserIdEmpty()
         {
@@ -57,37 +110,60 @@ namespace LT.DigitalOffice.CompanyServiceUnitTests.Repositories
         [Test]
         public void ShouldReturnUserPosition()
         {
-            var expected = new DbPosition
+            var dbCompanyUser = new DbCompanyUser
             {
-                Name = PositionName,
-                Description = Description,
-                Id = dbPositionGuid
+                PositionId = positionId,
+                UserId = Guid.NewGuid(),
+                CompanyId = Guid.NewGuid(),
+                IsActive = true,
+                StartTime = DateTime.Now.AddDays(-1)
             };
-
-            dbCompanyUser = new DbCompanyUser
-            {
-                PositionId = dbPositionGuid,
-                UserId = Guid.NewGuid()
-            };
-
-            dbPosition = new DbPosition
-            {
-                Id = dbPositionGuid,
-                Description = Description,
-                Name = PositionName,
-                UserIds = new List<DbCompanyUser>{ dbCompanyUser }
-            };
-
-            dbContext.Positions.Add(dbPosition);
+            var position = dbContext.Positions
+                .Include(p => p.UserIds)
+                .FirstOrDefault(p => p.Id == positionId);
+            position.UserIds = new List<DbCompanyUser> { dbCompanyUser };
             dbContext.SaveChanges();
 
-            Assert.AreEqual(expected.Id, repository.GetUserPosition(dbCompanyUser.UserId).Id);
-            Assert.AreEqual(expected.Description, repository.GetUserPosition(dbCompanyUser.UserId).Description);
-            Assert.AreEqual(expected.Name, repository.GetUserPosition(dbCompanyUser.UserId).Name);
-
+            var userId = dbPosition.UserIds.First().UserId;
+            var result = repository.GetUserPosition(userId);
+            Assert.AreEqual(dbPosition.Id, result.Id);
+            Assert.AreEqual(dbPosition.Description, result.Description);
+            Assert.AreEqual(dbPosition.Name, result.Name);
             Assert.That(dbContext.Positions, Is.EquivalentTo(new[] { dbPosition }));
         }
+        #endregion
 
+        #region AddPosition
+        [Test]
+        public void ShouldAddNewPositionSuccessfully()
+        {
+            var expected = dbPositionToAdd.Id;
+
+            var result = repository.AddPosition(dbPositionToAdd);
+
+            Assert.AreEqual(expected, result);
+            Assert.NotNull(dbContext.Positions.Find(dbPositionToAdd.Id));
+        }
+        #endregion
+
+        #region EditPosition
+        [Test]
+        public void ShouldEditPositionSuccessfully()
+        {
+            newPosition = new DbPosition
+            {
+                Id = positionId,
+                Name = "abracadabra",
+                Description = "bluhbluh"
+            };
+
+            var result = repository.EditPosition(newPosition);
+            DbPosition updatedPosition = dbContext.Positions.FirstOrDefault(p => p.Id == positionId);
+
+            Assert.IsTrue(result);
+            SerializerAssert.AreEqual(newPosition, updatedPosition);
+            Assert.That(dbContext.Positions, Is.EquivalentTo(new List<DbPosition> { updatedPosition }));
+        }
         #endregion
     }
 }

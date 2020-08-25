@@ -14,7 +14,7 @@ namespace LT.DigitalOffice.CompanyServiceUnitTests.Commands
 {
     public class GetRightsListCommandTests
     {
-        private Mock<ICompanyRepository> repositoryMock;
+        private Mock<IPositionRepository> repositoryMock;
         private Mock<IMapper<DbPosition, Position>> mapperMock;
         private IGetPositionsListCommand command;
         private List<Position> positionsList;
@@ -23,7 +23,7 @@ namespace LT.DigitalOffice.CompanyServiceUnitTests.Commands
         [SetUp]
         public void SetUp()
         {
-            repositoryMock = new Mock<ICompanyRepository>();
+            repositoryMock = new Mock<IPositionRepository>();
             mapperMock = new Mock<IMapper<DbPosition, Position>>();
             command = new GetPositionsListCommand(repositoryMock.Object, mapperMock.Object);
 
