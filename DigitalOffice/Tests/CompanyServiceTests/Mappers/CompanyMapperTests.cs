@@ -18,6 +18,10 @@ namespace LT.DigitalOffice.CompanyServiceUnitTests.Mappers
         private AddCompanyRequest addCompanyRequest;
         private DbCompany expectedDbCompanyWithoutId;
 
+        private IMapper<EditCompanyRequest, DbCompany> changeCompanyRequestMapper;
+        private EditCompanyRequest changeCompanyRequest;
+        private DbCompany expectedDbCompanyAfterChange;
+
         [OneTimeSetUp]
         public void OneTimeSetUp()
         {
@@ -46,6 +50,20 @@ namespace LT.DigitalOffice.CompanyServiceUnitTests.Mappers
             {
                 Name = name,
                 IsActive = true
+            };
+
+            changeCompanyRequestMapper = new CompanyMapper();
+            changeCompanyRequest = new EditCompanyRequest
+            {
+                CompanyId = dbCompany.Id,
+                Name = dbCompany.Name + "abracadabra",
+                IsActive = !dbCompany.IsActive
+            };
+            expectedDbCompanyAfterChange = new DbCompany
+            {
+                Id = changeCompanyRequest.CompanyId,
+                Name = changeCompanyRequest.Name,
+                IsActive = changeCompanyRequest.IsActive
             };
         }
 
@@ -79,6 +97,22 @@ namespace LT.DigitalOffice.CompanyServiceUnitTests.Mappers
 
             Assert.IsInstanceOf<Guid>(addedDbCompany.Id);
             SerializerAssert.AreEqual(expectedDbCompanyWithoutId, addedDbCompany);
+        }
+        #endregion
+
+        #region EditCompanyRequest to DbCompany
+        [Test]
+        public void ShouldThrowArgumentNullExceptionWhenEditCompanyRequestIsNull()
+        {
+            Assert.Throws<ArgumentNullException>(() => changeCompanyRequestMapper.Map(null));
+        }
+
+        [Test]
+        public void ShouldReturnRightModelWhenEditCompanyRequestIsMapped()
+        {
+            var changedDbCompany = changeCompanyRequestMapper.Map(changeCompanyRequest);
+
+            SerializerAssert.AreEqual(expectedDbCompanyAfterChange, changedDbCompany);
         }
         #endregion
     }

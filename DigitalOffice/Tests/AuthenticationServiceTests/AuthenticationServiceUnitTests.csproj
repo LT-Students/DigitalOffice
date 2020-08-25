@@ -19,6 +19,7 @@
 
   <ItemGroup>
     <ProjectReference Include="..\..\Services\AuthenticationService\AuthenticationService.csproj" />
+    <ProjectReference Include="..\..\Shared\Kernel\Kernel.csproj" />
   </ItemGroup>
 
 </Project>

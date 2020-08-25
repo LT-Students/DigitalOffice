@@ -1,7 +1,7 @@
-﻿using System.Text.Json;
-using NUnit.Framework;
+﻿using NUnit.Framework;
+using System.Text.Json;
 
-namespace LT.DigitalOffice.AuthenticationServiceUnitTests.UnitTestLibrary
+namespace LT.DigitalOffice.ProjectServiceUnitTests.UnitTestLibrary
 {
     public static class SerializerAssert
     {

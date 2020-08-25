@@ -22,7 +22,7 @@ namespace LT.DigitalOffice.CompanyService
 {
     public class Startup
     {
-        public IConfiguration Configuration { get; }
+        private IConfiguration Configuration { get; }
 
         public Startup(IConfiguration configuration)
         {
@@ -95,36 +95,42 @@ namespace LT.DigitalOffice.CompanyService
             context.Database.Migrate();
         }
 
-        private void ConfigureRepositories(IServiceCollection services)
+        private void ConfigureCommands(IServiceCollection services)
         {
-            services.AddTransient<IPositionRepository, PositionRepository>();
-            services.AddTransient<ICompanyRepository, CompanyRepository>();
+            services.AddTransient<IGetCompanyByIdCommand, GetCompanyByIdCommand>();
+            services.AddTransient<IAddCompanyCommand, AddCompanyCommand>();
+            services.AddTransient<IEditCompanyCommand, EditCompanyCommand>();
+
+            services.AddTransient<IGetPositionByIdCommand, GetPositionByIdCommand>();
+            services.AddTransient<IGetPositionsListCommand, GetPositionsListCommand>();
+            services.AddTransient<IAddPositionCommand, AddPositionCommand>();
+            services.AddTransient<IEditPositionCommand, EditPositionCommand>();
         }
 
         private void ConfigureMappers(IServiceCollection services)
         {
-            services.AddTransient<IMapper<EditPositionRequest, DbPosition>, PositionMapper>();
             services.AddTransient<IMapper<DbCompany, Company>, CompanyMapper>();
             services.AddTransient<IMapper<AddCompanyRequest, DbCompany>, CompanyMapper>();
+            services.AddTransient<IMapper<EditCompanyRequest, DbCompany>, CompanyMapper>();
+
             services.AddTransient<IMapper<DbPosition, Position>, PositionMapper>();
             services.AddTransient<IMapper<AddPositionRequest, DbPosition>, PositionMapper>();
+            services.AddTransient<IMapper<EditPositionRequest, DbPosition>, PositionMapper>();
         }
 
         private void ConfigureValidators(IServiceCollection services)
         {
             services.AddTransient<IValidator<AddCompanyRequest>, AddCompanyValidator>();
+            services.AddTransient<IValidator<EditCompanyRequest>, EditCompanyValidator>();
+
             services.AddTransient<IValidator<AddPositionRequest>, AddPositionRequestValidator>();
             services.AddTransient<IValidator<EditPositionRequest>, EditPositionRequestValidator>();
         }
 
-        private void ConfigureCommands(IServiceCollection services)
+        private void ConfigureRepositories(IServiceCollection services)
         {
-            services.AddTransient<IEditPositionCommand, EditPositionCommand>();
-            services.AddTransient<IAddCompanyCommand, AddCompanyCommand>();
-            services.AddTransient<IAddPositionCommand, AddPositionCommand>();
-            services.AddTransient<IGetPositionByIdCommand, GetPositionByIdCommand>();
-            services.AddTransient<IGetCompanyByIdCommand, GetCompanyByIdCommand>();
-            services.AddTransient<IAddCompanyCommand, AddCompanyCommand>();
+            services.AddTransient<IPositionRepository, PositionRepository>();
+            services.AddTransient<ICompanyRepository, CompanyRepository>();
         }
     }
 }
