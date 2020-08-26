@@ -30,3 +30,4 @@ jobs:
         username: ${{ secrets.DOCKER_LOGIN }}
         password: ${{ secrets.DOCKER_PASSWORD }}
         repository: services
+        dockerfile: ./DigitalOffice/Services/AuthenticationService/Dockerfile
