@@ -29,5 +29,8 @@ jobs:
       with:
         username: ${{ secrets.DOCKER_LOGIN }}
         password: ${{ secrets.DOCKER_PASSWORD }}
-        repository: services
+        repository: ltstudents/services
         dockerfile: ./Services/AuthenticationService/Dockerfile
+        tags: authServiceTag1
+        labels: authServiceLabel1
+        push: true
