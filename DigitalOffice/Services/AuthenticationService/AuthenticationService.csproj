@@ -24,7 +24,7 @@
   <PropertyGroup>
     <LangVersion>preview</LangVersion>
     <UserSecretsId>4dfac504-9e3d-4eb3-bdd9-642ce453e67d</UserSecretsId>
-    <DockerDefaultTargetOS>Windows</DockerDefaultTargetOS>
+    <DockerDefaultTargetOS>Linux</DockerDefaultTargetOS>
     <DockerfileContext>..\..</DockerfileContext>
   </PropertyGroup>
 
