@@ -31,3 +31,6 @@ jobs:
         password: ${{ secrets.DOCKER_PASSWORD }}
         repository: services
         dockerfile: ./Services/AuthenticationService/Dockerfile
+        tags: authServiceTag1
+        labels: authServiceLabel1
+        push: true
