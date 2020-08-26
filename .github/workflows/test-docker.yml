@@ -1,4 +1,4 @@
-name: .NET Core
+name: Test Docker
 
 on:
   push:
