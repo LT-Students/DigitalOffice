@@ -127,6 +127,7 @@ namespace LT.DigitalOffice.AuthenticationService
             app.UseEndpoints(endpoints =>
             {
                 endpoints.MapControllers();
+                endpoints.MapHealthChecks("api/healthcheck");
             });
         }
     }
