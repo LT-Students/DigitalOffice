@@ -30,7 +30,7 @@ namespace LT.DigitalOffice.AuthenticationService
 
         public void ConfigureServices(IServiceCollection services)
         {
-            ConfigJwt(services);
+            ConfigureJwt(services);
 
             services.AddHealthChecks();
 
@@ -44,7 +44,7 @@ namespace LT.DigitalOffice.AuthenticationService
             ConfigureValidators(services);
         }
 
-        private void ConfigJwt(IServiceCollection services)
+        private void ConfigureJwt(IServiceCollection services)
         {
             var signingKey = new SigningSymmetricKey();
             var signingDecodingKey = (IJwtSigningDecodingKey)signingKey;
@@ -67,12 +67,13 @@ namespace LT.DigitalOffice.AuthenticationService
 
             services.Configure<TokenOptions>(Configuration.GetSection("TokenSettings"));
 
-            services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
-            .AddJwtBearer(options =>
-            {
-                options.RequireHttpsMetadata = true;
-                options.TokenValidationParameters = validationParametersnew;
-            });
+            services
+                .AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
+                .AddJwtBearer(options =>
+                {
+                    options.RequireHttpsMetadata = true;
+                    options.TokenValidationParameters = validationParametersnew;
+                });
         }
 
         private void ConfigureRabbitMq(IServiceCollection services)
