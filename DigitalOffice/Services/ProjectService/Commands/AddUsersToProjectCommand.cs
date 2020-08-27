@@ -8,21 +8,22 @@ using LT.DigitalOffice.ProjectService.Models;
 using LT.DigitalOffice.ProjectService.Repositories.Interfaces;
 using Microsoft.AspNetCore.Mvc;
 using System;
+using System.Collections.Generic;
 using System.Threading.Tasks;
 
 namespace ProjectService.Commands
 {
-    public class AddUserToProjectCommand : IAddUserToProjectCommand
+    public class AddUsersToProjectCommand : IAddUsersToProjectCommand
     {
-        private readonly IValidator<AddUserToProjectRequest> validator;
+        private readonly IValidator<ProjectUser> validator;
         private readonly IProjectRepository repository;
-        private readonly IMapper<AddUserToProjectRequest, DbProjectWorkerUser> projectUserMapper;
+        private readonly IMapper<ProjectUser, DbProjectWorkerUser> projectUserMapper;
         private readonly ISender<Guid, IUserExistenceResponse> userExistenceSender;
 
-        public AddUserToProjectCommand(
-            [FromServices] IValidator<AddUserToProjectRequest> validator,
+        public AddUsersToProjectCommand(
+            [FromServices] IValidator<ProjectUser> validator,
             [FromServices] IProjectRepository repository,
-            [FromServices] IMapper<AddUserToProjectRequest, DbProjectWorkerUser> projectUserMapper,
+            [FromServices] IMapper<ProjectUser, DbProjectWorkerUser> projectUserMapper,
             [FromServices] ISender<Guid, IUserExistenceResponse> userExistenceSender)
         {
             this.validator = validator;
@@ -31,18 +32,25 @@ namespace ProjectService.Commands
             this.userExistenceSender = userExistenceSender;
         }
 
-        public async Task<bool> Execute(AddUserToProjectRequest request)
+        public async Task<IEnumerable<bool>> Execute(AddUserToProjectRequest request)
         {
-            validator.ValidateAndThrow(request);
+            var result = new List<bool>();
 
-            var brokerResponse = await userExistenceSender.GetResponseFromBroker(request.UserId);
-
-            if (!brokerResponse.Message.Body.Exists)
+            foreach (var user in request.UsersToAdd)
             {
-                throw new ArgumentException("User does not exist.");
+                validator.ValidateAndThrow(user);
+
+                var brokerResponse = await userExistenceSender.GetResponseFromBroker(user.UserId);
+
+                if (!brokerResponse.Message.Body.Exists)
+                {
+                    throw new ArgumentException("User does not exist.");
+                }
+
+                result.Add(repository.AddUserToProject(projectUserMapper.Map(user), user.ProjectId));
             }
 
-            return repository.AddUserToProject(projectUserMapper.Map(request), request.ProjectId);
+            return result;
         }
     }
 }

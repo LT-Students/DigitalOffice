@@ -86,7 +86,7 @@ namespace LT.DigitalOffice.ProjectService
         {
             services.AddTransient<IGetProjectInfoByIdCommand, GetProjectInfoByIdCommand>();
             services.AddTransient<ICreateNewProjectCommand, CreateNewProjectCommand>();
-            services.AddTransient<IAddUserToProjectCommand, AddUserToProjectCommand>();
+            services.AddTransient<IAddUsersToProjectCommand, AddUsersToProjectCommand>();
         }
 
         private void ConfigRepositories(IServiceCollection services)
@@ -98,13 +98,13 @@ namespace LT.DigitalOffice.ProjectService
         {
             services.AddTransient<IMapper<DbProject, Project>, ProjectMapper>();
             services.AddTransient<IMapper<NewProjectRequest, DbProject>, ProjectMapper>();
-            services.AddTransient<IMapper<AddUserToProjectRequest, DbProjectWorkerUser>, ProjectUserMapper>();
+            services.AddTransient<IMapper<ProjectUser, DbProjectWorkerUser>, ProjectUserMapper>();
         }
 
         private void ConfigValidators(IServiceCollection services)
         {
             services.AddTransient<IValidator<NewProjectRequest>, NewProjectValidator>();
-            services.AddTransient<IValidator<AddUserToProjectRequest>, AddUserToProjectRequestValidator>();
+            services.AddTransient<IValidator<ProjectUser>, AddUserToProjectRequestValidator>();
         }
 
         public void Configure(IApplicationBuilder app, IWebHostEnvironment env)

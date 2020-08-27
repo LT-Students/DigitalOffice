@@ -2,6 +2,7 @@
 using LT.DigitalOffice.ProjectService.Models;
 using Microsoft.AspNetCore.Mvc;
 using System;
+using System.Collections.Generic;
 using System.Threading.Tasks;
 
 namespace LT.DigitalOffice.ProjectService.Controllers
@@ -22,9 +23,9 @@ namespace LT.DigitalOffice.ProjectService.Controllers
             [FromBody] NewProjectRequest request) => command.Execute(request);
 
         [HttpPut("addUserToProject")]
-        public async Task<bool> AddUserToProject(
+        public async Task<IEnumerable<bool>> AddUserToProject(
             [FromBody] AddUserToProjectRequest request,
-            [FromServices] IAddUserToProjectCommand command)
+            [FromServices] IAddUsersToProjectCommand command)
         {
             return await command.Execute(request);
         }

@@ -107,7 +107,7 @@ namespace ProjectServiceUnitTests.Commands
         }
 
         private Mock<IRequestClient<IUserExistenceRequest>> requestClientMock;
-        private AddUserToProjectCommand command;
+        private AddUsersToProjectCommand command;
         private ISender<Guid, IUserExistenceResponse> sender;
         private ProjectServiceDbContext dbContext;
 
@@ -131,30 +131,43 @@ namespace ProjectServiceUnitTests.Commands
 
             sender = new UserExistenceSender(requestClientMock.Object);
 
-            command = new AddUserToProjectCommand(validator, repository, workerMapper, sender);
+            command = new AddUsersToProjectCommand(validator, repository, workerMapper, sender);
         }
 
         [Test]
         public void ShouldAddWorkerTest()
         {
-            var request = new AddUserToProjectRequest
+            var user = new ProjectUser
             {
                 ProjectId = new Guid("ff15f706-8409-4464-8ea9-980247bd8b91"),
                 UserId = new Guid("72a92185-cf55-41c2-b339-4535d8b38340"),
                 IsManager = false
             };
 
-            Assert.IsTrue(command.Execute(request).Result);
+            var request = new AddUserToProjectRequest
+            {
+                UsersToAdd = new List<ProjectUser>() { user }
+            };
+
+            foreach (var result in command.Execute(request).Result)
+            {
+                Assert.IsTrue(result);
+            }
         }
 
         [Test]
         public void ShouldThrowOnValidationFail()
         {
-            var request = new AddUserToProjectRequest
+            var user = new ProjectUser
             {
                 ProjectId = new Guid("ff15f706-8409-4464-8ea9-980247bd8b91"),
                 UserId = new Guid(),
                 IsManager = true
+            };
+
+            var request = new AddUserToProjectRequest
+            {
+                UsersToAdd = new List<ProjectUser>() { user }
             };
 
             Assert.ThrowsAsync<ValidationException>(() => command.Execute(request));
@@ -165,11 +178,16 @@ namespace ProjectServiceUnitTests.Commands
         {
             var response = new ImplementationResponse(new OperationResult(new UserExistenceResponse(false), new List<string>(), true));
 
-            var request = new AddUserToProjectRequest
+            var user = new ProjectUser
             {
                 ProjectId = new Guid("ff15f706-8409-4464-8ea9-980247bd8b91"),
                 UserId = new Guid("9e1ed7b0-da55-4048-9657-b4fe17574b2e"),
                 IsManager = false
+            };
+
+            var request = new AddUserToProjectRequest
+            {
+                UsersToAdd = new List<ProjectUser>() { user }
             };
 
             requestClientMock.Setup(c =>

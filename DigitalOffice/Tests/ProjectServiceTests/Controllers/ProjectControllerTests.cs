@@ -3,6 +3,7 @@ using LT.DigitalOffice.ProjectService.Controllers;
 using LT.DigitalOffice.ProjectService.Models;
 using Moq;
 using NUnit.Framework;
+using System.Collections.Generic;
 using System.Threading.Tasks;
 
 namespace LT.DigitalOffice.ProjectServiceUnitTests.Controllers
@@ -10,7 +11,7 @@ namespace LT.DigitalOffice.ProjectServiceUnitTests.Controllers
     class ProjectControllerTests
     {
         private ProjectController projectController;
-        private Mock<IAddUserToProjectCommand> command;
+        private Mock<IAddUsersToProjectCommand> command;
 
         [SetUp]
         public void Setup()
@@ -22,9 +23,9 @@ namespace LT.DigitalOffice.ProjectServiceUnitTests.Controllers
         [Test]
         public void AddUserToProjectTest()
         {
-            command = new Mock<IAddUserToProjectCommand>();
+            command = new Mock<IAddUsersToProjectCommand>();
 
-            var responseTask = Task.FromResult(true);
+            var responseTask = Task.FromResult(new List<bool>() { true } as IEnumerable<bool>);
             command.Setup(c => c.Execute(It.IsAny<AddUserToProjectRequest>())).Returns(responseTask);
 
             var request = new AddUserToProjectRequest();

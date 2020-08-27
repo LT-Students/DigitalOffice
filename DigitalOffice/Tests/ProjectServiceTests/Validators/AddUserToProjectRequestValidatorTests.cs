@@ -9,7 +9,7 @@ namespace LT.DigitalOffice.ProjectServiceUnitTests.ValidatorsTests
 {
     class AddUserToProjectRequestValidatorTests
     {
-        private IValidator<AddUserToProjectRequest> validator;
+        private IValidator<ProjectUser> validator;
 
         [SetUp]
         public void Initialization()

@@ -3,7 +3,7 @@ using LT.DigitalOffice.ProjectService.Models;
 
 namespace ProjectService.Validators
 {
-    public class AddUserToProjectRequestValidator : AbstractValidator<AddUserToProjectRequest>
+    public class AddUserToProjectRequestValidator : AbstractValidator<ProjectUser>
     {
         public AddUserToProjectRequestValidator()
         {

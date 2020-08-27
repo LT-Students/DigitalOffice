@@ -5,15 +5,10 @@ using System;
 
 namespace LT.DigitalOffice.ProjectService.Mappers
 {
-    public class ProjectUserMapper : IMapper<AddUserToProjectRequest, DbProjectWorkerUser>
+    public class ProjectUserMapper : IMapper<ProjectUser, DbProjectWorkerUser>
     {
-        public DbProjectWorkerUser Map(AddUserToProjectRequest value)
+        public DbProjectWorkerUser Map(ProjectUser value)
         {
-            if (value == null)
-            {
-                throw new ArgumentNullException(nameof(value));
-            }
-
             return new DbProjectWorkerUser
             {
                 WorkerUserId = value.UserId,
