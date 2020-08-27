@@ -1,9 +1,6 @@
 using System;
 using FluentValidation;
-<<<<<<< HEAD:DigitalOffice/Services/UserService/Startup.cs
 using LT.DigitalOffice.UserService.Broker.Consumers;
-using LT.DigitalOffice.UserService.Broker.Requests;
-=======
 using LT.DigitalOffice.Kernel;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
@@ -13,8 +10,6 @@ using Microsoft.Extensions.DependencyInjection;
 using GreenPipes;
 using LT.DigitalOffice.Broker.Requests;
 using LT.DigitalOffice.Broker.Responses;
-using LT.DigitalOffice.UserService.Broker.Consumers;
->>>>>>> develop:Services/UserService/Startup.cs
 using LT.DigitalOffice.UserService.Commands;
 using LT.DigitalOffice.UserService.Commands.Interfaces;
 using LT.DigitalOffice.UserService.Database;
@@ -26,15 +21,6 @@ using LT.DigitalOffice.UserService.Repositories;
 using LT.DigitalOffice.UserService.Repositories.Interfaces;
 using LT.DigitalOffice.UserService.Validators;
 using MassTransit;
-<<<<<<< HEAD:DigitalOffice/Services/UserService/Startup.cs
-using Microsoft.AspNetCore.Builder;
-using Microsoft.AspNetCore.Hosting;
-using Microsoft.EntityFrameworkCore;
-using Microsoft.Extensions.Configuration;
-using Microsoft.Extensions.DependencyInjection;
-using System;
-=======
->>>>>>> develop:Services/UserService/Startup.cs
 
 namespace LT.DigitalOffice.UserService
 {
@@ -62,49 +48,12 @@ namespace LT.DigitalOffice.UserService
             services.AddControllers();
             services.AddMassTransitHostedService();
 
-            ConfigRabbitMQ(services);
-            ConfigBrokerConsumers(services);
-
+            ConfigRabbitMq(services);
             ConfigureCommands(services);
             ConfigureRepositories(services);
             ConfigureValidators(services);
             ConfigureMappers(services);
             ConfigRabbitMq(services);
-
-<<<<<<< HEAD:DigitalOffice/Services/UserService/Startup.cs
-        private void ConfigRabbitMQ(IServiceCollection services)
-        {
-            string appSettingSection = "ServiceInfo";
-            string serviceId = Configuration.GetSection(appSettingSection)["ID"];
-            string serviceName = Configuration.GetSection(appSettingSection)["Name"];
-
-            var uri = $"rabbitmq://localhost/UserService_{serviceName}";
-
-            services.AddMassTransit(x =>
-            {
-                x.UsingRabbitMq((context, cfg) =>
-                {
-                    cfg.Host("localhost", "/", host =>
-                    {
-                        host.Username($"{serviceName}");
-                        host.Password($"{serviceName}_{serviceId}");
-                    });
-                });
-            });
-        }
-
-        private void ConfigBrokerConsumers(IServiceCollection services)
-        {
-            services.AddTransient<IConsumer<IUserExistenceRequest>, UserExistenceConsumer>();
-        }
-
-        private void ConfigureCommands(IServiceCollection services)
-        {
-            services.AddTransient<IUserCreateCommand, UserCreateCommand>();
-            services.AddTransient<IGetUserByIdCommand, GetUserByIdCommand>();
-=======
-            services.AddMassTransitHostedService();
->>>>>>> develop:Services/UserService/Startup.cs
         }
 
         private void ConfigRabbitMq(IServiceCollection services)

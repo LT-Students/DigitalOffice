@@ -40,10 +40,9 @@ namespace LT.DigitalOffice.UserService.Repositories
             => userServiceDbContext.Users.FirstOrDefault(dbUser => dbUser.Id == userId) ??
                throw new Exception("User with this id not found.");
 
-<<<<<<< HEAD:DigitalOffice/Services/UserService/Repositories/UserRepository.cs
         public bool UserExists(Guid id)
             => userServiceDbContext.Users.FirstOrDefault(u => u.Id == id) != null;
-=======
+
         public bool EditUser(DbUser user)
         {
             if (!userServiceDbContext.Users.Any(users => user.Id == users.Id))
@@ -68,6 +67,5 @@ namespace LT.DigitalOffice.UserService.Repositories
 
             return user;
         }
->>>>>>> develop:Services/UserService/Repositories/UserRepository.cs
     }
 }

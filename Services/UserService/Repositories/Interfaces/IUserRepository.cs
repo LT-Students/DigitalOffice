@@ -20,12 +20,6 @@ namespace LT.DigitalOffice.UserService.Repositories.Interfaces
         /// Adds new user to the database. Returns whether it was successful to add.
         /// </summary>
         /// <param name="user">User to add.</param>
-<<<<<<< HEAD:DigitalOffice/Services/UserService/Repositories/Interfaces/IUserRepository.cs
-        /// <returns>Whether it was successful to add</returns>
-        bool UserCreate(DbUser user);
-
-        bool UserExists(Guid id);
-=======
         /// <returns>Guid of added user.</returns>
         Guid UserCreate(DbUser user);
       
@@ -33,8 +27,15 @@ namespace LT.DigitalOffice.UserService.Repositories.Interfaces
         /// Edit existing user. Returns whether it was successful to edit.
         /// </summary>
         /// <param name="user">User to edit.</param>
-        /// <returns>Whether it was successful to edit</returns>
+        /// <returns>Whether it was successful to edit.</returns>
         bool EditUser(DbUser user);
+
+        /// <summary>
+        /// Checks if user exists in the repository.
+        /// </summary>
+        /// <param name="id">User's id.</param>
+        /// <returns>Whether user exists in the repository or not.</returns>
+        bool UserExists(Guid id);
 
         /// <summary>
         /// Returns the user with the specified email from database.
@@ -42,7 +43,6 @@ namespace LT.DigitalOffice.UserService.Repositories.Interfaces
         /// <param name="userEmail">Specified email of user.</param>
         /// <returns>User model.</returns>
         DbUser GetUserByEmail(string userEmail);
->>>>>>> develop:Services/UserService/Repositories/Interfaces/IUserRepository.cs
     }
 }
 

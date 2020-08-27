@@ -1,12 +1,9 @@
 using FluentValidation;
-<<<<<<< HEAD:DigitalOffice/Services/ProjectService/Startup.cs
 using LT.DigitalOffice.ProjectService.Broker.Requests;
 using LT.DigitalOffice.ProjectService.Broker.Responses;
 using LT.DigitalOffice.ProjectService.Broker.Senders;
 using LT.DigitalOffice.ProjectService.Broker.Senders.Interfaces;
-=======
 using LT.DigitalOffice.Kernel;
->>>>>>> develop:Services/ProjectService/Startup.cs
 using LT.DigitalOffice.ProjectService.Commands;
 using LT.DigitalOffice.ProjectService.Commands.Interfaces;
 using LT.DigitalOffice.ProjectService.Database;
@@ -90,11 +87,8 @@ namespace LT.DigitalOffice.ProjectService
         {
             services.AddTransient<IGetProjectInfoByIdCommand, GetProjectInfoByIdCommand>();
             services.AddTransient<ICreateNewProjectCommand, CreateNewProjectCommand>();
-<<<<<<< HEAD:DigitalOffice/Services/ProjectService/Startup.cs
             services.AddTransient<IAddUsersToProjectCommand, AddUsersToProjectCommand>();
-=======
             services.AddTransient<IEditProjectByIdCommand, EditProjectByIdCommand>();
->>>>>>> develop:Services/ProjectService/Startup.cs
         }
 
         private void ConfigRepositories(IServiceCollection services)
@@ -106,21 +100,15 @@ namespace LT.DigitalOffice.ProjectService
         {
             services.AddTransient<IMapper<DbProject, Project>, ProjectMapper>();
             services.AddTransient<IMapper<NewProjectRequest, DbProject>, ProjectMapper>();
-<<<<<<< HEAD:DigitalOffice/Services/ProjectService/Startup.cs
             services.AddTransient<IMapper<ProjectUser, DbProjectWorkerUser>, ProjectUserMapper>();
-=======
             services.AddTransient<IMapper<EditProjectRequest, DbProject>, ProjectMapper>();
->>>>>>> develop:Services/ProjectService/Startup.cs
         }
 
         private void ConfigValidators(IServiceCollection services)
         {
             services.AddTransient<IValidator<NewProjectRequest>, NewProjectValidator>();
-<<<<<<< HEAD:DigitalOffice/Services/ProjectService/Startup.cs
             services.AddTransient<IValidator<ProjectUser>, AddUserToProjectRequestValidator>();
-=======
             services.AddTransient<IValidator<EditProjectRequest>, EditProjectValidator>();
->>>>>>> develop:Services/ProjectService/Startup.cs
         }
 
         public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
