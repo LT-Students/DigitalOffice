@@ -10,7 +10,7 @@ using System.Collections.Generic;
 
 namespace LT.DigitalOffice.ProjectServiceUnitTests.Repositories
 {
-    public class GetProjectInfoByIdRepositoryTests
+    public class GetProjectByIdRepositoryTests
     {
         private IProjectRepository repository;
         private ProjectServiceDbContext dbContext;

@@ -13,7 +13,7 @@ using LT.DigitalOffice.ProjectService.Repositories.Interfaces;
 
 namespace LT.DigitalOffice.ProjectServiceUnitTests.Commands
 {
-    public class GetProjectInfoByIdCommandTests
+    public class GetProjectByIdCommandTests
     {
         private IGetProjectInfoByIdCommand command;
         private Mock<IProjectRepository> repositoryMock;
@@ -24,15 +24,15 @@ namespace LT.DigitalOffice.ProjectServiceUnitTests.Commands
 
         private Guid projectId;
         private Guid workerId;
-		
+
         private const string NAME = "Project";
-		
+
         [SetUp]
         public void SetUp()
         {
             repositoryMock = new Mock<IProjectRepository>();
             mapperMock = new Mock<IMapper<DbProject, Project>>();
-            command = new GetProjectInfoByIdCommand(repositoryMock.Object, mapperMock.Object);
+            command = new GetProjectByIdCommand(repositoryMock.Object, mapperMock.Object);
 
             workerId = Guid.NewGuid();
             projectId = Guid.NewGuid();

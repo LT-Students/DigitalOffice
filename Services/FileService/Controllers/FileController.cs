@@ -17,7 +17,7 @@ namespace LT.DigitalOffice.FileService.Controllers
             return command.Execute(request);
         }
 
-        [HttpGet("GetFileByIdById")]
+        [HttpGet("getFileById")]
         public File GetFileById([FromServices] IGetFileByIdCommand command, [FromQuery] Guid fileId)
         {
             return command.Execute(fileId);

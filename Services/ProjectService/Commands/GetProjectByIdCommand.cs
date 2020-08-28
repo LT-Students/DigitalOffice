@@ -8,12 +8,12 @@ using System;
 
 namespace LT.DigitalOffice.ProjectService.Commands
 {
-    public class GetProjectInfoByIdCommand : IGetProjectInfoByIdCommand
+    public class GetProjectByIdCommand : IGetProjectInfoByIdCommand
     {
         private readonly IProjectRepository repository;
         private readonly IMapper<DbProject, Project> mapper;
 
-        public GetProjectInfoByIdCommand(
+        public GetProjectByIdCommand(
             [FromServices] IProjectRepository repository,
             [FromServices] IMapper<DbProject, Project> mapper)
         {

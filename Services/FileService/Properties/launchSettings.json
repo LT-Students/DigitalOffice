@@ -17,7 +17,7 @@
     },
     "FileService": {
       "commandName": "Project",
-      "launchBrowser": true,
+      "launchBrowser": false,
       "applicationUrl": "https://localhost:9813;http://localhost:9814",
       "environmentVariables": {
         "ASPNETCORE_ENVIRONMENT": "Development"

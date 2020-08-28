@@ -1,4 +1,5 @@
 using FluentValidation;
+using LT.DigitalOffice.FileService.Broker.Consumers;
 using LT.DigitalOffice.FileService.Commands;
 using LT.DigitalOffice.FileService.Commands.Interfaces;
 using LT.DigitalOffice.FileService.Database;
@@ -10,6 +11,7 @@ using LT.DigitalOffice.FileService.Repositories;
 using LT.DigitalOffice.FileService.Repositories.Interfaces;
 using LT.DigitalOffice.FileService.Validators;
 using LT.DigitalOffice.Kernel;
+using MassTransit;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.EntityFrameworkCore;
@@ -26,8 +28,11 @@ namespace LT.DigitalOffice.FileService
         {
             Configuration = configuration;
         }
+
         public void ConfigureServices(IServiceCollection services)
         {
+            services.AddHealthChecks();
+
             services.AddDbContext<FileServiceDbContext>(options =>
             {
                 options.UseSqlServer(Configuration.GetConnectionString("SQLConnectionString"));
@@ -38,6 +43,35 @@ namespace LT.DigitalOffice.FileService
             ConfigureMappers(services);
             ConfigureRepositories(services);
             ConfigureValidators(services);
+            ConfigureMassTransit(services);
+        }
+
+        private void ConfigureMassTransit(IServiceCollection services)
+        {
+            string appSettingSection = "ServiceInfo";
+            string serviceId = Configuration.GetSection(appSettingSection)["ID"];
+            string serviceName = Configuration.GetSection(appSettingSection)["Name"];
+
+            services.AddMassTransit(x =>
+            {
+                x.AddConsumer<GetFileConsumer>();
+
+                x.UsingRabbitMq((context, cfg) =>
+                {
+                    cfg.Host("localhost", "/", host =>
+                    {
+                        host.Username($"{serviceName}_{serviceId}");
+                        host.Password(serviceId);
+                    });
+
+                    cfg.ReceiveEndpoint(serviceName, ep =>
+                    {
+                        ep.ConfigureConsumer<GetFileConsumer>(context);
+                    });
+                });
+            });
+
+            services.AddMassTransitHostedService();
         }
 
         private void ConfigureCommands(IServiceCollection services)

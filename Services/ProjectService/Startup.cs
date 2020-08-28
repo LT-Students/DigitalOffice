@@ -1,5 +1,9 @@
+using Microsoft.AspNetCore.Builder;
+using Microsoft.AspNetCore.Hosting;
+using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Configuration;
+using Microsoft.Extensions.DependencyInjection;
 using FluentValidation;
-using LT.DigitalOffice.Kernel;
 using LT.DigitalOffice.ProjectService.Commands;
 using LT.DigitalOffice.ProjectService.Commands.Interfaces;
 using LT.DigitalOffice.ProjectService.Database;
@@ -10,11 +14,10 @@ using LT.DigitalOffice.ProjectService.Models;
 using LT.DigitalOffice.ProjectService.Repositories;
 using LT.DigitalOffice.ProjectService.Repositories.Interfaces;
 using LT.DigitalOffice.ProjectService.Validators;
-using Microsoft.AspNetCore.Builder;
-using Microsoft.AspNetCore.Hosting;
-using Microsoft.EntityFrameworkCore;
-using Microsoft.Extensions.Configuration;
-using Microsoft.Extensions.DependencyInjection;
+using MassTransit;
+using LT.DigitalOffice.Broker.Requests;
+using System;
+using LT.DigitalOffice.Kernel;
 
 namespace LT.DigitalOffice.ProjectService
 {
@@ -36,32 +39,57 @@ namespace LT.DigitalOffice.ProjectService
 
             services.AddControllers();
 
-            ConfigCommands(services);
-            ConfigRepositories(services);
-            ConfigMappers(services);
-            ConfigValidators(services);
+            ConfigureCommands(services);
+            ConfigureRepositories(services);
+            ConfigureMappers(services);
+            ConfigureValidators(services);
+            ConfigureMassTransit(services);
+            services.AddMassTransitHostedService();
         }
 
-        private void ConfigCommands(IServiceCollection services)
+        private void ConfigureMassTransit(IServiceCollection services)
         {
-            services.AddTransient<IGetProjectInfoByIdCommand, GetProjectInfoByIdCommand>();
+            services.AddMassTransit(configurator =>
+            {
+                configurator.UsingRabbitMq((context, factoryConfigurator) =>
+                {
+                    const string serviceInfoSection = "ServiceInfo";
+
+                    var serviceName = Configuration.GetSection(serviceInfoSection)["Name"];
+                    var serviceId = Configuration.GetSection(serviceInfoSection)["ID"];
+
+                    factoryConfigurator.Host("localhost", hostConfigurator =>
+                    {
+                        hostConfigurator.Username($"{serviceName}_{serviceId}");
+                        hostConfigurator.Password(serviceId);
+                    });
+                });
+
+                configurator.AddRequestClient<IGetFileRequest>(
+                    new Uri("rabbitmq://localhost/FileService"));
+            });
+        }
+
+        private void ConfigureCommands(IServiceCollection services)
+        {
+            services.AddTransient<IGetProjectInfoByIdCommand, GetProjectByIdCommand>();
             services.AddTransient<ICreateNewProjectCommand, CreateNewProjectCommand>();
             services.AddTransient<IEditProjectByIdCommand, EditProjectByIdCommand>();
         }
 
-        private void ConfigRepositories(IServiceCollection services)
+        private void ConfigureRepositories(IServiceCollection services)
         {
             services.AddTransient<IProjectRepository, ProjectRepository>();
         }
 
-        private void ConfigMappers(IServiceCollection services)
+        private void ConfigureMappers(IServiceCollection services)
         {
             services.AddTransient<IMapper<DbProject, Project>, ProjectMapper>();
             services.AddTransient<IMapper<NewProjectRequest, DbProject>, ProjectMapper>();
             services.AddTransient<IMapper<EditProjectRequest, DbProject>, ProjectMapper>();
         }
 
-        private void ConfigValidators(IServiceCollection services)
+        private void ConfigureValidators(IServiceCollection services)
         {
             services.AddTransient<IValidator<NewProjectRequest>, NewProjectValidator>();
             services.AddTransient<IValidator<EditProjectRequest>, EditProjectValidator>();

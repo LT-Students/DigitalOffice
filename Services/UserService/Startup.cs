@@ -1,11 +1,5 @@
 using System;
 using FluentValidation;
-using LT.DigitalOffice.Kernel;
-using Microsoft.AspNetCore.Builder;
-using Microsoft.AspNetCore.Hosting;
-using Microsoft.EntityFrameworkCore;
-using Microsoft.Extensions.Configuration;
-using Microsoft.Extensions.DependencyInjection;
 using GreenPipes;
 using LT.DigitalOffice.Broker.Requests;
 using LT.DigitalOffice.Broker.Responses;
@@ -21,6 +15,12 @@ using LT.DigitalOffice.UserService.Repositories;
 using LT.DigitalOffice.UserService.Repositories.Interfaces;
 using LT.DigitalOffice.UserService.Validators;
 using MassTransit;
+using Microsoft.AspNetCore.Builder;
+using Microsoft.AspNetCore.Hosting;
+using Microsoft.Extensions.DependencyInjection;
+using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Configuration;
+using LT.DigitalOffice.Kernel;
 
 namespace LT.DigitalOffice.UserService
 {
@@ -71,7 +71,7 @@ namespace LT.DigitalOffice.UserService
                     cfg.Host("localhost", host =>
                     {
                         host.Username($"{serviceName}_{serviceId}");
-                        host.Password(serviceName);
+                        host.Password(serviceId);
                     });
 
                     cfg.ReceiveEndpoint($"{serviceName}_AuthenticationService", ep =>
@@ -90,6 +90,8 @@ namespace LT.DigitalOffice.UserService
 
                 x.AddRequestClient<IGetUserPositionRequest>(
                     new Uri("rabbitmq://localhost/CompanyService"));
+                x.AddRequestClient<IGetFileRequest>(
+                    new Uri("rabbitmq://localhost/FileService"));
             });
         }
 
@@ -98,6 +100,7 @@ namespace LT.DigitalOffice.UserService
             app.UseExceptionHandler(tempApp => tempApp.Run(CustomExceptionHandler.HandleCustomException));
 
             UpdateDatabase(app);
+
             app.UseHttpsRedirection();
             app.UseRouting();
 
@@ -131,7 +134,7 @@ namespace LT.DigitalOffice.UserService
         }
 
         private void ConfigureCommands(IServiceCollection services)
-        {   
+        {
             services.AddTransient<IUserCreateCommand, UserCreateCommand>();
             services.AddTransient<IEditUserCommand, EditUserCommand>();
             services.AddTransient<IGetUserByEmailCommand, GetUserByEmailCommand>();
