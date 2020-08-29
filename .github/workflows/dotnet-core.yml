@@ -23,8 +23,8 @@ jobs:
       with:
         dotnet-version: 3.1.301
     - name: Install dependencies
-      run: dotnet restore ./digitaloffice/
+      run: dotnet restore
     - name: Build
-      run: dotnet build ./digitaloffice/ --no-restore
+      run: dotnet build --no-restore
     - name: Test
-      run: dotnet test ./digitaloffice/ --no-restore --verbosity normal
+      run: dotnet test --no-restore --verbosity normal
