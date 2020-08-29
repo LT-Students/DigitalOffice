@@ -1,5 +1,3 @@
-using FluentValidation;
-using LT.DigitalOffice.Broker.Requests;
 using LT.DigitalOffice.CheckRightsService.Broker.Consumers;
 using LT.DigitalOffice.CheckRightsService.Commands;
 using LT.DigitalOffice.CheckRightsService.Commands.Interfaces;
@@ -11,7 +9,6 @@ using LT.DigitalOffice.CheckRightsService.Models;
 using LT.DigitalOffice.CheckRightsService.Repositories;
 using LT.DigitalOffice.CheckRightsService.Repositories.Interfaces;
 using LT.DigitalOffice.Kernel;
-using LT.DigitalOffice.CheckRightsService.Validators;
 using MassTransit;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
@@ -45,7 +42,6 @@ namespace LT.DigitalOffice.CheckRightsService
             ConfigureCommands(services);
             ConfigureMappers(services);
             ConfigureRepositories(services);
-            ConfigureValidators(services);
         }
 
         public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
@@ -88,11 +84,6 @@ namespace LT.DigitalOffice.CheckRightsService
         private void ConfigureMappers(IServiceCollection services)
         {
             services.AddTransient<IMapper<DbRight, Right>, RightsMapper>();
-        }
-
-        private void ConfigureValidators(IServiceCollection services)
-        {
-            services.AddTransient<IValidator<ICheckIfUserHasRightRequest>, CheckIfUserHasRightValidator>();
         }
 
         private void ConfigureMassTransit(IServiceCollection services)
