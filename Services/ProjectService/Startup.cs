@@ -1,9 +1,7 @@
-using Microsoft.AspNetCore.Builder;
-using Microsoft.AspNetCore.Hosting;
-using Microsoft.EntityFrameworkCore;
-using Microsoft.Extensions.Configuration;
-using Microsoft.Extensions.DependencyInjection;
 using FluentValidation;
+using LT.DigitalOffice.Broker.Requests;
+using LT.DigitalOffice.Kernel;
+using LT.DigitalOffice.Kernel.Broker;
 using LT.DigitalOffice.ProjectService.Commands;
 using LT.DigitalOffice.ProjectService.Commands.Interfaces;
 using LT.DigitalOffice.ProjectService.Database;
@@ -15,10 +13,12 @@ using LT.DigitalOffice.ProjectService.Repositories;
 using LT.DigitalOffice.ProjectService.Repositories.Interfaces;
 using LT.DigitalOffice.ProjectService.Validators;
 using MassTransit;
-using LT.DigitalOffice.Kernel.Broker;
-using LT.DigitalOffice.Broker.Requests;
+using Microsoft.AspNetCore.Builder;
+using Microsoft.AspNetCore.Hosting;
+using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Configuration;
+using Microsoft.Extensions.DependencyInjection;
 using System;
-using LT.DigitalOffice.Kernel;
 
 namespace LT.DigitalOffice.ProjectService
 {
@@ -74,6 +74,7 @@ namespace LT.DigitalOffice.ProjectService
             services.AddTransient<IGetProjectInfoByIdCommand, GetProjectByIdCommand>();
             services.AddTransient<ICreateNewProjectCommand, CreateNewProjectCommand>();
             services.AddTransient<IEditProjectByIdCommand, EditProjectByIdCommand>();
+            services.AddTransient<IDisableWorkersInProjectCommand, DisableWorkersInProjectCommand>();
         }
 
         private void ConfigureRepositories(IServiceCollection services)
@@ -92,6 +93,7 @@ namespace LT.DigitalOffice.ProjectService
         {
             services.AddTransient<IValidator<NewProjectRequest>, NewProjectValidator>();
             services.AddTransient<IValidator<EditProjectRequest>, EditProjectValidator>();
+            services.AddTransient<IValidator<WorkersIdsInProjectRequest>, WorkersProjectIdsValidator>();
         }
 
         public void Configure(IApplicationBuilder app, IWebHostEnvironment env)

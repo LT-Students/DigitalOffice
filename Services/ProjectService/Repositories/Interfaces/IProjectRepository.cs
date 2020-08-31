@@ -1,4 +1,5 @@
 ﻿using LT.DigitalOffice.ProjectService.Database.Entities;
+using LT.DigitalOffice.ProjectService.Models;
 using System;
 
 namespace LT.DigitalOffice.ProjectService.Repositories.Interfaces
@@ -29,5 +30,11 @@ namespace LT.DigitalOffice.ProjectService.Repositories.Interfaces
         /// <param name="dbProject">New data of the project.</param>
         /// <returns>Id of the edited project.</returns>
         Guid EditProjectById(DbProject dbProject);
+
+        /// <summary>
+        /// Disable active workers, which were previously assigned to the project.
+        /// </summary>
+        /// <param name="request">Contains workers id and project id.</param>
+        void DisableWorkersInProject(WorkersIdsInProjectRequest request);
     }
 }

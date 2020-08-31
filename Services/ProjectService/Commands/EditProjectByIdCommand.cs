@@ -37,9 +37,8 @@ namespace LT.DigitalOffice.ProjectService.Commands
             }
 
             request.Id = projectId;
-            
+
             validator.ValidateAndThrow(request);
-            
             var dbProject = mapper.Map(request);
 
             return repository.EditProjectById(dbProject);
