@@ -15,6 +15,7 @@ using LT.DigitalOffice.ProjectService.Repositories;
 using LT.DigitalOffice.ProjectService.Repositories.Interfaces;
 using LT.DigitalOffice.ProjectService.Validators;
 using MassTransit;
+using LT.DigitalOffice.Kernel.Broker;
 using LT.DigitalOffice.Broker.Requests;
 using System;
 using LT.DigitalOffice.Kernel;
@@ -24,10 +25,12 @@ namespace LT.DigitalOffice.ProjectService
     public class Startup
     {
         public IConfiguration Configuration { get; }
+        private readonly RabbitMQOptions options;
 
         public Startup(IConfiguration configuration)
         {
             Configuration = configuration;
+            options = Configuration.GetSection(RabbitMQOptions.RabbitMQ).Get<RabbitMQOptions>();
         }
 
         public void ConfigureServices(IServiceCollection services)
@@ -38,37 +41,33 @@ namespace LT.DigitalOffice.ProjectService
             });
 
             services.AddControllers();
-
+            services.AddKernelExtensions(Configuration);
             ConfigureCommands(services);
             ConfigureRepositories(services);
             ConfigureMappers(services);
             ConfigureValidators(services);
             ConfigureMassTransit(services);
-            services.AddMassTransitHostedService();
         }
 
         private void ConfigureMassTransit(IServiceCollection services)
         {
-            services.AddMassTransit(configurator =>
+            services.AddMassTransit(x =>
             {
-                configurator.UsingRabbitMq((context, factoryConfigurator) =>
+                x.UsingRabbitMq((context, cfg) =>
                 {
-                    const string serviceInfoSection = "ServiceInfo";
-
-                    var serviceName = Configuration.GetSection(serviceInfoSection)["Name"];
-                    var serviceId = Configuration.GetSection(serviceInfoSection)["ID"];
-
-                    factoryConfigurator.Host("localhost", hostConfigurator =>
+                    cfg.Host(options.Host, host =>
                     {
-                        hostConfigurator.Username($"{serviceName}_{serviceId}");
-                        hostConfigurator.Password(serviceId);
+                        host.Username(options.Username);
+                        host.Password(options.Password);
                     });
                 });
 
-                configurator.AddRequestClient<IGetFileRequest>(
-                    new Uri("rabbitmq://localhost/FileService"));
+				x.AddRequestClient<IGetFileRequest>(
+					new Uri("rabbitmq://localhost/FileService"));
             });
-        }
+
+            services.AddMassTransitHostedService();
+		}
 
         private void ConfigureCommands(IServiceCollection services)
         {

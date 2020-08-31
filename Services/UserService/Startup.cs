@@ -15,6 +15,7 @@ using LT.DigitalOffice.UserService.Repositories;
 using LT.DigitalOffice.UserService.Repositories.Interfaces;
 using LT.DigitalOffice.UserService.Validators;
 using MassTransit;
+using LT.DigitalOffice.Kernel.Broker;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.DependencyInjection;
@@ -27,10 +28,12 @@ namespace LT.DigitalOffice.UserService
     public class Startup
     {
         public IConfiguration Configuration { get; }
+        private readonly RabbitMQOptions options;
 
         public Startup(IConfiguration configuration)
         {
             Configuration = configuration;
+            options = Configuration.GetSection(RabbitMQOptions.RabbitMQ).Get<RabbitMQOptions>();
         }
 
         public void ConfigureServices(IServiceCollection services)
@@ -38,6 +41,8 @@ namespace LT.DigitalOffice.UserService
             services.AddHealthChecks();
 
             services.AddControllers();
+
+            services.AddKernelExtensions(Configuration);
 
             services.AddDbContext<UserServiceDbContext>(options =>
             {
@@ -57,37 +62,35 @@ namespace LT.DigitalOffice.UserService
 
         private void ConfigRabbitMq(IServiceCollection services)
         {
-            string appSettingSection = "ServiceInfo";
-            string serviceId = Configuration.GetSection(appSettingSection)["ID"];
-            string serviceName = Configuration.GetSection(appSettingSection)["Name"];
-
             services.AddMassTransit(x =>
             {
                 x.AddConsumer<UserLoginConsumer>();
                 x.AddConsumer<GetUserInfoConsumer>();
+                x.AddConsumer<AccessValidatorConsumer>();
 
                 x.UsingRabbitMq((context, cfg) =>
                 {
-                    cfg.Host("localhost", host =>
+                    cfg.Host(options.Host, host =>
                     {
-                        host.Username($"{serviceName}_{serviceId}");
-                        host.Password(serviceId);
+                        host.Username(options.Username);
+                        host.Password(options.Password);
                     });
 
-                    cfg.ReceiveEndpoint($"{serviceName}_AuthenticationService", ep =>
+                    cfg.ReceiveEndpoint("UserService", ep =>
+                    {
+                        ep.ConfigureConsumer<GetUserInfoConsumer>(context);
+                        ep.ConfigureConsumer<AccessValidatorConsumer>(context);
+                    });
+
+                    cfg.ReceiveEndpoint("UserService_AuthenticationService", ep =>
                     {
                         ep.PrefetchCount = 16;
                         ep.UseMessageRetry(r => r.Interval(2, 100));
 
                         ep.ConfigureConsumer<UserLoginConsumer>(context);
                     });
-
-                    cfg.ReceiveEndpoint($"{serviceName}", ep =>
-                    {
-                        ep.ConfigureConsumer<GetUserInfoConsumer>(context);
-                    });
                 });
-
+                x.AddRequestClient<IGetUserPositionRequest>(new Uri("rabbitmq://localhost/CompanyService"));
                 x.AddRequestClient<IGetUserPositionRequest>(
                     new Uri("rabbitmq://localhost/CompanyService"));
                 x.AddRequestClient<IGetFileRequest>(

@@ -1,3 +1,4 @@
+using LT.DigitalOffice.CheckRightsService.Broker.Consumers;
 using LT.DigitalOffice.CheckRightsService.Commands;
 using LT.DigitalOffice.CheckRightsService.Commands.Interfaces;
 using LT.DigitalOffice.CheckRightsService.Database;
@@ -8,6 +9,8 @@ using LT.DigitalOffice.CheckRightsService.Models;
 using LT.DigitalOffice.CheckRightsService.Repositories;
 using LT.DigitalOffice.CheckRightsService.Repositories.Interfaces;
 using LT.DigitalOffice.Kernel;
+using LT.DigitalOffice.Kernel.Broker;
+using MassTransit;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.EntityFrameworkCore;
@@ -19,10 +22,12 @@ namespace LT.DigitalOffice.CheckRightsService
     public class Startup
     {
         public IConfiguration Configuration { get; }
+        private readonly RabbitMQOptions options;
 
         public Startup(IConfiguration configuration)
         {
             Configuration = configuration;
+            options = Configuration.GetSection(RabbitMQOptions.RabbitMQ).Get<RabbitMQOptions>();
         }
 
         public void ConfigureServices(IServiceCollection services)
@@ -36,15 +41,16 @@ namespace LT.DigitalOffice.CheckRightsService
                 options.UseSqlServer(Configuration.GetConnectionString("SQLConnectionString"));
             });
 
+            ConfigureMassTransit(services);
             ConfigureCommands(services);
             ConfigureMappers(services);
             ConfigureRepositories(services);
         }
 
-        public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
+        public void Configure(IApplicationBuilder app)
         {
             app.UseExceptionHandler(tempApp => tempApp.Run(CustomExceptionHandler.HandleCustomException));
-            
+
             UpdateDatabase(app);
 
             app.UseHttpsRedirection();
@@ -66,6 +72,30 @@ namespace LT.DigitalOffice.CheckRightsService
             using var context = scope.ServiceProvider.GetService<CheckRightsServiceDbContext>();
 
             context.Database.Migrate();
+        }
+
+        private void ConfigureMassTransit(IServiceCollection services)
+        {
+            services.AddMassTransit(o =>
+            {
+                o.AddConsumer<AccessValidatorConsumer>();
+
+                o.UsingRabbitMq((context, cfg) =>
+                {
+                    cfg.Host(options.Host, host =>
+                    {
+                        host.Username(options.Username);
+                        host.Password(options.Password);
+                    });
+
+                    cfg.ReceiveEndpoint("CheckRightsService", e =>
+                    {
+                        e.ConfigureConsumer<AccessValidatorConsumer>(context);
+                    });
+                });
+            });
+
+            services.AddMassTransitHostedService();
         }
 
         private void ConfigureCommands(IServiceCollection services)
