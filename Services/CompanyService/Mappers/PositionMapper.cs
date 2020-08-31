@@ -34,7 +34,8 @@ namespace LT.DigitalOffice.CompanyService.Mappers
             {
                 Id = Guid.NewGuid(),
                 Name = value.Name,
-                Description = value.Description
+                Description = value.Description,
+                IsActive = true
             };
         }
 
@@ -49,7 +50,8 @@ namespace LT.DigitalOffice.CompanyService.Mappers
             {
                 Name = value.Name,
                 Description = value.Description,
-                UserIds = value.UserIds?.Select(x => x.UserId).ToList()
+                UserIds = value.UserIds?.Select(x => x.UserId).ToList(),
+                IsActive = value.IsActive
             };
         }
     }

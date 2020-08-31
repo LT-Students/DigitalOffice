@@ -31,6 +31,13 @@ namespace LT.DigitalOffice.CompanyService.Repositories.Interfaces
         DbPosition GetUserPosition(Guid userId);
 
         /// <summary>
+        /// Disable the position with the specified id from database.
+        /// </summary>
+        /// <param name="positionId">Specified id of position.</param>
+        /// <returns>Nothing if the position was disabled, otherwise Exception.</returns>
+        void DisablePositionById(Guid positionId);
+
+        /// <summary>
         /// Adds new position to the database. Returns its Id.
         /// </summary>
         /// <param name="position">Position to add.</param>
