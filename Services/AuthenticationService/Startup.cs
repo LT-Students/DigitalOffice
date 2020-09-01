@@ -16,6 +16,7 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.IdentityModel.Tokens;
 using System;
+using LT.DigitalOffice.Kernel;
 
 namespace LT.DigitalOffice.AuthenticationService
 {
@@ -121,6 +122,8 @@ namespace LT.DigitalOffice.AuthenticationService
 
         public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
         {
+            app.UseExceptionHandler(tempApp => tempApp.Run(CustomExceptionHandler.HandleCustomException));
+
             app.UseHttpsRedirection();
 
             app.UseRouting();

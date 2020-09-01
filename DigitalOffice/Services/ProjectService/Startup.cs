@@ -1,26 +1,26 @@
-using System;
-using FluentValidation;
-using LT.DigitalOffice.Broker.Requests;
-using LT.DigitalOffice.Kernel.Middlewares.Token;
-using LT.DigitalOffice.TimeManagementService.Commands;
-using LT.DigitalOffice.TimeManagementService.Commands.Interfaces;
-using LT.DigitalOffice.TimeManagementService.Database;
-using LT.DigitalOffice.TimeManagementService.Database.Entities;
-using LT.DigitalOffice.TimeManagementService.Mappers;
-using LT.DigitalOffice.TimeManagementService.Mappers.Interfaces;
-using LT.DigitalOffice.TimeManagementService.Models;
-using LT.DigitalOffice.TimeManagementService.Repositories;
-using LT.DigitalOffice.TimeManagementService.Repositories.Interfaces;
-using LT.DigitalOffice.TimeManagementService.Validators;
-using LT.DigitalOffice.Kernel;
-using MassTransit;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
+using System;
+using FluentValidation;
+using LT.DigitalOffice.Kernel;
+using LT.DigitalOffice.Broker.Requests;
+using LT.DigitalOffice.Kernel.Middlewares.Token;
+using LT.DigitalOffice.ProjectService.Commands;
+using LT.DigitalOffice.ProjectService.Commands.Interfaces;
+using LT.DigitalOffice.ProjectService.Database;
+using LT.DigitalOffice.ProjectService.Database.Entities;
+using LT.DigitalOffice.ProjectService.Mappers;
+using LT.DigitalOffice.ProjectService.Mappers.Interfaces;
+using LT.DigitalOffice.ProjectService.Models;
+using LT.DigitalOffice.ProjectService.Repositories;
+using LT.DigitalOffice.ProjectService.Repositories.Interfaces;
+using LT.DigitalOffice.ProjectService.Validators;
+using MassTransit;
 
-namespace LT.DigitalOffice.TimeManagementService
+namespace LT.DigitalOffice.ProjectService
 {
     public class Startup
     {
@@ -33,7 +33,7 @@ namespace LT.DigitalOffice.TimeManagementService
 
         public void ConfigureServices(IServiceCollection services)
         {
-            services.AddDbContext<TimeManagementDbContext>(options =>
+            services.AddDbContext<ProjectServiceDbContext>(options =>
             {
                 options.UseSqlServer(Configuration.GetConnectionString("SQLConnectionString"));
             });
@@ -42,35 +42,36 @@ namespace LT.DigitalOffice.TimeManagementService
 
             services.Configure<TokenConfiguration>(Configuration);
 
-            ConfigureCommands(services);
-            ConfigureValidators(services);
-            ConfigureMappers(services);
-            ConfigureRepositories(services);
+            ConfigCommands(services);
+            ConfigRepositories(services);
+            ConfigMappers(services);
+            ConfigValidators(services);
             ConfigureRabbitMq(services);
         }
 
-        private void ConfigureCommands(IServiceCollection services)
+        private void ConfigCommands(IServiceCollection services)
         {
-            services.AddTransient<ICreateLeaveTimeCommand, CreateLeaveTimeCommand>();
-            services.AddTransient<ICreateWorkTimeCommand, CreateWorkTimeCommand>();
+            services.AddTransient<IGetProjectInfoByIdCommand, GetProjectInfoByIdCommand>();
+            services.AddTransient<ICreateNewProjectCommand, CreateNewProjectCommand>();
+            services.AddTransient<IEditProjectByIdCommand, EditProjectByIdCommand>();
         }
 
-        private void ConfigureValidators(IServiceCollection services)
+        private void ConfigRepositories(IServiceCollection services)
         {
-            services.AddTransient<IValidator<CreateLeaveTimeRequest>, CreateLeaveTimeRequestValidator>();
-            services.AddTransient<IValidator<CreateWorkTimeRequest>, CreateWorkTimeRequestValidator>();
+            services.AddTransient<IProjectRepository, ProjectRepository>();
         }
 
-        private void ConfigureMappers(IServiceCollection services)
+        private void ConfigMappers(IServiceCollection services)
         {
-            services.AddTransient<IMapper<CreateLeaveTimeRequest, DbLeaveTime>, LeaveTimeMapper>();
-            services.AddTransient<IMapper<CreateWorkTimeRequest, DbWorkTime>, WorkTimeMapper>();
+            services.AddTransient<IMapper<DbProject, Project>, ProjectMapper>();
+            services.AddTransient<IMapper<NewProjectRequest, DbProject>, ProjectMapper>();
+            services.AddTransient<IMapper<EditProjectRequest, DbProject>, ProjectMapper>();
         }
 
-        private void ConfigureRepositories(IServiceCollection services)
+        private void ConfigValidators(IServiceCollection services)
         {
-            services.AddTransient<ILeaveTimeRepository, LeaveTimeRepository>();
-            services.AddTransient<IWorkTimeRepository, WorkTimeRepository>();
+            services.AddTransient<IValidator<NewProjectRequest>, NewProjectValidator>();
+            services.AddTransient<IValidator<EditProjectRequest>, EditProjectValidator>();
         }
 
         public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
@@ -93,9 +94,11 @@ namespace LT.DigitalOffice.TimeManagementService
 
         private void UpdateDatabase(IApplicationBuilder app)
         {
-            using var serviceScope = app.ApplicationServices.GetRequiredService<IServiceScopeFactory>().CreateScope();
+            using var serviceScope = app.ApplicationServices
+                .GetRequiredService<IServiceScopeFactory>()
+                .CreateScope();
 
-            using var context = serviceScope.ServiceProvider.GetService<TimeManagementDbContext>();
+            using var context = serviceScope.ServiceProvider.GetService<ProjectServiceDbContext>();
 
             context.Database.Migrate();
         }
