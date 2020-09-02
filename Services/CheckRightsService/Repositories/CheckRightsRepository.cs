@@ -35,7 +35,6 @@ namespace LT.DigitalOffice.CheckRightsService.Repositories
             }
 
             throw new Exception("Such user doesn't exist or does not have this right.");
-
         }
     }
 }
