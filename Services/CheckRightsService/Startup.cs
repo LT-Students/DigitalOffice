@@ -22,16 +22,16 @@ namespace LT.DigitalOffice.CheckRightsService
     public class Startup
     {
         public IConfiguration Configuration { get; }
-        private readonly RabbitMQOptions options;
 
         public Startup(IConfiguration configuration)
         {
             Configuration = configuration;
-            options = Configuration.GetSection(RabbitMQOptions.RabbitMQ).Get<RabbitMQOptions>();
         }
 
         public void ConfigureServices(IServiceCollection services)
         {
+            services.Configure<RabbitMQOptions>(Configuration);
+
             services.AddHealthChecks();
 
             services.AddControllers();
@@ -76,16 +76,20 @@ namespace LT.DigitalOffice.CheckRightsService
 
         private void ConfigureMassTransit(IServiceCollection services)
         {
+            string appSettingSection = "RabbitMQ";
+            string serviceName = Configuration.GetSection(appSettingSection)["Username"];
+            string servicePassword = Configuration.GetSection(appSettingSection)["Password"];
+
             services.AddMassTransit(o =>
             {
                 o.AddConsumer<AccessValidatorConsumer>();
 
                 o.UsingRabbitMq((context, cfg) =>
                 {
-                    cfg.Host(options.Host, host =>
+                    cfg.Host("localhost", "/", host =>
                     {
-                        host.Username(options.Username);
-                        host.Password(options.Password);
+                        host.Username($"{serviceName}_{servicePassword}");
+                        host.Password(servicePassword);
                     });
 
                     cfg.ReceiveEndpoint("CheckRightsService", e =>

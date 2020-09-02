@@ -25,16 +25,16 @@ namespace LT.DigitalOffice.ProjectService
     public class Startup
     {
         public IConfiguration Configuration { get; }
-        private readonly RabbitMQOptions options;
 
         public Startup(IConfiguration configuration)
         {
             Configuration = configuration;
-            options = Configuration.GetSection(RabbitMQOptions.RabbitMQ).Get<RabbitMQOptions>();
         }
 
         public void ConfigureServices(IServiceCollection services)
         {
+            services.Configure<RabbitMQOptions>(Configuration);
+
             services.AddDbContext<ProjectServiceDbContext>(options =>
             {
                 options.UseSqlServer(Configuration.GetConnectionString("SQLConnectionString"));
@@ -51,14 +51,18 @@ namespace LT.DigitalOffice.ProjectService
 
         private void ConfigureMassTransit(IServiceCollection services)
         {
+            const string serviceSection = "RabbitMQ";
+            string serviceName = Configuration.GetSection(serviceSection)["Username"];
+            string servicePassword = Configuration.GetSection(serviceSection)["Password"];
+
             services.AddMassTransit(x =>
             {
                 x.UsingRabbitMq((context, cfg) =>
                 {
-                    cfg.Host(options.Host, host =>
+                    cfg.Host("localhost", "/", host =>
                     {
-                        host.Username(options.Username);
-                        host.Password(options.Password);
+                        host.Username($"{serviceName}_{servicePassword}");
+                        host.Password(servicePassword);
                     });
                 });
 

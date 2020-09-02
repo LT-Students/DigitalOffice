@@ -11,6 +11,7 @@ using LT.DigitalOffice.FileService.Repositories;
 using LT.DigitalOffice.FileService.Repositories.Interfaces;
 using LT.DigitalOffice.FileService.Validators;
 using LT.DigitalOffice.Kernel;
+using LT.DigitalOffice.Kernel.Broker;
 using MassTransit;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
@@ -31,6 +32,8 @@ namespace LT.DigitalOffice.FileService
 
         public void ConfigureServices(IServiceCollection services)
         {
+            services.Configure<RabbitMQOptions>(Configuration);
+
             services.AddHealthChecks();
 
             services.AddDbContext<FileServiceDbContext>(options =>
@@ -48,9 +51,9 @@ namespace LT.DigitalOffice.FileService
 
         private void ConfigureMassTransit(IServiceCollection services)
         {
-            string appSettingSection = "ServiceInfo";
-            string serviceId = Configuration.GetSection(appSettingSection)["ID"];
-            string serviceName = Configuration.GetSection(appSettingSection)["Name"];
+            const string serviceSection = "RabbitMQ";
+            string serviceName = Configuration.GetSection(serviceSection)["Username"];
+            string servicePassword = Configuration.GetSection(serviceSection)["Password"];
 
             services.AddMassTransit(x =>
             {
@@ -60,8 +63,8 @@ namespace LT.DigitalOffice.FileService
                 {
                     cfg.Host("localhost", "/", host =>
                     {
-                        host.Username($"{serviceName}_{serviceId}");
-                        host.Password(serviceId);
+                        host.Username($"{serviceName}_{servicePassword}");
+                        host.Password(servicePassword);
                     });
 
                     cfg.ReceiveEndpoint(serviceName, ep =>

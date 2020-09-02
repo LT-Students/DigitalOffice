@@ -28,16 +28,16 @@ namespace LT.DigitalOffice.UserService
     public class Startup
     {
         public IConfiguration Configuration { get; }
-        private readonly RabbitMQOptions options;
 
         public Startup(IConfiguration configuration)
         {
             Configuration = configuration;
-            options = Configuration.GetSection(RabbitMQOptions.RabbitMQ).Get<RabbitMQOptions>();
         }
 
         public void ConfigureServices(IServiceCollection services)
         {
+            services.Configure<RabbitMQOptions>(Configuration);
+
             services.AddHealthChecks();
 
             services.AddControllers();
@@ -62,6 +62,10 @@ namespace LT.DigitalOffice.UserService
 
         private void ConfigRabbitMq(IServiceCollection services)
         {
+            const string serviceSection = "RabbitMQ";
+            string serviceName = Configuration.GetSection(serviceSection)["Username"];
+            string servicePassword = Configuration.GetSection(serviceSection)["Password"];
+
             services.AddMassTransit(x =>
             {
                 x.AddConsumer<UserLoginConsumer>();
@@ -70,10 +74,10 @@ namespace LT.DigitalOffice.UserService
 
                 x.UsingRabbitMq((context, cfg) =>
                 {
-                    cfg.Host(options.Host, host =>
+                    cfg.Host("localhost", "/", host =>
                     {
-                        host.Username(options.Username);
-                        host.Password(options.Password);
+                        host.Username($"{serviceName}_{servicePassword}");
+                        host.Password(servicePassword);
                     });
 
                     cfg.ReceiveEndpoint("UserService", ep =>

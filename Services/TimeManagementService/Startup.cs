@@ -19,6 +19,7 @@ using Microsoft.AspNetCore.Hosting;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
+using LT.DigitalOffice.Kernel.Broker;
 
 namespace LT.DigitalOffice.TimeManagementService
 {
@@ -33,6 +34,8 @@ namespace LT.DigitalOffice.TimeManagementService
 
         public void ConfigureServices(IServiceCollection services)
         {
+            services.Configure<RabbitMQOptions>(Configuration);
+
             services.AddDbContext<TimeManagementDbContext>(options =>
             {
                 options.UseSqlServer(Configuration.GetConnectionString("SQLConnectionString"));
@@ -102,9 +105,9 @@ namespace LT.DigitalOffice.TimeManagementService
 
         private void ConfigureRabbitMq(IServiceCollection services)
         {
-            string appSettingSection = "ServiceInfo";
-            string serviceId = Configuration.GetSection(appSettingSection)["ID"];
-            string serviceName = Configuration.GetSection(appSettingSection)["Name"];
+            const string serviceSection = "RabbitMQ";
+            string serviceName = Configuration.GetSection(serviceSection)["Username"];
+            string servicePassword = Configuration.GetSection(serviceSection)["Password"];
 
             string appSettingMassTransitUris = "MassTransitUris";
             string checkTokenUri = Configuration.GetSection(appSettingMassTransitUris)["CheckToken"];
@@ -115,8 +118,8 @@ namespace LT.DigitalOffice.TimeManagementService
                 {
                     cfg.Host("localhost", "/", host =>
                     {
-                        host.Username($"{serviceName}_{serviceId}");
-                        host.Password(serviceId);
+                        host.Username($"{serviceName}_{servicePassword}");
+                        host.Password(servicePassword);
                     });
                 });
 
