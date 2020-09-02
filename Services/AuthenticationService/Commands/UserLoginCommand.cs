@@ -41,7 +41,7 @@ namespace LT.DigitalOffice.AuthenticationService.Commands
             var result = new UserLoginResult
             {
                 UserId = userCredentials.UserId,
-                JwtToken = token.GetNewToken(loginInfo.Email)
+                Token = token.GetNewToken(loginInfo.Email)
             };
 
             return result;
