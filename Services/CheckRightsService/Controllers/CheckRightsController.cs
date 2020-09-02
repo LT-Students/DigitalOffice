@@ -2,7 +2,6 @@
 using LT.DigitalOffice.CheckRightsService.Models;
 using Microsoft.AspNetCore.Mvc;
 using System.Collections.Generic;
-using LT.DigitalOffice.CheckRightsService.RestRequests;
 
 namespace LT.DigitalOffice.CheckRightsService.Controllers
 {
@@ -19,7 +18,7 @@ namespace LT.DigitalOffice.CheckRightsService.Controllers
         [HttpPost("addRightsForUser")]
         public bool AddRightsForUser(
             [FromServices] IAddRightsForUserCommand command,
-            [FromBody] RightsForUserRequest request)
+            [FromBody] AddRightsForUserRequest request)
         {
             return command.Execute(request);
         }

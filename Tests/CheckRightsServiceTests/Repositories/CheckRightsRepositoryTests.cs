@@ -2,9 +2,9 @@
 using System.Collections.Generic;
 using LT.DigitalOffice.CheckRightsService.Database;
 using LT.DigitalOffice.CheckRightsService.Database.Entities;
+using LT.DigitalOffice.CheckRightsService.Models;
 using LT.DigitalOffice.CheckRightsService.Repositories;
 using LT.DigitalOffice.CheckRightsService.Repositories.Interfaces;
-using LT.DigitalOffice.CheckRightsService.RestRequests;
 using LT.DigitalOffice.Kernel.Exceptions;
 using Microsoft.EntityFrameworkCore;
 using NUnit.Framework;
@@ -56,7 +56,7 @@ namespace LT.DigitalOffice.CheckRightsServiceUnitTests.Repositories
         }
         #endregion
 
-        #region AddRightsToUser
+        #region AddRightsForUser
         [Test]
         public void ShouldAddRightsForUser()
         {
@@ -68,7 +68,7 @@ namespace LT.DigitalOffice.CheckRightsServiceUnitTests.Repositories
                 UserIds = new List<DbRightUser>()
             };
 
-            var request = new RightsForUserRequest
+            var request = new AddRightsForUserRequest
             {
                 UserId = Guid.NewGuid(),
                 RightsIds = new List<int> { dbRight.Id }
@@ -85,7 +85,7 @@ namespace LT.DigitalOffice.CheckRightsServiceUnitTests.Repositories
         [Test]
         public void ShouldThrowExceptionWhenRightIdIsNoFound()
         {
-            var request = new RightsForUserRequest
+            var request = new AddRightsForUserRequest
             {
                 UserId = Guid.NewGuid(),
                 RightsIds = new List<int> { int.MaxValue, 0 }
