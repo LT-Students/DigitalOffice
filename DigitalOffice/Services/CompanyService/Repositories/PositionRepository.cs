@@ -4,7 +4,6 @@ using LT.DigitalOffice.CompanyService.Database;
 using LT.DigitalOffice.CompanyService.Database.Entities;
 using LT.DigitalOffice.CompanyService.Repositories.Interfaces;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.EntityFrameworkCore;
 
 namespace LT.DigitalOffice.CompanyService.Repositories
 {

@@ -1,4 +1,5 @@
 using FluentValidation;
+using LT.DigitalOffice.Broker.Requests;
 using LT.DigitalOffice.CheckRightsService.Commands;
 using LT.DigitalOffice.CheckRightsService.Commands.Interfaces;
 using LT.DigitalOffice.CheckRightsService.Database;
@@ -8,14 +9,17 @@ using LT.DigitalOffice.CheckRightsService.Mappers.Interfaces;
 using LT.DigitalOffice.CheckRightsService.Models;
 using LT.DigitalOffice.CheckRightsService.Repositories;
 using LT.DigitalOffice.CheckRightsService.Repositories.Interfaces;
-using LT.DigitalOffice.Kernel;
 using LT.DigitalOffice.CheckRightsService.RestRequests;
 using LT.DigitalOffice.CheckRightsService.Validator;
+using LT.DigitalOffice.Kernel;
+using LT.DigitalOffice.Kernel.Middlewares.Token;
+using MassTransit;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
+using System;
 
 namespace LT.DigitalOffice.CheckRightsService
 {
@@ -39,10 +43,13 @@ namespace LT.DigitalOffice.CheckRightsService
                 options.UseSqlServer(Configuration.GetConnectionString("SQLConnectionString"));
             });
 
+            services.Configure<TokenConfiguration>(Configuration);
+
             ConfigureCommands(services);
             ConfigureMappers(services);
             ConfigureRepositories(services);
             ConfigureValidators(services);
+            ConfigureRabbitMq(services);
         }
 
         public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
@@ -54,6 +61,8 @@ namespace LT.DigitalOffice.CheckRightsService
             app.UseHttpsRedirection();
 
             app.UseRouting();
+
+            app.UseMiddleware<TokenMiddleware>();
 
             app.UseEndpoints(endpoints =>
             {
@@ -91,6 +100,32 @@ namespace LT.DigitalOffice.CheckRightsService
         private void ConfigureValidators(IServiceCollection services)
         {
             services.AddTransient<IValidator<RightsForUserRequest>, AddRightsForUserValidator>();
+        }
+
+        private void ConfigureRabbitMq(IServiceCollection services)
+        {
+            string appSettingSection = "ServiceInfo";
+            string serviceId = Configuration.GetSection(appSettingSection)["ID"];
+            string serviceName = Configuration.GetSection(appSettingSection)["Name"];
+
+            string appSettingMassTransitUris = "MassTransitUris";
+            string checkTokenUri = Configuration.GetSection(appSettingMassTransitUris)["CheckToken"];
+
+            services.AddMassTransit(x =>
+            {
+                x.UsingRabbitMq((context, cfg) =>
+                {
+                    cfg.Host("localhost", "/", host =>
+                    {
+                        host.Username($"{serviceName}_{serviceId}");
+                        host.Password(serviceId);
+                    });
+                });
+
+                x.AddRequestClient<IUserJwtRequest>(new Uri(checkTokenUri));
+            });
+
+            services.AddMassTransitHostedService();
         }
     }
 }

@@ -1,14 +1,10 @@
 using System;
 using FluentValidation;
-using LT.DigitalOffice.Kernel;
-using Microsoft.AspNetCore.Builder;
-using Microsoft.AspNetCore.Hosting;
-using Microsoft.EntityFrameworkCore;
-using Microsoft.Extensions.Configuration;
-using Microsoft.Extensions.DependencyInjection;
 using GreenPipes;
 using LT.DigitalOffice.Broker.Requests;
 using LT.DigitalOffice.Broker.Responses;
+using LT.DigitalOffice.Kernel;
+using LT.DigitalOffice.Kernel.Middlewares.Token;
 using LT.DigitalOffice.UserService.Broker.Consumers;
 using LT.DigitalOffice.UserService.Commands;
 using LT.DigitalOffice.UserService.Commands.Interfaces;
@@ -21,17 +17,22 @@ using LT.DigitalOffice.UserService.Repositories;
 using LT.DigitalOffice.UserService.Repositories.Interfaces;
 using LT.DigitalOffice.UserService.Validators;
 using MassTransit;
+using Microsoft.AspNetCore.Builder;
+using Microsoft.AspNetCore.Hosting;
+using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Configuration;
+using Microsoft.Extensions.DependencyInjection;
 
 namespace LT.DigitalOffice.UserService
 {
     public class Startup
     {
-        public IConfiguration Configuration { get; }
-
         public Startup(IConfiguration configuration)
         {
             Configuration = configuration;
         }
+
+        public IConfiguration Configuration { get; }
 
         public void ConfigureServices(IServiceCollection services)
         {
@@ -44,53 +45,13 @@ namespace LT.DigitalOffice.UserService
                 options.UseSqlServer(Configuration.GetConnectionString("SQLConnectionString"));
             });
 
-            services.AddControllers();
+            services.Configure<TokenConfiguration>(Configuration);
 
             ConfigureCommands(services);
             ConfigureRepositories(services);
             ConfigureValidators(services);
             ConfigureMappers(services);
-            ConfigRabbitMq(services);
-
-            services.AddMassTransitHostedService();
-        }
-
-        private void ConfigRabbitMq(IServiceCollection services)
-        {
-            string appSettingSection = "ServiceInfo";
-            string serviceId = Configuration.GetSection(appSettingSection)["ID"];
-            string serviceName = Configuration.GetSection(appSettingSection)["Name"];
-
-            services.AddMassTransit(x =>
-            {
-                x.AddConsumer<UserLoginConsumer>();
-                x.AddConsumer<GetUserInfoConsumer>();
-
-                x.UsingRabbitMq((context, cfg) =>
-                {
-                    cfg.Host("localhost", host =>
-                    {
-                        host.Username($"{serviceName}_{serviceId}");
-                        host.Password(serviceName);
-                    });
-
-                    cfg.ReceiveEndpoint($"{serviceName}_AuthenticationService", ep =>
-                    {
-                        ep.PrefetchCount = 16;
-                        ep.UseMessageRetry(r => r.Interval(2, 100));
-
-                        ep.ConfigureConsumer<UserLoginConsumer>(context);
-                    });
-
-                    cfg.ReceiveEndpoint($"{serviceName}", ep =>
-                    {
-                        ep.ConfigureConsumer<GetUserInfoConsumer>(context);
-                    });
-                });
-
-                x.AddRequestClient<IGetUserPositionRequest>(
-                    new Uri("rabbitmq://localhost/CompanyService"));
-            });
+            ConfigureRabbitMq(services);
         }
 
         public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
@@ -98,13 +59,14 @@ namespace LT.DigitalOffice.UserService
             app.UseExceptionHandler(tempApp => tempApp.Run(CustomExceptionHandler.HandleCustomException));
 
             UpdateDatabase(app);
+
             app.UseHttpsRedirection();
+
             app.UseRouting();
 
-            app.UseEndpoints(endpoints =>
-            {
-                endpoints.MapControllers();
-            });
+            app.UseMiddleware<TokenMiddleware>();
+
+            app.UseEndpoints(endpoints => { endpoints.MapControllers(); });
         }
 
         private void UpdateDatabase(IApplicationBuilder app)
@@ -116,6 +78,48 @@ namespace LT.DigitalOffice.UserService
             context.Database.Migrate();
         }
 
+        private void ConfigureRabbitMq(IServiceCollection services)
+        {
+            var appSettingSection = "ServiceInfo";
+            var serviceId = Configuration.GetSection(appSettingSection)["ID"];
+            var serviceName = Configuration.GetSection(appSettingSection)["Name"];
+
+            var appSettingMassTransitUris = "MassTransitUris";
+            var checkTokenUri = Configuration.GetSection(appSettingMassTransitUris)["CheckToken"];
+            var companyServiceUri = Configuration.GetSection(appSettingMassTransitUris)["CompanyService"];
+
+            services.AddMassTransit(x =>
+            {
+                x.AddConsumer<UserLoginConsumer>();
+                x.AddConsumer<GetUserInfoConsumer>();
+
+                x.UsingRabbitMq((context, cfg) =>
+                {
+                    cfg.Host("localhost", "/", host =>
+                    {
+                        host.Username($"{serviceName}_{serviceId}");
+                        host.Password(serviceId);
+                    });
+
+                    cfg.ReceiveEndpoint($"{serviceName}_AuthenticationService", ep =>
+                    {
+                        ep.PrefetchCount = 16;
+                        ep.UseMessageRetry(r => r.Interval(2, 100));
+
+                        ep.ConfigureConsumer<UserLoginConsumer>(context);
+                    });
+
+                    cfg.ReceiveEndpoint($"{serviceName}",
+                        ep => { ep.ConfigureConsumer<GetUserInfoConsumer>(context); });
+                });
+
+                x.AddRequestClient<IUserJwtRequest>(new Uri(checkTokenUri));
+                x.AddRequestClient<IGetUserPositionRequest>(new Uri(companyServiceUri));
+            });
+
+            services.AddMassTransitHostedService();
+        }
+
         private void ConfigureRepositories(IServiceCollection services)
         {
             services.AddTransient<IUserRepository, UserRepository>();
@@ -123,7 +127,7 @@ namespace LT.DigitalOffice.UserService
 
         private void ConfigureMappers(IServiceCollection services)
         {
-            services.AddTransient<IMapper<DbUser,IUserPositionResponse, object>,
+            services.AddTransient<IMapper<DbUser, IUserPositionResponse, object>,
                 UserMapper>();
             services.AddTransient<IMapper<UserCreateRequest, DbUser>, UserMapper>();
             services.AddTransient<IMapper<DbUser, User>, UserMapper>();
@@ -131,7 +135,7 @@ namespace LT.DigitalOffice.UserService
         }
 
         private void ConfigureCommands(IServiceCollection services)
-        {   
+        {
             services.AddTransient<IUserCreateCommand, UserCreateCommand>();
             services.AddTransient<IEditUserCommand, EditUserCommand>();
             services.AddTransient<IGetUserByEmailCommand, GetUserByEmailCommand>();

@@ -1,4 +1,6 @@
+using System;
 using FluentValidation;
+using LT.DigitalOffice.Broker.Requests;
 using LT.DigitalOffice.FileService.Commands;
 using LT.DigitalOffice.FileService.Commands.Interfaces;
 using LT.DigitalOffice.FileService.Database;
@@ -10,6 +12,8 @@ using LT.DigitalOffice.FileService.Repositories;
 using LT.DigitalOffice.FileService.Repositories.Interfaces;
 using LT.DigitalOffice.FileService.Validators;
 using LT.DigitalOffice.Kernel;
+using LT.DigitalOffice.Kernel.Middlewares.Token;
+using MassTransit;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.EntityFrameworkCore;
@@ -34,10 +38,13 @@ namespace LT.DigitalOffice.FileService
             });
             services.AddControllers();
 
+            services.Configure<TokenConfiguration>(Configuration);
+
             ConfigureCommands(services);
             ConfigureMappers(services);
             ConfigureRepositories(services);
             ConfigureValidators(services);
+            ConfigureRabbitMq(services);
         }
 
         private void ConfigureCommands(IServiceCollection services)
@@ -69,7 +76,10 @@ namespace LT.DigitalOffice.FileService
             UpdateDatabase(app);
 
             app.UseHttpsRedirection();
+
             app.UseRouting();
+
+            app.UseMiddleware<TokenMiddleware>();
 
             app.UseEndpoints(endpoints =>
             {
@@ -84,6 +94,32 @@ namespace LT.DigitalOffice.FileService
                 .CreateScope();
             using var context = serviceScope.ServiceProvider.GetService<FileServiceDbContext>();
             context.Database.Migrate();
+        }
+
+        private void ConfigureRabbitMq(IServiceCollection services)
+        {
+            string appSettingSection = "ServiceInfo";
+            string serviceId = Configuration.GetSection(appSettingSection)["ID"];
+            string serviceName = Configuration.GetSection(appSettingSection)["Name"];
+
+            string appSettingMassTransitUris = "MassTransitUris";
+            string checkTokenUri = Configuration.GetSection(appSettingMassTransitUris)["CheckToken"];
+
+            services.AddMassTransit(x =>
+            {
+                x.UsingRabbitMq((context, cfg) =>
+                {
+                    cfg.Host("localhost", "/", host =>
+                    {
+                        host.Username($"{serviceName}_{serviceId}");
+                        host.Password(serviceId);
+                    });
+                });
+
+                x.AddRequestClient<IUserJwtRequest>(new Uri(checkTokenUri));
+            });
+
+            services.AddMassTransitHostedService();
         }
     }
 }

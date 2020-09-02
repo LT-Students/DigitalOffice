@@ -3,13 +3,11 @@ using Microsoft.AspNetCore.Hosting;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
+using System;
 using FluentValidation;
 using LT.DigitalOffice.Kernel;
-using Microsoft.AspNetCore.Builder;
-using Microsoft.AspNetCore.Hosting;
-using Microsoft.EntityFrameworkCore;
-using Microsoft.Extensions.Configuration;
-using Microsoft.Extensions.DependencyInjection;
+using LT.DigitalOffice.Broker.Requests;
+using LT.DigitalOffice.Kernel.Middlewares.Token;
 using LT.DigitalOffice.ProjectService.Commands;
 using LT.DigitalOffice.ProjectService.Commands.Interfaces;
 using LT.DigitalOffice.ProjectService.Database;
@@ -20,6 +18,7 @@ using LT.DigitalOffice.ProjectService.Models;
 using LT.DigitalOffice.ProjectService.Repositories;
 using LT.DigitalOffice.ProjectService.Repositories.Interfaces;
 using LT.DigitalOffice.ProjectService.Validators;
+using MassTransit;
 
 namespace LT.DigitalOffice.ProjectService
 {
@@ -41,10 +40,13 @@ namespace LT.DigitalOffice.ProjectService
 
             services.AddControllers();
 
+            services.Configure<TokenConfiguration>(Configuration);
+
             ConfigCommands(services);
             ConfigRepositories(services);
             ConfigMappers(services);
             ConfigValidators(services);
+            ConfigureRabbitMq(services);
         }
 
         private void ConfigCommands(IServiceCollection services)
@@ -82,6 +84,8 @@ namespace LT.DigitalOffice.ProjectService
 
             app.UseRouting();
 
+            app.UseMiddleware<TokenMiddleware>();
+
             app.UseEndpoints(endpoints =>
             {
                 endpoints.MapControllers();
@@ -97,6 +101,32 @@ namespace LT.DigitalOffice.ProjectService
             using var context = serviceScope.ServiceProvider.GetService<ProjectServiceDbContext>();
 
             context.Database.Migrate();
+        }
+
+        private void ConfigureRabbitMq(IServiceCollection services)
+        {
+            string appSettingSection = "ServiceInfo";
+            string serviceId = Configuration.GetSection(appSettingSection)["ID"];
+            string serviceName = Configuration.GetSection(appSettingSection)["Name"];
+
+            string appSettingMassTransitUris = "MassTransitUris";
+            string checkTokenUri = Configuration.GetSection(appSettingMassTransitUris)["CheckToken"];
+
+            services.AddMassTransit(x =>
+            {
+                x.UsingRabbitMq((context, cfg) =>
+                {
+                    cfg.Host("localhost", "/", host =>
+                    {
+                        host.Username($"{serviceName}_{serviceId}");
+                        host.Password(serviceId);
+                    });
+                });
+
+                x.AddRequestClient<IUserJwtRequest>(new Uri(checkTokenUri));
+            });
+
+            services.AddMassTransitHostedService();
         }
     }
 }
