@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using LT.DigitalOffice.Broker.Requests;
 using LT.DigitalOffice.CheckRightsService.Database.Entities;
 
@@ -15,12 +16,13 @@ namespace LT.DigitalOffice.CheckRightsService.Repositories.Interfaces
         /// </summary>
         /// <returns>List of all added rights.</returns>
         List<DbRight> GetRightsList();
-        
+
         /// <summary>
-        /// Checks if user with specified id has right with specified id in database.
+        /// Checks whether the user has the specific right.
         /// </summary>
-        /// <param name="request">Request containing specified user ID and specified right ID.</param>
-        /// <returns>True if user have right; otherwise false.</returns>
-        bool CheckIfUserHasRight(ICheckIfUserHasRightRequest request);
+        /// <param name="userId">ID of the user.</param>
+        /// <param name="rightId">ID of the right.</param>
+        /// <returns>True, if there's a UserId-RightId pair. False otherwise.</returns>
+        bool CheckIfUserHasRight(Guid userId, int rightId);
     }
 }

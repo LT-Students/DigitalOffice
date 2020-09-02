@@ -23,8 +23,19 @@ namespace LT.DigitalOffice.CheckRightsService.Repositories
             return dbContext.Rights.ToList();
         }
 
-        public bool CheckIfUserHasRight(ICheckIfUserHasRightRequest request)
-            => dbContext.Rights.Where(right => right.Id == request.RightId)
-                .Any(right => right.UserIds.Select(rightUser => rightUser.UserId).Contains(request.UserId));
+        public bool CheckIfUserHasRight(Guid userId, int rightId)
+        {
+            var rights = dbContext.Rights
+                .AsNoTracking()
+                .Include(r => r.UserIds);
+
+            if (rights.Any(r => r.UserIds.Select(ru => ru.UserId).Contains(userId)))
+            {
+                return true;
+            }
+
+            throw new Exception("Such user doesn't exist or does not have this right.");
+
+        }
     }
 }
