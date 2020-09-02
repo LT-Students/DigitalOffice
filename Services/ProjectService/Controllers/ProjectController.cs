@@ -1,9 +1,5 @@
-using Microsoft.AspNetCore.Mvc;
-using MassTransit;
+﻿using Microsoft.AspNetCore.Mvc;
 using System;
-using System.Threading.Tasks;
-using LT.DigitalOffice.Broker.Requests;
-using LT.DigitalOffice.Kernel.Broker;
 using LT.DigitalOffice.ProjectService.Models;
 using LT.DigitalOffice.ProjectService.Commands.Interfaces;
 
@@ -33,6 +29,14 @@ namespace LT.DigitalOffice.ProjectService.Controllers
             [FromBody] EditProjectRequest request)
         {
             return command.Execute(projectId, request);
+        }
+
+        [HttpDelete("disableWorkersInProject")]
+        public void DisableWorkersInProject(
+            [FromServices] IDisableWorkersInProjectCommand command,
+            [FromQuery] WorkersIdsInProjectRequest request)
+        {
+            command.Execute(request);
         }
     }
 }

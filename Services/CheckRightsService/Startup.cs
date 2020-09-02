@@ -9,6 +9,7 @@ using LT.DigitalOffice.CheckRightsService.Models;
 using LT.DigitalOffice.CheckRightsService.Repositories;
 using LT.DigitalOffice.CheckRightsService.Repositories.Interfaces;
 using LT.DigitalOffice.Kernel;
+using LT.DigitalOffice.Kernel.Broker;
 using MassTransit;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
@@ -29,9 +30,11 @@ namespace LT.DigitalOffice.CheckRightsService
 
         public void ConfigureServices(IServiceCollection services)
         {
+            services.Configure<RabbitMQOptions>(Configuration);
+
             services.AddHealthChecks();
             services.AddControllers();
-            ConfigureMassTransit(services);
+            ConfigureMassTransitUsingAccessValidator(services);
             services.AddMassTransitHostedService();
 
             services.AddDbContext<CheckRightsServiceDbContext>(options =>
@@ -39,15 +42,16 @@ namespace LT.DigitalOffice.CheckRightsService
                 options.UseSqlServer(Configuration.GetConnectionString("SQLConnectionString"));
             });
 
+            ConfigureMassTransit(services);
             ConfigureCommands(services);
             ConfigureMappers(services);
             ConfigureRepositories(services);
         }
 
-        public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
+        public void Configure(IApplicationBuilder app)
         {
             app.UseExceptionHandler(tempApp => tempApp.Run(CustomExceptionHandler.HandleCustomException));
-            
+
             UpdateDatabase(app);
 
             app.UseHttpsRedirection();
@@ -69,6 +73,34 @@ namespace LT.DigitalOffice.CheckRightsService
             using var context = scope.ServiceProvider.GetService<CheckRightsServiceDbContext>();
 
             context.Database.Migrate();
+        }
+
+        private void ConfigureMassTransitUsingAccessValidator(IServiceCollection services)
+        {
+            string appSettingSection = "RabbitMQ";
+            string serviceName = Configuration.GetSection(appSettingSection)["Username"];
+            string servicePassword = Configuration.GetSection(appSettingSection)["Password"];
+
+            services.AddMassTransit(o =>
+            {
+                o.AddConsumer<AccessValidatorConsumer>();
+
+                o.UsingRabbitMq((context, cfg) =>
+                {
+                    cfg.Host("localhost", "/", host =>
+                    {
+                        host.Username($"{serviceName}_{servicePassword}");
+                        host.Password(servicePassword);
+                    });
+
+                    cfg.ReceiveEndpoint("CheckRightsService", e =>
+                    {
+                        e.ConfigureConsumer<AccessValidatorConsumer>(context);
+                    });
+                });
+            });
+
+            services.AddMassTransitHostedService();
         }
 
         private void ConfigureCommands(IServiceCollection services)

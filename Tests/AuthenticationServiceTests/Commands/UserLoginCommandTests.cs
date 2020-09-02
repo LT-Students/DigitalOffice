@@ -111,7 +111,7 @@ namespace LT.DigitalOffice.AuthenticationServiceUnitTests.Commands
             var expectedLoginResponse = new UserLoginResult
             {
                 UserId = brokerResponse.UserId,
-                JwtToken = JwtToken
+                Token = JwtToken
             };
 
             newTokenMock

@@ -16,6 +16,8 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.IdentityModel.Tokens;
 using System;
+using LT.DigitalOffice.Kernel;
+using LT.DigitalOffice.Kernel.Broker;
 
 namespace LT.DigitalOffice.AuthenticationService
 {
@@ -30,6 +32,8 @@ namespace LT.DigitalOffice.AuthenticationService
 
         public void ConfigureServices(IServiceCollection services)
         {
+            services.Configure<RabbitMQOptions>(Configuration);
+
             ConfigureJwt(services);
 
             services.AddHealthChecks();
@@ -78,9 +82,9 @@ namespace LT.DigitalOffice.AuthenticationService
 
         private void ConfigureRabbitMq(IServiceCollection services)
         {
-            string appSettingSection = "ServiceInfo";
-            string serviceId = Configuration.GetSection(appSettingSection)["ID"];
-            string serviceName = Configuration.GetSection(appSettingSection)["Name"];
+            string appSettingSection = "RabbitMQ";
+            string serviceName = Configuration.GetSection(appSettingSection)["Username"];
+            string servicePassword = Configuration.GetSection(appSettingSection)["Password"];
 
             var uri = $"rabbitmq://localhost/UserService_{serviceName}";
 
@@ -92,8 +96,8 @@ namespace LT.DigitalOffice.AuthenticationService
                 {
                     cfg.Host("localhost", "/", host =>
                     {
-                        host.Username($"{serviceName}_{serviceId}");
-                        host.Password(serviceId);
+                        host.Username($"{serviceName}_{servicePassword}");
+                        host.Password(servicePassword);
                     });
 
                     cfg.ReceiveEndpoint($"{serviceName}_ValidationJwt", ep =>
@@ -121,6 +125,8 @@ namespace LT.DigitalOffice.AuthenticationService
 
         public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
         {
+            app.UseExceptionHandler(tempApp => tempApp.Run(CustomExceptionHandler.HandleCustomException));
+
             app.UseHttpsRedirection();
 
             app.UseRouting();

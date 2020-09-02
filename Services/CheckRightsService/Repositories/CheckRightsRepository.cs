@@ -4,6 +4,8 @@ using System.Collections.Generic;
 using System.Linq;
 using LT.DigitalOffice.CheckRightsService.Database.Entities;
 using LT.DigitalOffice.Broker.Requests;
+using System;
+using Microsoft.EntityFrameworkCore;
 
 namespace LT.DigitalOffice.CheckRightsService.Repositories
 {

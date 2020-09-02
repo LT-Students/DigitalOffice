@@ -7,15 +7,11 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <Compile Remove="Database\Migrations\20200710073402_InitialCreate.cs" />
-    <Compile Remove="Database\Migrations\20200710073402_InitialCreate.Designer.cs" />
-  </ItemGroup>
-
-  <ItemGroup>
     <PackageReference Include="FluentValidation" Version="9.0.1" />
-    <PackageReference Include="MassTransit" Version="7.0.2" />
-    <PackageReference Include="MassTransit.AspNetCore" Version="7.0.2" />
-    <PackageReference Include="MassTransit.RabbitMQ" Version="7.0.2" />
+    <PackageReference Include="MassTransit" Version="7.0.3" />
+    <PackageReference Include="MassTransit.AspNetCore" Version="7.0.3" />
+    <PackageReference Include="MassTransit.Extensions.DependencyInjection" Version="7.0.3" />
+    <PackageReference Include="MassTransit.RabbitMQ" Version="7.0.3" />
     <PackageReference Include="Microsoft.EntityFrameworkCore" Version="3.1.5" />
     <PackageReference Include="Microsoft.EntityFrameworkCore.SqlServer" Version="3.1.5" />
     <PackageReference Include="Microsoft.EntityFrameworkCore.Tools" Version="3.1.5">
@@ -29,8 +25,6 @@
   </ItemGroup>
     <PropertyGroup>
     <LangVersion>preview</LangVersion>
-    <AssemblyName>LT.DigitalOffice.ProjectService</AssemblyName>
-    <RootNamespace>LT.DigitalOffice.ProjectService</RootNamespace>
   </PropertyGroup>
 
 </Project>

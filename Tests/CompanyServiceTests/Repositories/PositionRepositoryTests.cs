@@ -14,10 +14,11 @@ namespace LT.DigitalOffice.CompanyServiceUnitTests.Repositories
     internal class PositionRepositoryTests
     {
         private CompanyServiceDbContext dbContext;
-        private DbPosition dbPosition;
         private IPositionRepository repository;
-        private DbPosition newPosition;
+
+        private DbPosition dbPosition;
         private Guid positionId;
+        private DbPosition newPosition;
         private DbPosition dbPositionToAdd;
 
         [OneTimeSetUp]
@@ -35,12 +36,14 @@ namespace LT.DigitalOffice.CompanyServiceUnitTests.Repositories
         public void SetUp()
         {
             positionId = Guid.NewGuid();
+
             dbPosition = new DbPosition
             {
                 Id = positionId,
-                Name = "Name",
                 Description = "Description",
+                Name = "Name"
             };
+
             dbContext.Positions.Add(dbPosition);
             dbContext.SaveChanges();
 
@@ -163,6 +166,31 @@ namespace LT.DigitalOffice.CompanyServiceUnitTests.Repositories
             Assert.IsTrue(result);
             SerializerAssert.AreEqual(newPosition, updatedPosition);
             Assert.That(dbContext.Positions, Is.EquivalentTo(new List<DbPosition> { updatedPosition }));
+        }
+        #endregion
+
+        #region DisablePositionById
+        [Test]
+        public void ShouldThrowExceptionIfPositionDoesNotExistWhileDisablingPosition()
+        {
+            Assert.Throws<Exception>(() => repository.DisablePositionById(Guid.NewGuid()));
+            Assert.AreEqual(dbContext.Positions, new List<DbPosition> { dbPosition });
+        }
+
+        [Test]
+        public void ShouldDisablePositionSuccessfully()
+        {
+            repository.DisablePositionById(positionId);
+
+            Assert.IsTrue(dbContext.Positions.Find(positionId).IsActive == false);
+            Assert.AreEqual(dbContext.Positions, new List<DbPosition> { dbPosition });
+        }
+
+        [Test]
+        public void ShouldThrowExceptionIfPositionIdNullWhileDisablingPosition()
+        {
+            Assert.Throws<Exception>(() => repository.DisablePositionById(Guid.Empty));
+            Assert.AreEqual(dbContext.Positions, new List<DbPosition> { dbPosition });
         }
         #endregion
     }

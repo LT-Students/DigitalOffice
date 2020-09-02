@@ -1,9 +1,7 @@
-using Microsoft.AspNetCore.Builder;
-using Microsoft.AspNetCore.Hosting;
-using Microsoft.EntityFrameworkCore;
-using Microsoft.Extensions.Configuration;
-using Microsoft.Extensions.DependencyInjection;
 using FluentValidation;
+using LT.DigitalOffice.Broker.Requests;
+using LT.DigitalOffice.Kernel;
+using LT.DigitalOffice.Kernel.Broker;
 using LT.DigitalOffice.ProjectService.Commands;
 using LT.DigitalOffice.ProjectService.Commands.Interfaces;
 using LT.DigitalOffice.ProjectService.Database;
@@ -15,9 +13,12 @@ using LT.DigitalOffice.ProjectService.Repositories;
 using LT.DigitalOffice.ProjectService.Repositories.Interfaces;
 using LT.DigitalOffice.ProjectService.Validators;
 using MassTransit;
-using LT.DigitalOffice.Broker.Requests;
+using Microsoft.AspNetCore.Builder;
+using Microsoft.AspNetCore.Hosting;
+using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Configuration;
+using Microsoft.Extensions.DependencyInjection;
 using System;
-using LT.DigitalOffice.Kernel;
 
 namespace LT.DigitalOffice.ProjectService
 {
@@ -32,49 +33,52 @@ namespace LT.DigitalOffice.ProjectService
 
         public void ConfigureServices(IServiceCollection services)
         {
+            services.Configure<RabbitMQOptions>(Configuration);
+
             services.AddDbContext<ProjectServiceDbContext>(options =>
             {
                 options.UseSqlServer(Configuration.GetConnectionString("SQLConnectionString"));
             });
 
             services.AddControllers();
-
+            services.AddKernelExtensions(Configuration);
             ConfigureCommands(services);
             ConfigureRepositories(services);
             ConfigureMappers(services);
             ConfigureValidators(services);
             ConfigureMassTransit(services);
-            services.AddMassTransitHostedService();
         }
 
         private void ConfigureMassTransit(IServiceCollection services)
         {
-            services.AddMassTransit(configurator =>
+            const string serviceSection = "RabbitMQ";
+            string serviceName = Configuration.GetSection(serviceSection)["Username"];
+            string servicePassword = Configuration.GetSection(serviceSection)["Password"];
+
+            services.AddMassTransit(x =>
             {
-                configurator.UsingRabbitMq((context, factoryConfigurator) =>
+                x.UsingRabbitMq((context, cfg) =>
                 {
-                    const string serviceInfoSection = "ServiceInfo";
-
-                    var serviceName = Configuration.GetSection(serviceInfoSection)["Name"];
-                    var serviceId = Configuration.GetSection(serviceInfoSection)["ID"];
-
-                    factoryConfigurator.Host("localhost", hostConfigurator =>
+                    cfg.Host("localhost", "/", host =>
                     {
-                        hostConfigurator.Username($"{serviceName}_{serviceId}");
-                        hostConfigurator.Password(serviceId);
+                        host.Username($"{serviceName}_{servicePassword}");
+                        host.Password(servicePassword);
                     });
                 });
 
-                configurator.AddRequestClient<IGetFileRequest>(
-                    new Uri("rabbitmq://localhost/FileService"));
+				x.AddRequestClient<IGetFileRequest>(
+					new Uri("rabbitmq://localhost/FileService"));
             });
-        }
+
+            services.AddMassTransitHostedService();
+		}
 
         private void ConfigureCommands(IServiceCollection services)
         {
             services.AddTransient<IGetProjectInfoByIdCommand, GetProjectByIdCommand>();
             services.AddTransient<ICreateNewProjectCommand, CreateNewProjectCommand>();
             services.AddTransient<IEditProjectByIdCommand, EditProjectByIdCommand>();
+            services.AddTransient<IDisableWorkersInProjectCommand, DisableWorkersInProjectCommand>();
         }
 
         private void ConfigureRepositories(IServiceCollection services)
@@ -93,6 +97,7 @@ namespace LT.DigitalOffice.ProjectService
         {
             services.AddTransient<IValidator<NewProjectRequest>, NewProjectValidator>();
             services.AddTransient<IValidator<EditProjectRequest>, EditProjectValidator>();
+            services.AddTransient<IValidator<WorkersIdsInProjectRequest>, WorkersProjectIdsValidator>();
         }
 
         public void Configure(IApplicationBuilder app, IWebHostEnvironment env)

@@ -5,6 +5,7 @@ using Microsoft.EntityFrameworkCore;
 using LT.DigitalOffice.ProjectService.Database;
 using LT.DigitalOffice.ProjectService.Database.Entities;
 using LT.DigitalOffice.ProjectService.Repositories.Interfaces;
+using LT.DigitalOffice.ProjectService.Models;
 
 namespace LT.DigitalOffice.ProjectService.Repositories
 {
@@ -52,6 +53,33 @@ namespace LT.DigitalOffice.ProjectService.Repositories
             dbContext.SaveChanges();
 
             return dbProject.Id;
+        }
+
+        public void DisableWorkersInProject(WorkersIdsInProjectRequest request)
+        {
+            DbProject dbProject = dbContext.Projects
+                .FirstOrDefault(p => p.Id == request.ProjectId);
+
+            if (dbProject == null)
+            {
+                throw new NullReferenceException("Project with this Id does not exist.");
+            }
+
+            foreach (Guid workerId in request.WorkersIds)
+            {
+                DbProjectWorkerUser dbProjectWorker = dbProject.WorkersUsersIds?
+                    .FirstOrDefault(w => w.WorkerUserId == workerId);
+
+                if (dbProjectWorker == null)
+                {
+                    throw new NullReferenceException("Worker with this Id does not exist.");
+                }
+
+                dbProjectWorker.IsActive = false;
+            }
+
+            dbContext.Projects.Update(dbProject);
+            dbContext.SaveChanges();
         }
     }
 }

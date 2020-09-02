@@ -11,10 +11,12 @@ namespace LT.DigitalOffice.ProjectServiceUnitTests.Validators
     {
         private IValidator<NewProjectRequest> validator;
         private NewProjectRequest projectRequest;
+
         [SetUp]
         public void SetUp()
         {
             validator = new NewProjectValidator();
+
             projectRequest = new NewProjectRequest
             {
                 DepartmentId = Guid.NewGuid(),
@@ -40,7 +42,7 @@ namespace LT.DigitalOffice.ProjectServiceUnitTests.Validators
         }
 
         [Test]
-        public void ShouldShouldNotHaveAnyValidationErrorsWhenRequestIsValid()
+        public void ShouldNotHaveAnyValidationErrorsWhenRequestIsValid()
         {
             validator.TestValidate(projectRequest).ShouldNotHaveAnyValidationErrors();
         }

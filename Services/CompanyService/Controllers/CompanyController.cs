@@ -1,4 +1,4 @@
-using LT.DigitalOffice.CompanyService.Commands.Interfaces;
+﻿using LT.DigitalOffice.CompanyService.Commands.Interfaces;
 using LT.DigitalOffice.CompanyService.Models;
 using Microsoft.AspNetCore.Mvc;
 using System;
@@ -50,6 +50,12 @@ namespace LT.DigitalOffice.CompanyService.Controllers
         public Guid AddPosition([FromServices] IAddPositionCommand command, [FromBody] AddPositionRequest request)
         {
             return command.Execute(request);
+        }
+
+        [HttpDelete("disablePositionById")]
+        public void DisablePositionById([FromServices] IDisablePositionByIdCommand command, [FromQuery] Guid positionId)
+        {
+            command.Execute(positionId);
         }
 
         [HttpPost("editPosition")]

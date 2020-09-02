@@ -49,7 +49,8 @@ namespace LT.DigitalOffice.CompanyServiceUnitTests.Mappers
             expectedDbPosition = new DbPosition
             {
                 Name = addPositionRequest.Name,
-                Description = addPositionRequest.Description
+                Description = addPositionRequest.Description,
+                IsActive = true
             };
 
             dbUserIds = new DbCompanyUser
@@ -65,6 +66,7 @@ namespace LT.DigitalOffice.CompanyServiceUnitTests.Mappers
                 Id = dbUserIds.PositionId,
                 Name = "Position",
                 Description = "Description",
+                IsActive = true,
                 UserIds = new List<DbCompanyUser> { dbUserIds }
             };
         }
@@ -103,6 +105,7 @@ namespace LT.DigitalOffice.CompanyServiceUnitTests.Mappers
             {
                 Name = dbPosition.Name,
                 Description = dbPosition.Description,
+                IsActive = dbPosition.IsActive,
                 UserIds = dbPosition.UserIds?.Select(x => x.UserId).ToList()
             };
 

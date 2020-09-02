@@ -1,6 +1,7 @@
 using System;
 using LT.DigitalOffice.Broker.Requests;
 using FluentValidation;
+using LT.DigitalOffice.Kernel.Middlewares.Token;
 using LT.DigitalOffice.TimeManagementService.Commands;
 using LT.DigitalOffice.TimeManagementService.Commands.Interfaces;
 using LT.DigitalOffice.TimeManagementService.Database;
@@ -18,6 +19,7 @@ using Microsoft.AspNetCore.Hosting;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
+using LT.DigitalOffice.Kernel.Broker;
 
 namespace LT.DigitalOffice.TimeManagementService
 {
@@ -32,6 +34,8 @@ namespace LT.DigitalOffice.TimeManagementService
 
         public void ConfigureServices(IServiceCollection services)
         {
+            services.Configure<RabbitMQOptions>(Configuration);
+
             services.AddDbContext<TimeManagementDbContext>(options =>
             {
                 options.UseSqlServer(Configuration.GetConnectionString("SQLConnectionString"));
@@ -41,10 +45,13 @@ namespace LT.DigitalOffice.TimeManagementService
             ConfigureMassTransit(services);
             services.AddMassTransitHostedService();
 
+            services.Configure<TokenConfiguration>(Configuration);
+
             ConfigureCommands(services);
             ConfigureValidators(services);
             ConfigureMappers(services);
             ConfigureRepositories(services);
+            ConfigureRabbitMq(services);
         }
 
         private void ConfigureMassTransit(IServiceCollection services)
@@ -104,6 +111,8 @@ namespace LT.DigitalOffice.TimeManagementService
 
             app.UseRouting();
 
+            app.UseMiddleware<TokenMiddleware>();
+
             app.UseEndpoints(endpoints =>
             {
                 endpoints.MapControllers();
@@ -117,6 +126,32 @@ namespace LT.DigitalOffice.TimeManagementService
             using var context = serviceScope.ServiceProvider.GetService<TimeManagementDbContext>();
 
             context.Database.Migrate();
+        }
+
+        private void ConfigureRabbitMq(IServiceCollection services)
+        {
+            const string serviceSection = "RabbitMQ";
+            string serviceName = Configuration.GetSection(serviceSection)["Username"];
+            string servicePassword = Configuration.GetSection(serviceSection)["Password"];
+
+            string appSettingMassTransitUris = "MassTransitUris";
+            string checkTokenUri = Configuration.GetSection(appSettingMassTransitUris)["CheckToken"];
+
+            services.AddMassTransit(x =>
+            {
+                x.UsingRabbitMq((context, cfg) =>
+                {
+                    cfg.Host("localhost", "/", host =>
+                    {
+                        host.Username($"{serviceName}_{servicePassword}");
+                        host.Password(servicePassword);
+                    });
+                });
+
+                x.AddRequestClient<IUserJwtRequest>(new Uri(checkTokenUri));
+            });
+
+            services.AddMassTransitHostedService();
         }
     }
 }

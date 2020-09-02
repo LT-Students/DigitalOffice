@@ -20,7 +20,7 @@
     <PackageReference Include="Microsoft.NET.Test.Sdk" Version="16.4.0" />
   </ItemGroup>
 
-	<ItemGroup>
-		<ProjectReference Include="..\..\Services\CheckRightsService\CheckRightsService.csproj" />
-	</ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\..\Services\CheckRightsService\CheckRightsService.csproj" />
+  </ItemGroup>
 </Project>
