@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Threading.Tasks;
 using FluentValidation;
 using LT.DigitalOffice.CheckRightsService.Commands;
 using LT.DigitalOffice.CheckRightsService.Commands.Interfaces;
@@ -41,10 +42,43 @@ namespace LT.DigitalOffice.CheckRightsServiceUnitTests.Commands
                 .Setup(x => x.Validate(It.IsAny<IValidationContext>()).IsValid)
                 .Returns(true);
 
+            var task = new Task<bool>(() => true);
+            task.RunSynchronously();
+
+            accessValidator
+                .Setup(x => x.IsAdmin())
+                .Returns(task);
+
             repositoryMock
                 .Setup(x => x.AddRightsToUser(It.IsAny<AddRightsForUserRequest>()));
 
             command.Execute(request);
+        }
+
+        [Test]
+        public void ShouldThrowForbiddenExceptionWhenAccessValidatorThrowFalse()
+        {
+            var request = new AddRightsForUserRequest
+            {
+                UserId = Guid.NewGuid(),
+                RightsIds = new List<int>() { 0, 1 }
+            };
+
+            validatorMock
+                .Setup(x => x.Validate(It.IsAny<IValidationContext>()).IsValid)
+                .Returns(true);
+
+            var task = new Task<bool>(() => false);
+            task.RunSynchronously();
+
+            accessValidator
+                .Setup(x => x.IsAdmin())
+                .Returns(task);
+
+            repositoryMock
+                .Setup(x => x.AddRightsToUser(It.IsAny<AddRightsForUserRequest>()));
+
+            Assert.Throws<ForbiddenException>(() => command.Execute(request));
         }
 
         [Test]
@@ -59,7 +93,15 @@ namespace LT.DigitalOffice.CheckRightsServiceUnitTests.Commands
                 .Setup(x => x.Validate(It.IsAny<IValidationContext>()).IsValid)
                 .Returns(false);
 
+            var task = new Task<bool>(() => true);
+            task.RunSynchronously();
+
+            accessValidator
+                .Setup(x => x.IsAdmin())
+                .Returns(task);
+
             Assert.Throws<ValidationException>(() => command.Execute(request));
+            repositoryMock.Verify(repository => repository.AddRightsToUser(It.IsAny<AddRightsForUserRequest>()), Times.Never);
         }
 
         [Test]
@@ -73,6 +115,13 @@ namespace LT.DigitalOffice.CheckRightsServiceUnitTests.Commands
             validatorMock
                 .Setup(x => x.Validate(It.IsAny<IValidationContext>()).IsValid)
                 .Returns(true);
+
+            var task = new Task<bool>(() => true);
+            task.RunSynchronously();
+
+            accessValidator
+                .Setup(x => x.IsAdmin())
+                .Returns(task);
 
             repositoryMock
                 .Setup(x => x.AddRightsToUser(It.IsAny<AddRightsForUserRequest>()))

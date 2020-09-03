@@ -19,8 +19,8 @@ namespace LT.DigitalOffice.CheckRightsServiceUnitTests.Repositories
         private CheckRightsServiceDbContext dbContext;
         private ICheckRightsRepository repository;
         private Mock<IMapper<DbRight, Right>> mapperMock;
-        private DbRight dbRight;
-        private DbRight dbRightUpdate;
+        private DbRight dbRight1InDb;
+        private DbRight dbRight2InDb;
         private Guid userId;
 
         [SetUp]
@@ -34,7 +34,7 @@ namespace LT.DigitalOffice.CheckRightsServiceUnitTests.Repositories
             repository = new CheckRightsRepository(dbContext);
 
             userId = Guid.NewGuid();
-            dbRight = new DbRight
+            dbRight1InDb = new DbRight
             {
                 Id = 3,
                 Name = "Right",
@@ -42,11 +42,11 @@ namespace LT.DigitalOffice.CheckRightsServiceUnitTests.Repositories
             };
             dbContext.RightUsers.Add(new DbRightUser
             {
-                RightId = dbRight.Id,
+                RightId = dbRight1InDb.Id,
                 UserId = userId
             });
 
-            dbRightUpdate = new DbRight
+            dbRight2InDb = new DbRight
             {
                 Id = 4,
                 Name = "Right update",
@@ -54,16 +54,16 @@ namespace LT.DigitalOffice.CheckRightsServiceUnitTests.Repositories
             };
             dbContext.RightUsers.Add(new DbRightUser
             {
-                Right = dbRightUpdate,
-                RightId = dbRightUpdate.Id,
+                Right = dbRight2InDb,
+                RightId = dbRight2InDb.Id,
                 UserId = userId
             });
 
-            dbContext.Rights.AddRange(dbRight, dbRightUpdate);
+            dbContext.Rights.AddRange(dbRight1InDb, dbRight2InDb);
             dbContext.SaveChanges();
 
-            mapperMock.Setup(mapper => mapper.Map(dbRight)).Returns(new Right
-                {Id = dbRight.Id, Name = dbRight.Name, Description = dbRight.Description});
+            mapperMock.Setup(mapper => mapper.Map(dbRight1InDb)).Returns(new Right
+                {Id = dbRight1InDb.Id, Name = dbRight1InDb.Name, Description = dbRight1InDb.Description});
 
         }
 
@@ -98,25 +98,31 @@ namespace LT.DigitalOffice.CheckRightsServiceUnitTests.Repositories
         [Test]
         public void ShouldAddRightsForUser()
         {
-            dbRight = new DbRight
-            {
-                Id = 4,
-                Name = "Right",
-                Description = "Allows you everything",
-                RightUsers = new List<DbRightUser>()
-            };
-
+            var rightId = dbRight1InDb.Id;
             var request = new AddRightsForUserRequest
             {
                 UserId = Guid.NewGuid(),
-                RightsIds = new List<int> { dbRight.Id }
+                RightsIds = new List<int> { rightId }
             };
 
-            dbContext.Rights.Add(dbRight);
-            dbContext.SaveChanges();
+            var rightsBeforeRequest = dbContext.Rights.ToList();
+            var rightUsersBeforeRequest = dbContext.RightUsers.ToList();
+            Assert.IsNotNull(rightsBeforeRequest.FirstOrDefault(
+                x => x.Id == rightId));
+            Assert.IsNull(rightUsersBeforeRequest.FirstOrDefault(
+                x => x.UserId == request.UserId && x.RightId == rightId));
 
-            Assert.That(dbContext.Rights, Is.EquivalentTo(new List<DbRight> { dbRight }));
-            Assert.That(dbContext.RightUsers, Is.EquivalentTo(new List<DbRightUser> (dbRight.RightUsers)));
+            repository.AddRightsToUser(request);
+
+            var rightsAfterRequest = dbContext.Rights.ToList();
+            var rightUsersAfterRequest = dbContext.RightUsers.ToList();
+            foreach(var right in rightsBeforeRequest)
+            {
+                Assert.IsTrue(rightsAfterRequest.Contains(right));
+            }
+            Assert.IsNotNull(rightUsersAfterRequest.FirstOrDefault(
+                x => x.UserId == request.UserId && x.RightId == rightId));
+            Assert.AreEqual(rightUsersBeforeRequest.Count + 1, rightUsersAfterRequest.Count);
         }
 
         [Test]
@@ -139,7 +145,7 @@ namespace LT.DigitalOffice.CheckRightsServiceUnitTests.Repositories
             var request = new RemoveRightsFromUserRequest
             {
                 UserId = userId,
-                RightIds = new List<int> { dbRight.Id }
+                RightIds = new List<int> { dbRight1InDb.Id }
             };
 
             var rightsBeforeRequest = dbContext.Rights.ToList();
@@ -188,7 +194,7 @@ namespace LT.DigitalOffice.CheckRightsServiceUnitTests.Repositories
             var request = new RemoveRightsFromUserRequest
             {
                 UserId = Guid.NewGuid(),
-                RightIds = new List<int> { dbRight.Id }
+                RightIds = new List<int> { dbRight1InDb.Id }
             };
 
             var rightsBeforeRequest = dbContext.Rights.ToList();
