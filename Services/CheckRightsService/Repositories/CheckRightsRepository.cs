@@ -1,10 +1,11 @@
-﻿using LT.DigitalOffice.CheckRightsService.Database;
+using LT.DigitalOffice.CheckRightsService.Database;
+using LT.DigitalOffice.CheckRightsService.Database.Entities;
+using LT.DigitalOffice.CheckRightsService.Models;
 using LT.DigitalOffice.CheckRightsService.Repositories.Interfaces;
+using Microsoft.EntityFrameworkCore;
+using System;
 using System.Collections.Generic;
 using System.Linq;
-using LT.DigitalOffice.CheckRightsService.Database.Entities;
-using System;
-using Microsoft.EntityFrameworkCore;
 
 namespace LT.DigitalOffice.CheckRightsService.Repositories
 {
@@ -22,13 +23,22 @@ namespace LT.DigitalOffice.CheckRightsService.Repositories
             return dbContext.Rights.ToList();
         }
 
+        public void RemoveRightsFromUser(RemoveRightsFromUserRequest request)
+        {
+            var userRights = dbContext.RightUsers.Where(ru =>
+                ru.UserId == request.UserId && request.RightIds.Contains(ru.RightId));
+
+            dbContext.RightUsers.RemoveRange(userRights);
+            dbContext.SaveChanges();
+        }
+
         public bool CheckIfUserHasRight(Guid userId, int rightId)
         {
             var rights = dbContext.Rights
                 .AsNoTracking()
-                .Include(r => r.UserIds);
+                .Include(r => r.RightUsers);
 
-            if (rights.Any(r => r.UserIds.Select(ru => ru.UserId).Contains(userId)))
+            if (rights.Any(r => r.RightUsers.Select(ru => ru.UserId).Contains(userId)))
             {
                 return true;
             }

@@ -1,11 +1,11 @@
 ﻿using LT.DigitalOffice.CheckRightsService.Commands.Interfaces;
+using LT.DigitalOffice.CheckRightsService.Database.Entities;
+using LT.DigitalOffice.CheckRightsService.Mappers.Interfaces;
 using LT.DigitalOffice.CheckRightsService.Models;
 using LT.DigitalOffice.CheckRightsService.Repositories.Interfaces;
 using Microsoft.AspNetCore.Mvc;
 using System.Collections.Generic;
 using System.Linq;
-using LT.DigitalOffice.CheckRightsService.Database.Entities;
-using LT.DigitalOffice.CheckRightsService.Mappers.Interfaces;
 
 namespace LT.DigitalOffice.CheckRightsService.Commands
 {

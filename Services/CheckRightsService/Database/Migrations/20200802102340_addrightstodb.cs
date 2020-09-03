@@ -2,7 +2,7 @@
 
 namespace LT.DigitalOffice.CheckRightsService.Database.Migrations
 {
-    public partial class addrightstodb : Migration
+    public partial class AddRightsToDb : Migration
     {
         protected override void Up(MigrationBuilder migrationBuilder)
         {

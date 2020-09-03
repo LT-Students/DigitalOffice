@@ -10,6 +10,6 @@ namespace LT.DigitalOffice.CheckRightsService.Database.Entities
         [Required]
         public string Name { get; set; }
         public string Description { get; set; }
-        public ICollection<DbRightUser> UserIds { get; set; }
+        public ICollection<DbRightUser> RightUsers { get; set; }
     }
 }

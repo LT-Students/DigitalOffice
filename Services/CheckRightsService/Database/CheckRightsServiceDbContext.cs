@@ -10,6 +10,7 @@ namespace LT.DigitalOffice.CheckRightsService.Database
     public class CheckRightsServiceDbContext : DbContext
     {
         public DbSet<DbRight> Rights { get; set; }
+        public DbSet<DbRightUser> RightUsers { get; set; }
 
         public CheckRightsServiceDbContext(DbContextOptions<CheckRightsServiceDbContext> options) : base(options) { }
 
