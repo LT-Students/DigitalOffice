@@ -1,12 +1,12 @@
-﻿using System;
-using LT.DigitalOffice.CheckRightsService.Database;
+﻿using LT.DigitalOffice.CheckRightsService.Database;
 using LT.DigitalOffice.CheckRightsService.Database.Entities;
+using LT.DigitalOffice.CheckRightsService.Models;
 using LT.DigitalOffice.CheckRightsService.Repositories.Interfaces;
 using LT.DigitalOffice.Kernel.Exceptions;
 using Microsoft.EntityFrameworkCore;
+using System;
 using System.Collections.Generic;
 using System.Linq;
-using LT.DigitalOffice.CheckRightsService.Models;
 
 namespace LT.DigitalOffice.CheckRightsService.Repositories
 {
@@ -24,7 +24,7 @@ namespace LT.DigitalOffice.CheckRightsService.Repositories
             return dbContext.Rights.ToList();
         }
 
-        public bool AddRightsToUser(AddRightsForUserRequest request)
+        public void AddRightsToUser(AddRightsForUserRequest request)
         {
             foreach (var rightId in request.RightsIds)
             {
@@ -50,8 +50,6 @@ namespace LT.DigitalOffice.CheckRightsService.Repositories
             }
 
             dbContext.SaveChanges();
-
-            return true;
         }
 
         public bool CheckIfUserHasRight(Guid userId, int rightId)

@@ -41,6 +41,8 @@ namespace LT.DigitalOffice.CheckRightsService
                 options.UseSqlServer(Configuration.GetConnectionString("SQLConnectionString"));
             });
 
+            services.AddKernelExtensions(Configuration);
+
             ConfigureMassTransit(services);
             ConfigureCommands(services);
             ConfigureMappers(services);
@@ -105,6 +107,7 @@ namespace LT.DigitalOffice.CheckRightsService
         private void ConfigureCommands(IServiceCollection services)
         {
             services.AddTransient<IGetRightsListCommand, GetRightsListCommand>();
+            services.AddTransient<IAddRightsForUserCommand, AddRightsForUserCommand>();
         }
 
         private void ConfigureRepositories(IServiceCollection services)

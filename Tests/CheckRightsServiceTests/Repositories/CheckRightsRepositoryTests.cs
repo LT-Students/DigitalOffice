@@ -1,6 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using LT.DigitalOffice.CheckRightsService.Database;
+﻿using LT.DigitalOffice.CheckRightsService.Database;
 using LT.DigitalOffice.CheckRightsService.Database.Entities;
 using LT.DigitalOffice.CheckRightsService.Models;
 using LT.DigitalOffice.CheckRightsService.Repositories;
@@ -8,6 +6,8 @@ using LT.DigitalOffice.CheckRightsService.Repositories.Interfaces;
 using LT.DigitalOffice.Kernel.Exceptions;
 using Microsoft.EntityFrameworkCore;
 using NUnit.Framework;
+using System;
+using System.Collections.Generic;
 
 namespace LT.DigitalOffice.CheckRightsServiceUnitTests.Repositories
 {
@@ -77,7 +77,6 @@ namespace LT.DigitalOffice.CheckRightsServiceUnitTests.Repositories
             dbContext.Rights.Add(dbRight);
             dbContext.SaveChanges();
 
-            Assert.True(repository.AddRightsToUser(request));
             Assert.That(dbContext.Rights, Is.EquivalentTo(new List<DbRight> { dbRight }));
             Assert.That(dbContext.RightsUsers, Is.EquivalentTo(new List<DbRightUser> (dbRight.UserIds)));
         }

@@ -11,7 +11,6 @@ namespace LT.DigitalOffice.CheckRightsService.Commands.Interfaces
         /// Add rights for user.
         /// </summary>
         /// <param name="request">Request with rights and user id.</param>
-        /// <returns>Return true if successfully else return false.</returns>
-        bool Execute(AddRightsForUserRequest request);
+        void Execute(AddRightsForUserRequest request);
     }
 }

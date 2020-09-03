@@ -21,8 +21,7 @@ namespace LT.DigitalOffice.CheckRightsService.Repositories.Interfaces
         /// Adds rights for user.
         /// </summary>
         /// <param name="request">Request with rights and user id.</param>
-        /// <returns>Return true if successfully else return false.</returns>
-        bool AddRightsToUser(AddRightsForUserRequest request);
+        void AddRightsToUser(AddRightsForUserRequest request);
 
         /// <summary>
         /// Checks whether the user has the specific right.
