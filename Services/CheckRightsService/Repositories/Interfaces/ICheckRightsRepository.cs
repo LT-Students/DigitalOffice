@@ -18,6 +18,12 @@ namespace LT.DigitalOffice.CheckRightsService.Repositories.Interfaces
         List<DbRight> GetRightsList();
 
         /// <summary>
+        /// Adds rights for user.
+        /// </summary>
+        /// <param name="request">Request with rights and user id.</param>
+        void AddRightsToUser(AddRightsForUserRequest request);
+
+        /// <summary>
         /// Remove rights for user.
         /// </summary>
         /// <param name="request">Request with rights and user id.</param>

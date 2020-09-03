@@ -11,7 +11,6 @@ using LT.DigitalOffice.CheckRightsService.Repositories;
 using LT.DigitalOffice.CheckRightsService.Repositories.Interfaces;
 using LT.DigitalOffice.CheckRightsService.Validator;
 using LT.DigitalOffice.Kernel;
-using LT.DigitalOffice.Kernel.AccessValidator.Interfaces;
 using LT.DigitalOffice.Kernel.Broker;
 using MassTransit;
 using Microsoft.AspNetCore.Builder;
@@ -111,6 +110,7 @@ namespace LT.DigitalOffice.CheckRightsService
         private void ConfigureCommands(IServiceCollection services)
         {
             services.AddTransient<IGetRightsListCommand, GetRightsListCommand>();
+            services.AddTransient<IAddRightsForUserCommand, AddRightsForUserCommand>();
             services.AddTransient<IRemoveRightsFromUserCommand, RemoveRightsFromUserCommand>();
         }
 

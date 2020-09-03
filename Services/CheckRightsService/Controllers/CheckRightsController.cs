@@ -15,6 +15,14 @@ namespace LT.DigitalOffice.CheckRightsService.Controllers
             return command.Execute();
         }
 
+        [HttpPost("addRightsForUser")]
+        public void AddRightsForUser(
+            [FromServices] IAddRightsForUserCommand command,
+            [FromBody] AddRightsForUserRequest request)
+        {
+            command.Execute(request);
+        }
+
         [HttpDelete("removeRightsFromUser")]
         public void RemoveRightsFromUser(
             [FromServices] IRemoveRightsFromUserCommand command,

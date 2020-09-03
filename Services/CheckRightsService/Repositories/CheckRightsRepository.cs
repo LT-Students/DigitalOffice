@@ -2,6 +2,7 @@ using LT.DigitalOffice.CheckRightsService.Database;
 using LT.DigitalOffice.CheckRightsService.Database.Entities;
 using LT.DigitalOffice.CheckRightsService.Models;
 using LT.DigitalOffice.CheckRightsService.Repositories.Interfaces;
+using LT.DigitalOffice.Kernel.Exceptions;
 using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;
@@ -23,12 +24,40 @@ namespace LT.DigitalOffice.CheckRightsService.Repositories
             return dbContext.Rights.ToList();
         }
 
+        public void AddRightsToUser(AddRightsForUserRequest request)
+        {
+            foreach (var rightId in request.RightsIds)
+            {
+                var dbRight = dbContext.Rights.FirstOrDefault(right => right.Id == rightId);
+
+                if (dbRight == null)
+                {
+                    throw new BadRequestException("Right doesn't exist.");
+                }
+
+                var dbRightUser = dbContext.RightUsers.FirstOrDefault(rightUser =>
+                    rightUser.RightId == rightId && rightUser.UserId == request.UserId);
+
+                if (dbRightUser == null)
+                {
+                    dbContext.RightUsers.Add(new DbRightUser
+                    {
+                        UserId = request.UserId,
+                        Right = dbRight,
+                        RightId = rightId,
+                    });
+                }
+            }
+            dbContext.SaveChanges();
+        }
+
         public void RemoveRightsFromUser(RemoveRightsFromUserRequest request)
         {
             var userRights = dbContext.RightUsers.Where(ru =>
                 ru.UserId == request.UserId && request.RightIds.Contains(ru.RightId));
 
             dbContext.RightUsers.RemoveRange(userRights);
+
             dbContext.SaveChanges();
         }
 

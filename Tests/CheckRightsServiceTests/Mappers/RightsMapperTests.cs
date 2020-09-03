@@ -29,6 +29,7 @@ namespace LT.DigitalOffice.CheckRightsServiceUnitTests.Mappers
             };
         }
 
+        #region DbRight to Right
         [Test]
         public void ShouldThrowExceptionWhenArgumentIsNull()
         {
@@ -46,5 +47,6 @@ namespace LT.DigitalOffice.CheckRightsServiceUnitTests.Mappers
             Assert.AreEqual(Name, result.Name);
             Assert.AreEqual(Description, result.Description);
         }
+        #endregion
     }
 }
