@@ -40,21 +40,23 @@ namespace LT.DigitalOffice.CheckRightsService.Database.Migrations
 
             modelBuilder.Entity("LT.DigitalOffice.CheckRightsService.Database.Entities.DbRightUser", b =>
                 {
-                    b.Property<int>("RightId")
-                        .HasColumnType("int");
-
                     b.Property<Guid>("UserId")
                         .HasColumnType("uniqueidentifier");
 
-                    b.HasKey("RightId", "UserId");
+                    b.Property<int>("RightId")
+                        .HasColumnType("int");
 
-                    b.ToTable("DbRightUser");
+                    b.HasKey("UserId", "RightId");
+
+                    b.HasIndex("RightId");
+
+                    b.ToTable("RightUsers");
                 });
 
             modelBuilder.Entity("LT.DigitalOffice.CheckRightsService.Database.Entities.DbRightUser", b =>
                 {
                     b.HasOne("LT.DigitalOffice.CheckRightsService.Database.Entities.DbRight", "Right")
-                        .WithMany("UserIds")
+                        .WithMany("RightUsers")
                         .HasForeignKey("RightId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();

@@ -11,7 +11,7 @@ namespace LT.DigitalOffice.Kernel.Exceptions
     {
         public override int StatusCode => (int) HttpStatusCode.BadRequest;
         public override string Header => "Bad Request";
-        
+
         /// <summary>
         /// Initializes a new instance of the <see cref="BadRequestException"/> class.
         /// </summary>

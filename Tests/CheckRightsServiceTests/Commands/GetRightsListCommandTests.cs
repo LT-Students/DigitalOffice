@@ -1,13 +1,13 @@
-using System;
 using LT.DigitalOffice.CheckRightsService.Commands;
 using LT.DigitalOffice.CheckRightsService.Commands.Interfaces;
+using LT.DigitalOffice.CheckRightsService.Database.Entities;
+using LT.DigitalOffice.CheckRightsService.Mappers.Interfaces;
 using LT.DigitalOffice.CheckRightsService.Models;
 using LT.DigitalOffice.CheckRightsService.Repositories.Interfaces;
 using Moq;
 using NUnit.Framework;
+using System;
 using System.Collections.Generic;
-using LT.DigitalOffice.CheckRightsService.Database.Entities;
-using LT.DigitalOffice.CheckRightsService.Mappers.Interfaces;
 
 namespace LT.DigitalOffice.CheckRightsServiceUnitTests.Commands
 {
@@ -64,7 +64,7 @@ namespace LT.DigitalOffice.CheckRightsServiceUnitTests.Commands
             mapperMock.Setup(mapper => mapper.Map(It.IsAny<DbRight>()))
                 .Throws(new Exception("Bad Request"))
                 .Verifiable();
-            
+
             Assert.That(() => command.Execute(), Throws.TypeOf<Exception>().And.Message.EqualTo("Bad Request"));
             repositoryMock.Verify();
             mapperMock.Verify();

@@ -1,3 +1,4 @@
+using FluentValidation;
 using LT.DigitalOffice.CheckRightsService.Broker.Consumers;
 using LT.DigitalOffice.CheckRightsService.Commands;
 using LT.DigitalOffice.CheckRightsService.Commands.Interfaces;
@@ -8,6 +9,7 @@ using LT.DigitalOffice.CheckRightsService.Mappers.Interfaces;
 using LT.DigitalOffice.CheckRightsService.Models;
 using LT.DigitalOffice.CheckRightsService.Repositories;
 using LT.DigitalOffice.CheckRightsService.Repositories.Interfaces;
+using LT.DigitalOffice.CheckRightsService.Validator;
 using LT.DigitalOffice.Kernel;
 using LT.DigitalOffice.Kernel.Broker;
 using MassTransit;
@@ -47,6 +49,7 @@ namespace LT.DigitalOffice.CheckRightsService
             ConfigureCommands(services);
             ConfigureMappers(services);
             ConfigureRepositories(services);
+            ConfigureValidators(services);
         }
 
         public void Configure(IApplicationBuilder app)
@@ -108,6 +111,7 @@ namespace LT.DigitalOffice.CheckRightsService
         {
             services.AddTransient<IGetRightsListCommand, GetRightsListCommand>();
             services.AddTransient<IAddRightsForUserCommand, AddRightsForUserCommand>();
+            services.AddTransient<IRemoveRightsFromUserCommand, RemoveRightsFromUserCommand>();
         }
 
         private void ConfigureRepositories(IServiceCollection services)
@@ -118,6 +122,11 @@ namespace LT.DigitalOffice.CheckRightsService
         private void ConfigureMappers(IServiceCollection services)
         {
             services.AddTransient<IMapper<DbRight, Right>, RightsMapper>();
+        }
+
+        private void ConfigureValidators(IServiceCollection services)
+        {
+            services.AddTransient<IValidator<RemoveRightsFromUserRequest>, RemoveRightsFromUserValidator>();
         }
     }
 }

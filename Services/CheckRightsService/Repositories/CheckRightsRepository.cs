@@ -1,4 +1,4 @@
-﻿using LT.DigitalOffice.CheckRightsService.Database;
+using LT.DigitalOffice.CheckRightsService.Database;
 using LT.DigitalOffice.CheckRightsService.Database.Entities;
 using LT.DigitalOffice.CheckRightsService.Models;
 using LT.DigitalOffice.CheckRightsService.Repositories.Interfaces;
@@ -35,12 +35,12 @@ namespace LT.DigitalOffice.CheckRightsService.Repositories
                     throw new BadRequestException("Right doesn't exist.");
                 }
 
-                var dbRightUser = dbContext.RightsUsers.FirstOrDefault(rightUser =>
+                var dbRightUser = dbContext.RightUsers.FirstOrDefault(rightUser =>
                     rightUser.RightId == rightId && rightUser.UserId == request.UserId);
 
                 if (dbRightUser == null)
                 {
-                    dbContext.RightsUsers.Add(new DbRightUser
+                    dbContext.RightUsers.Add(new DbRightUser
                     {
                         UserId = request.UserId,
                         Right = dbRight,
@@ -48,6 +48,15 @@ namespace LT.DigitalOffice.CheckRightsService.Repositories
                     });
                 }
             }
+            dbContext.SaveChanges();
+        }
+
+        public void RemoveRightsFromUser(RemoveRightsFromUserRequest request)
+        {
+            var userRights = dbContext.RightUsers.Where(ru =>
+                ru.UserId == request.UserId && request.RightIds.Contains(ru.RightId));
+
+            dbContext.RightUsers.RemoveRange(userRights);
 
             dbContext.SaveChanges();
         }
@@ -56,9 +65,9 @@ namespace LT.DigitalOffice.CheckRightsService.Repositories
         {
             var rights = dbContext.Rights
                 .AsNoTracking()
-                .Include(r => r.UserIds);
+                .Include(r => r.RightUsers);
 
-            if (rights.Any(r => r.UserIds.Select(ru => ru.UserId).Contains(userId)))
+            if (rights.Any(r => r.RightUsers.Select(ru => ru.UserId).Contains(userId)))
             {
                 return true;
             }

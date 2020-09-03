@@ -22,5 +22,13 @@ namespace LT.DigitalOffice.CheckRightsService.Controllers
         {
             command.Execute(request);
         }
+
+        [HttpDelete("removeRightsFromUser")]
+        public void RemoveRightsFromUser(
+            [FromServices] IRemoveRightsFromUserCommand command,
+            [FromBody] RemoveRightsFromUserRequest request)
+        {
+            command.Execute(request);
+        }
     }
 }

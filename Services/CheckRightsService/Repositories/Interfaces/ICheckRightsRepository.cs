@@ -24,6 +24,12 @@ namespace LT.DigitalOffice.CheckRightsService.Repositories.Interfaces
         void AddRightsToUser(AddRightsForUserRequest request);
 
         /// <summary>
+        /// Remove rights for user.
+        /// </summary>
+        /// <param name="request">Request with rights and user id.</param>
+        void RemoveRightsFromUser(RemoveRightsFromUserRequest request);
+
+        /// <summary>
         /// Checks whether the user has the specific right.
         /// </summary>
         /// <param name="userId">ID of the user.</param>

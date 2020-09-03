@@ -6,20 +6,20 @@ namespace LT.DigitalOffice.CheckRightsService.Database.Entities
 {
     public class DbRightUser
     {
+        public Guid UserId { get; set; }
         public int RightId { get; set; }
         public DbRight Right { get; set; }
-        public Guid UserId { get; set; }
     }
 
-    public class RightUserConfiguration : IEntityTypeConfiguration<DbRightUser>
+    public class CompanyUserConfiguration : IEntityTypeConfiguration<DbRightUser>
     {
         public void Configure(EntityTypeBuilder<DbRightUser> builder)
         {
-            builder.HasKey(rightUser => new { rightUser.RightId, rightUser.UserId });
+            builder.HasKey(right => new { right.UserId, right.RightId });
 
-            builder.HasOne(rightUser => rightUser.Right)
-                .WithMany(right => right.UserIds)
-                .HasForeignKey(rightUser => rightUser.RightId);
+            builder.HasOne(userRight => userRight.Right)
+                .WithMany(right => right.RightUsers)
+                .HasForeignKey(user => user.RightId);
         }
     }
 }
