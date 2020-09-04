@@ -25,5 +25,12 @@ namespace LT.DigitalOffice.TimeManagementService.Repositories.Interfaces
         /// <param name="workTime">Work time to add.</param>
         /// <returns>Id of the added work time.</returns>
         public Guid CreateWorkTime(DbWorkTime workTime);
+
+        /// <summary>
+        /// Change work time in the database. Returns true if the operation is successful.
+        /// </summary>
+        /// <param name="workTime">Work time change.</param>
+        /// <returns>True if the operation is successful.</returns>
+        public bool EditWorkTime(DbWorkTime workTime);
     }
 }

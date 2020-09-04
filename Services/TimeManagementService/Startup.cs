@@ -54,6 +54,7 @@ namespace LT.DigitalOffice.TimeManagementService
 
         private void ConfigureCommands(IServiceCollection services)
         {
+            services.AddTransient<IEditWorkTimeCommand, EditWorkTimeCommand>();
             services.AddTransient<ICreateLeaveTimeCommand, CreateLeaveTimeCommand>();
             services.AddTransient<ICreateWorkTimeCommand, CreateWorkTimeCommand>();
         }
@@ -62,12 +63,14 @@ namespace LT.DigitalOffice.TimeManagementService
         {
             services.AddTransient<IValidator<CreateLeaveTimeRequest>, CreateLeaveTimeRequestValidator>();
             services.AddTransient<IValidator<CreateWorkTimeRequest>, CreateWorkTimeRequestValidator>();
+            services.AddTransient<IValidator<EditWorkTimeRequest>, EditWorkTimeRequestValidator>();
         }
 
         private void ConfigureMappers(IServiceCollection services)
         {
             services.AddTransient<IMapper<CreateLeaveTimeRequest, DbLeaveTime>, LeaveTimeMapper>();
             services.AddTransient<IMapper<CreateWorkTimeRequest, DbWorkTime>, WorkTimeMapper>();
+            services.AddTransient<IMapper<EditWorkTimeRequest, DbWorkTime>, WorkTimeMapper>();
         }
 
         private void ConfigureRepositories(IServiceCollection services)
