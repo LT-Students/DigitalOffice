@@ -101,6 +101,13 @@ namespace LT.DigitalOffice.FileService
 
         public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
         {
+            app.UseExceptionHandler(tempApp => tempApp.Run(CustomExceptionHandler.HandleCustomException));
+
+            UpdateDatabase(app);
+
+            app.UseHttpsRedirection();
+            app.UseRouting();
+
             string corsUrl = Configuration.GetSection("Settings")["CorsUrl"];
 
             app.UseCors(builder =>
@@ -108,13 +115,6 @@ namespace LT.DigitalOffice.FileService
                     .WithOrigins(corsUrl)
                     .AllowAnyHeader()
                     .AllowAnyMethod());
-
-            app.UseExceptionHandler(tempApp => tempApp.Run(CustomExceptionHandler.HandleCustomException));
-
-            UpdateDatabase(app);
-
-            app.UseHttpsRedirection();
-            app.UseRouting();
 
             app.UseEndpoints(endpoints =>
             {

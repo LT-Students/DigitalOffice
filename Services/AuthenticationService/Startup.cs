@@ -125,6 +125,12 @@ namespace LT.DigitalOffice.AuthenticationService
 
         public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
         {
+            app.UseExceptionHandler(tempApp => tempApp.Run(CustomExceptionHandler.HandleCustomException));
+
+            app.UseHttpsRedirection();
+
+            app.UseRouting();
+
             string corsUrl = Configuration.GetSection("Settings")["CorsUrl"];
 
             app.UseCors(builder =>
@@ -132,12 +138,6 @@ namespace LT.DigitalOffice.AuthenticationService
                     .WithOrigins(corsUrl)
                     .AllowAnyHeader()
                     .AllowAnyMethod());
-
-            app.UseExceptionHandler(tempApp => tempApp.Run(CustomExceptionHandler.HandleCustomException));
-
-            app.UseHttpsRedirection();
-
-            app.UseRouting();
 
             app.UseEndpoints(endpoints =>
             {
