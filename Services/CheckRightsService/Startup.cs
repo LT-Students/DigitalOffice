@@ -54,6 +54,14 @@ namespace LT.DigitalOffice.CheckRightsService
 
         public void Configure(IApplicationBuilder app)
         {
+            string corsUrl = Configuration.GetSection("Settings")["CorsUrl"];
+
+            app.UseCors(builder =>
+                builder
+                    .WithOrigins(corsUrl)
+                    .AllowAnyHeader()
+                    .AllowAnyMethod());
+
             app.UseExceptionHandler(tempApp => tempApp.Run(CustomExceptionHandler.HandleCustomException));
 
             UpdateDatabase(app);

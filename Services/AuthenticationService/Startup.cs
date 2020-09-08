@@ -125,6 +125,14 @@ namespace LT.DigitalOffice.AuthenticationService
 
         public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
         {
+            string corsUrl = Configuration.GetSection("Settings")["CorsUrl"];
+
+            app.UseCors(builder =>
+                builder
+                    .WithOrigins(corsUrl)
+                    .AllowAnyHeader()
+                    .AllowAnyMethod());
+
             app.UseExceptionHandler(tempApp => tempApp.Run(CustomExceptionHandler.HandleCustomException));
 
             app.UseHttpsRedirection();

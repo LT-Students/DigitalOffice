@@ -81,6 +81,14 @@ namespace LT.DigitalOffice.TimeManagementService
 
         public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
         {
+            string corsUrl = Configuration.GetSection("Settings")["CorsUrl"];
+
+            app.UseCors(builder =>
+                builder
+                    .WithOrigins(corsUrl)
+                    .AllowAnyHeader()
+                    .AllowAnyMethod());
+
             app.UseExceptionHandler(tempApp => tempApp.Run(CustomExceptionHandler.HandleCustomException));
 
             UpdateDatabase(app);
