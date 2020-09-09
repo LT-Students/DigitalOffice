@@ -31,6 +31,9 @@ namespace LT.DigitalOffice.UserServiceUnitTests.Validators
                 yield return "ExampleW1thNumber!1";
                 yield return "examplelowcase";
                 yield return "EXAMPLCAPITALLETTER";
+                yield return "Приmer";
+                yield return "ПРимер";
+                yield return "примеР";
             }
         }
 
@@ -78,6 +81,7 @@ namespace LT.DigitalOffice.UserServiceUnitTests.Validators
             validator.ShouldHaveValidationErrorFor(gettingNamePropertyExpression, new string('a', 100));
         }
 
+        [Test]
         public void ShouldThrowValidationExceptionWhenNameDoesNotMatchRegularExpression(
             [ValueSource(nameof(NamePropertyCases))] Expression<Func<EditUserRequest, string>> gettingNamePropertyExpression,
             [ValueSource(nameof(NamesThatDoesNotMatchPatternCases))]
@@ -142,5 +146,24 @@ namespace LT.DigitalOffice.UserServiceUnitTests.Validators
 
             validator.TestValidate(request).ShouldNotHaveAnyValidationErrors();
         }
+
+        [Test]
+        public void ShouldNotThrowValidationExceptionWhenDataIsValidAndContainsRussianSymbols()
+        {
+            var request = new EditUserRequest
+            {
+                Id = Guid.NewGuid(),
+                FirstName = "Пример",
+                LastName = "Пример",
+                MiddleName = "Пример",
+                Email = "Example@gmail.com",
+                Status = "Example",
+                Password = "Example",
+                IsAdmin = false
+            };
+
+            validator.TestValidate(request).ShouldNotHaveAnyValidationErrors();
+        }
     }
 }
+

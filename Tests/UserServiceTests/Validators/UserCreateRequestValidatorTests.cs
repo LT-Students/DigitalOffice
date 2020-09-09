@@ -30,6 +30,9 @@ namespace LT.DigitalOffice.UserServiceUnitTests.Validators
                 yield return "ExampleW1thNumber!1";
                 yield return "examplelowcase";
                 yield return "EXAMPLCAPITALLETTER";
+                yield return "Приmer";
+                yield return "ПРимер";
+                yield return "примеР";
             }
         }
 
@@ -43,7 +46,7 @@ namespace LT.DigitalOffice.UserServiceUnitTests.Validators
                 yield return "Hello!";
             }
         }
-        
+
         [SetUp]
         public void SetUp()
         {
@@ -116,7 +119,7 @@ namespace LT.DigitalOffice.UserServiceUnitTests.Validators
         public void ShouldThrowValidationExceptionWhenAllFieldsAreEmpty()
         {
             var request = new UserCreateRequest();
-            
+
             validator.TestValidate(request).ShouldHaveAnyValidationError();
         }
 
@@ -128,6 +131,23 @@ namespace LT.DigitalOffice.UserServiceUnitTests.Validators
                 FirstName = "Example",
                 LastName = "Example",
                 MiddleName = "Example",
+                Email = "Example@gmail.com",
+                Status = "Example",
+                Password = "Example",
+                IsAdmin = false
+            };
+
+            validator.TestValidate(request).ShouldNotHaveAnyValidationErrors();
+        }
+
+        [Test]
+        public void ShouldNotThrowValidationExceptionWhenDataIsValidAndContainsRussianSymbols()
+        {
+            var request = new UserCreateRequest
+            {
+                FirstName = "Пример",
+                LastName = "Пример",
+                MiddleName = "Пример",
                 Email = "Example@gmail.com",
                 Status = "Example",
                 Password = "Example",

@@ -11,19 +11,19 @@ namespace LT.DigitalOffice.UserService.Validators
                 .NotEmpty()
                 .MaximumLength(32).WithMessage("First name is too long.")
                 .MinimumLength(2).WithMessage("First name is too short.")
-                .Matches("^[A-Z][a-z]+$").WithMessage("First name with error.");
+                .Matches("^[A-Z][a-z]+$|^[А-ЯЁ][а-яё]+$").WithMessage("First name with error.");
 
             RuleFor(user => user.LastName)
                 .NotEmpty()
                 .MaximumLength(32).WithMessage("Last name is too long.")
                 .MinimumLength(2).WithMessage("Last name is too short.")
-                .Matches("^[A-Z][a-z]+$").WithMessage("Last name with error.");
+                .Matches("^[A-Z][a-z]+$|^[А-ЯЁ][а-яё]+$").WithMessage("Last name with error.");
 
             RuleFor(user => user.MiddleName)
                 .NotEmpty()
                 .MaximumLength(32).WithMessage("Middle name is too long.")
                 .MinimumLength(2).WithMessage("Middle name is too short.")
-                .Matches("^[A-Z][a-z]+$").WithMessage("Middle name with error.");
+                .Matches("^[A-Z][a-z]+$|^[А-ЯЁ][а-яё]+$").WithMessage("Middle name with error.");
 
             RuleFor(user => user.Email)
                 .NotEmpty()
